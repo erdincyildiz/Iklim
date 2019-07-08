@@ -1,0 +1,184 @@
+﻿using ESRI.ArcGIS.ArcMapUI;
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.esriSystem;
+using ESRI.ArcGIS.Geodatabase;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace Iklim
+{
+    public partial class UcErinc : UserControl
+    {
+        public UcErinc()
+        {
+            InitializeComponent();
+        }
+
+        public void Init()
+        {
+            IMxDocument mxDocument = AppSingleton.Instance().MxDocument;
+            IMap map = mxDocument.FocusMap;
+            int layerCount = map.LayerCount;
+            List<LayerObject> LayerObjectList = new List<LayerObject>();
+            for (int i = 0; i < layerCount; i++)
+            {
+                ILayer layer = map.get_Layer(i);
+                IFeatureLayer fLayer = layer as IFeatureLayer;
+                if (fLayer != null)
+                {
+                    IFeatureClass fClass = fLayer.FeatureClass;
+
+                    LayerObject lObject = new LayerObject();
+                    lObject.layer = layer;
+                    lObject.Name = layer.Name;
+                    LayerObjectList.Add(lObject);
+                }
+            }
+            UpdateComboboxWithLayers(cmbCalismaAlani, LayerObjectList);
+            UpdateComboboxWithLayers(cmbVeriSeti, LayerObjectList);
+        }
+
+        private void UpdateComboboxWithLayers(ComboBox comboBox, List<LayerObject> layerObjectList)
+        {
+            comboBox.BindingContext = new BindingContext();
+            comboBox.DataSource = null;
+            comboBox.DataSource = layerObjectList;
+            comboBox.DisplayMember = "Name";
+            comboBox.SelectedIndex = -1;
+        }
+
+        private void cmbVeriSeti_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LayerObject layerObject = (LayerObject)cmbVeriSeti.SelectedItem;
+            if (layerObject != null)
+            {
+                List<string> fieldList = new List<string>();
+                IFeatureLayer fLayer = layerObject.layer as IFeatureLayer;
+                for (int j = 0; j < fLayer.FeatureClass.Fields.FieldCount; j++)
+                {
+                    IField field = fLayer.FeatureClass.Fields.get_Field(j);
+                    fieldList.Add(field.Name);
+                }
+
+                FillCmboboboxWithFieldList(cmbOrtSic, fieldList);
+                FillCmboboboxWithFieldList(cmbOrtYag, fieldList);
+            }
+            else
+            {
+                cmbOrtSic.DataSource = null;
+                cmbOrtYag.DataSource = null;
+            }
+        }
+
+        private void FillCmboboboxWithFieldList(ComboBox comboBox, List<string> fieldList)
+        {
+            comboBox.BindingContext = new BindingContext();
+            comboBox.DataSource = null;
+            comboBox.DataSource = fieldList;
+            comboBox.SelectedIndex = -1;
+        }    
+
+        private string Kriging(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Kriging kriging = new ESRI.ArcGIS.SpatialAnalystTools.Kriging();
+                kriging.cell_size = AppSingleton.Instance().CellSize;
+                kriging.out_surface_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_Kriging_" + FieldName;
+                kriging.in_point_features = selectedLayer;
+                kriging.z_field = FieldName;
+                kriging.semiVariogram_props = AppSingleton.Instance().KrigingSemiVariogram + " " + AppSingleton.Instance().KrigingLagSayisi;
+                kriging.search_radius = AppSingleton.Instance().KrigingYaricap;
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(kriging, null);
+                return kriging.out_surface_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        private string IDW(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
+                idw.cell_size = AppSingleton.Instance().CellSize;
+                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_IDW_" + FieldName;
+                idw.in_point_features = selectedLayer;
+                idw.z_field = FieldName;
+                idw.power = 3;
+                idw.search_radius = AppSingleton.Instance().IDWYaricap;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(idw, null);
+                return idw.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        private string Divide(string yagisLayer, string sicaklikLayer)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Divide divide = new ESRI.ArcGIS.SpatialAnalystTools.Divide();
+                divide.in_raster_or_constant1 = yagisLayer;
+                divide.in_raster_or_constant2 = sicaklikLayer;
+                divide.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "sonucLayer";
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(divide, null);
+                return divide.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        private bool Reclassify(string selectedLayer)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.Reclassify reclass = new ESRI.ArcGIS.SpatialAnalystTools.Reclassify();
+                reclass.in_raster = selectedLayer;//RingBuffered_
+                reclass.reclass_field = "Value";
+                reclass.out_raster = AppSingleton.Instance().WorkspacePath + "\\Reclassifiedlayer";
+                reclass.remap = "0 8 1;8 15 2;15 23 3;23 40 4;40 55 5;55 10000 6;NODATA 0";
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(reclass, null);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            AppSingleton.Instance().CreateWorkspacePath();
+            SettingsControl control = new SettingsControl();
+            control.Load();
+            control.CheckForm();
+            var yagisLayer = Kriging((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtYag.SelectedItem.ToString());
+            var sicaklikLayer = Kriging((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtSic.SelectedItem.ToString());
+            var sonucRaster = Divide(yagisLayer, sicaklikLayer);
+            Reclassify(sonucRaster);
+        }
+    }
+}

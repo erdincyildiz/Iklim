@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using ESRI.ArcGIS.ArcMapUI;
 
 namespace Iklim
 {
-    public class Iklim : ESRI.ArcGIS.Desktop.AddIns.Button
+    public class btnIklim : ESRI.ArcGIS.Desktop.AddIns.Button
     {
-        public Iklim()
+        public btnIklim()
         {
         }
 
@@ -17,11 +14,15 @@ namespace Iklim
             //  TODO: Sample code showing how to access button host
             //
             ArcMap.Application.CurrentTool = null;
+            MainForm mainForm = new MainForm();
+            mainForm.Show();
+            IMxDocument mxDocument = ArcMap.Document;
+            AppSingleton.Instance().MxDocument = mxDocument;
         }
+
         protected override void OnUpdate()
         {
             Enabled = ArcMap.Application != null;
         }
     }
-
 }

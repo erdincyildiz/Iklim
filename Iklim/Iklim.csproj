@@ -51,6 +51,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ESRI.ArcGIS.AxPublisherControls, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.Carto, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.ConversionTools, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.DataManagementTools, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.DataSourcesGDB, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="ESRI.ArcGIS.Desktop.AddIns">
       <Private>False</Private>
     </Reference>
@@ -62,38 +71,156 @@
     <Reference Include="ESRI.ArcGIS.Framework">
       <Private>False</Private>
     </Reference>
+    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geometry, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geoprocessing, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geoprocessor, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.PublisherControls, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.SpatialAnalystTools, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="ESRI.ArcGIS.System">
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ESRI.ArcGIS.Version, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ekoloji\AgirlikType.cs" />
+    <Compile Include="Ekoloji\btnEkoloji.cs" />
     <Compile Include="Config.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Config.esriaddinx</DependentUpon>
     </Compile>
+    <Compile Include="Ekoloji\BufferKatmanSec.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\BufferKatmanSec.designer.cs">
+      <DependentUpon>BufferKatmanSec.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\EmptyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\EmptyControl.designer.cs">
+      <DependentUpon>EmptyControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\EnterpolasyonKatmanSec.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\EnterpolasyonKatmanSec.designer.cs">
+      <DependentUpon>EnterpolasyonKatmanSec.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\EnterpoleField.cs" />
+    <Compile Include="Ekoloji\EnterpoleGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\EnterpoleGrid.designer.cs">
+      <DependentUpon>EnterpoleGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\FieldGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\FieldGrid.Designer.cs">
+      <DependentUpon>FieldGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\FieldLayerObject.cs" />
+    <Compile Include="Ekoloji\IWizardPage.cs" />
+    <Compile Include="Ekoloji\KatmanSec.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\KatmanSec.designer.cs">
+      <DependentUpon>KatmanSec.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\LastControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\LastControl.designer.cs">
+      <DependentUpon>LastControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\LayerField.cs" />
+    <Compile Include="Ekoloji\LayerType.cs" />
+    <Compile Include="Ekoloji\PolygonSec.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\PolygonSec.designer.cs">
+      <DependentUpon>PolygonSec.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\UtilMethods.cs" />
+    <Compile Include="Ekoloji\WizardHost.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ekoloji\WizardHost.designer.cs">
+      <DependentUpon>WizardHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekoloji\WizardPageCollection.cs" />
+    <Compile Include="ErincForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ErincForm.Designer.cs">
+      <DependentUpon>ErincForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="btnExcel.cs" />
+    <Compile Include="AppSingleton.cs" />
+    <Compile Include="LayerObject.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsControl.Designer.cs">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UcErinc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UcErinc.Designer.cs">
+      <DependentUpon>UcErinc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XYEventTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XYEventTableForm.Designer.cs">
+      <DependentUpon>XYEventTableForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Config.esriaddinx">
       <Generator>ArcGISAddInHostGenerator</Generator>
       <LastGenOutput>Config.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </AddInContent>
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\Iklim_1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Iklim.cs" />
+    <Compile Include="btnIklim.cs" />
     <AddInContent Include="Images\Iklim.png" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +239,56 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ekoloji\BufferKatmanSec.resx">
+      <DependentUpon>BufferKatmanSec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\EmptyControl.resx">
+      <DependentUpon>EmptyControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\EnterpolasyonKatmanSec.resx">
+      <DependentUpon>EnterpolasyonKatmanSec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\EnterpoleGrid.resx">
+      <DependentUpon>EnterpoleGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\KatmanSec.resx">
+      <DependentUpon>KatmanSec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\LastControl.resx">
+      <DependentUpon>LastControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\PolygonSec.resx">
+      <DependentUpon>PolygonSec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekoloji\WizardHost.resx">
+      <DependentUpon>WizardHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ErincForm.resx">
+      <DependentUpon>ErincForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsControl.resx">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UcErinc.resx">
+      <DependentUpon>UcErinc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XYEventTableForm.resx">
+      <DependentUpon>XYEventTableForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\ExcelButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\btnEkoloji.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>
