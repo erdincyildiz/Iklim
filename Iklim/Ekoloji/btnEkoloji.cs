@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using ESRI.ArcGIS.ArcMapUI;
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.Geometry;
 
 namespace Iklim
 {
@@ -19,7 +25,7 @@ namespace Iklim
         public PolygonSec poligonSec;
         public EmptyControl emptyControl;
         public List<string> reclassList;
-         public LastControl lastControl;
+        public LastControl lastControl;
         private void RunProgram()
         {
             ArcMap.Application.CurrentTool = null;
@@ -42,16 +48,16 @@ namespace Iklim
             enterpolasyonKatmanSec.layersUpdated += new EnterpolasyonKatmanSec.BufferLayersUpdated(bufferlayersUpdated);
 
             poligonSec = new PolygonSec();
-            emptyControl = new EmptyControl();
+            //emptyControl = new EmptyControl();
             bufferKatmanSec = new BufferKatmanSec();
             bufferKatmanSec.layersUpdated += new BufferKatmanSec.LayersUpdated(polylayersUpdated);
-         
-            
+
+
             lastControl = new LastControl();
-            host.WizardPages.Add(2, enterpolasyonKatmanSec);
-            host.WizardPages.Add(3, bufferKatmanSec);
-            host.WizardPages.Add(4, poligonSec);
-            host.WizardPages.Add(10000, emptyControl);
+            //host.WizardPages.Add(2, enterpolasyonKatmanSec);
+            //host.WizardPages.Add(3, bufferKatmanSec);
+            host.WizardPages.Add(2, poligonSec);
+            //host.WizardPages.Add(10000, emptyControl);
             host.WizardPages.Add(50001, lastControl);
             AppSingleton.Instance().wizardHost = host;
             host.LoadWizard();
@@ -70,58 +76,19 @@ namespace Iklim
         void layersUpdated()
         {
 
-
-            if (AppSingleton.Instance().EnterpoleLayerList.Count > 0)
+            if (AppSingleton.Instance().PolygonLayerList.Count > 0)
             {
-
 
                 if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(2)))
                 {
-                    enterpolasyonKatmanSec = new EnterpolasyonKatmanSec();
-                    enterpolasyonKatmanSec.layersUpdated += new EnterpolasyonKatmanSec.BufferLayersUpdated(bufferlayersUpdated);
-                    AppSingleton.Instance().wizardHost.WizardPages.Add(2, enterpolasyonKatmanSec);
+                    poligonSec = new PolygonSec();
+                    AppSingleton.Instance().wizardHost.WizardPages.Add(2, poligonSec);
                 }
-
             }
             else
             {
                 AppSingleton.Instance().wizardHost.WizardPages.Remove(2);
-
             }
-
-            if (AppSingleton.Instance().EnterpoleLayerList.Count > 0 || AppSingleton.Instance().PolygonLayerList.Count > 0)
-            {
-
-
-                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(3)))
-                {
-                    bufferKatmanSec = new BufferKatmanSec();
-                    //enterpolasyonKatmanSec.layersUpdated += new EnterpolasyonKatmanSec.BufferLayersUpdated(bufferlayersUpdated);
-                    AppSingleton.Instance().wizardHost.WizardPages.Add(3, bufferKatmanSec);
-                }
-
-            }
-            else
-            {
-                AppSingleton.Instance().wizardHost.WizardPages.Remove(3);
-            }
-
-
-            if (AppSingleton.Instance().PolygonLayerList.Count > 0)
-            {
-
-                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(4)))
-                {
-                    poligonSec = new PolygonSec();
-                    AppSingleton.Instance().wizardHost.WizardPages.Add(4, poligonSec);
-                }
-            }
-            else
-            {
-                AppSingleton.Instance().wizardHost.WizardPages.Remove(4);
-            }
-            enterpolasyonKatmanSec.InitForm();
-            bufferKatmanSec.InitForm();
             poligonSec.InitForm();
 
         }
@@ -136,14 +103,14 @@ namespace Iklim
                 if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(3)))
                 {
                     bufferKatmanSec = new BufferKatmanSec();
-                    AppSingleton.Instance().wizardHost.WizardPages.Add(3, bufferKatmanSec);
+                    //AppSingleton.Instance().wizardHost.WizardPages.Add(3, bufferKatmanSec);
                 }
             }
             else
             {
-                AppSingleton.Instance().wizardHost.WizardPages.Remove(3);
+                //AppSingleton.Instance().wizardHost.WizardPages.Remove(3);
             }
-            bufferKatmanSec.InitForm();
+            //bufferKatmanSec.InitForm();
         }
 
         void polylayersUpdated()
@@ -164,447 +131,950 @@ namespace Iklim
             poligonSec.InitForm();
         }
 
+        private bool ClipLayers(ILayer selectedLayer)
+        {
+            try
+            {
+                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.AnalysisTools.Clip clip = new ESRI.ArcGIS.AnalysisTools.Clip();
+                clip.in_features = selectedLayer;
+                clip.clip_features = AppSingleton.Instance().SinirLayer;
+                clip.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(clip, null);
+                //return clip.out_feature_class.ToString();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private string SetFieldToValue(ITable vat, string fieldName)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            string returnStr = "";
+            try
+            {
+                while ((feature = updateCursor.NextRow()) != null)
+                {
+                    int valueIndex = feature.Fields.FindField("Value");
+                    int fieldIndex = feature.Fields.FindField(fieldName);
+                    string fieldValue = (feature.get_Value(fieldIndex).ToString());
+                    string valueValue = (feature.get_Value(valueIndex).ToString());
+                    if (returnStr == "")
+                    {
+                        returnStr = valueValue + " " + fieldValue;
+                    }
+                    else
+                    {
+                        returnStr = returnStr + ";" + valueValue + " " + fieldValue;
+                    }
+
+                }
+                return returnStr;
+            }
+            catch (COMException comExc)
+            {
+                return "";
+                // Handle any errors that might occur on NextFeature().
+            }
+        }
+        private bool CreateTin(ILayer selectedLayer, EnterpoleGrid grid)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.CreateTin createTin = new ESRI.ArcGIS.Analyst3DTools.CreateTin();
+                createTin.out_tin = AppSingleton.Instance().Path + "\\TIN_" + selectedLayer.Name;//RingBuffered_
+                //erdinç
+                createTin.in_features = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name + " " + grid.FieldName + " hardline <None>";// 10.1 Hard_Line ; 10.0 hardline
+                createTin.constrained_delaunay = "DELAUNAY";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(createTin, null);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private bool TinToRaster(ILayer selectedLayer)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.TinRaster tinToRaster = new ESRI.ArcGIS.Analyst3DTools.TinRaster();
+                tinToRaster.in_tin = AppSingleton.Instance().WorkspacePath + "\\TIN_" + selectedLayer.Name;
+                tinToRaster.out_raster = AppSingleton.Instance().WorkspacePath + "\\TinRaster_" + selectedLayer.Name;
+                tinToRaster.method = AppSingleton.Instance().TinRasterMethod;
+                tinToRaster.data_type = AppSingleton.Instance().TinRasterDataType;
+                tinToRaster.sample_distance = "CELLSIZE " + AppSingleton.Instance().CellSize;
+                tinToRaster.z_factor = 1;
+                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
+                IEnvelope env = fLayer.AreaOfInterest.Envelope;
+                gp.SetEnvironmentValue("Extent", env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString());
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(tinToRaster, null);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public double FindMaxValue(List<double> list)
+        {
+            try
+            {
+                if (list.Count == 0)
+                {
+                    throw new InvalidOperationException("Empty list");
+                }
+                double maxValue = double.MinValue;
+                foreach (double type in list)
+                {
+                    if (type > maxValue)
+                    {
+                        maxValue = type;
+                    }
+                }
+                return maxValue;
+            }
+            catch (Exception ex)
+            {
+
+                return -1;
+            }
+
+        }
+        public List<double> GetUniques(ITable table, string fldName)
+        {
+            int idx = table.Fields.FindField(fldName);
+            if (idx == -1)
+            {
+                throw new Exception(string.Format(
+                    "field {0} not found in {1}",
+                    fldName, ((IDataset)table).Name));
+            }
+            IQueryFilter qf = new QueryFilterClass();
+            qf.AddField(fldName);
+
+            List<double> myList = new List<double>();
+            ICursor cur = null;
+            IRow row = null;
+            try
+            {
+                cur = table.Search(qf, true);
+                while ((row = cur.NextRow()) != null)
+                {
+                    try
+                    {
+                        double key = Convert.ToDouble(row.get_Value(idx) is DBNull ? "<Null>" :
+                                               row.get_Value(idx).ToString());
+                        if (!myList.Contains(key))
+                        {
+                            myList.Add(key);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    finally
+                    {
+                        Marshal.ReleaseComObject(row);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                if (cur != null)
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(cur);
+            }
+
+            return myList;
+        }
+        public double FindMinValue(List<double> list)
+        {
+            try
+            {
+                if (list.Count == 0)
+                {
+                    throw new InvalidOperationException("Empty list");
+                }
+                double minValue = double.MaxValue;
+                foreach (double type in list)
+                {
+                    if (type < minValue)
+                    {
+                        minValue = type;
+                    }
+                }
+                return minValue;
+            }
+            catch (Exception ex)
+            {
+
+                return -1;
+            }
+        }
+
+        private bool SetFirstNormal(ITable vat, double max)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            try
+            {
+                while ((feature = updateCursor.NextRow()) != null)
+                {
+                    int normalIndex = feature.Fields.FindField("Normal");
+                    int valueIndex = feature.Fields.FindField("Value");
+                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
+                    double value = localValue / max;
+                    feature.set_Value(normalIndex, value);
+                    feature.Store();
+                }
+                return true;
+            }
+            catch (COMException comExc)
+            {
+                return false;
+                // Handle any errors that might occur on NextFeature().
+            }
+        }
+        private bool SetSecondNormal(ITable vat, double max)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            try
+            {
+                while ((feature = updateCursor.NextRow()) != null)
+                {
+                    int normalIndex = feature.Fields.FindField("Normal");
+                    int valueIndex = feature.Fields.FindField("Value");
+                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
+                    double value = 1 - (localValue / max);
+                    feature.set_Value(normalIndex, value);
+                    feature.Store();
+                }
+                return true;
+            }
+            catch (COMException comExc)
+            {
+                return false;
+                // Handle any errors that might occur on NextFeature().
+            }
+        }
+        private bool SetThirdNormal(ITable vat, double max, double min)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            try
+            {
+                while ((feature = updateCursor.NextRow()) != null)
+                {
+                    int normalIndex = feature.Fields.FindField("Normal");
+                    int valueIndex = feature.Fields.FindField("Value");
+                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
+                    double value = ((localValue - min) / (max - min));
+                    feature.set_Value(normalIndex, value);
+                    feature.Store();
+                }
+                return true;
+            }
+            catch (COMException comExc)
+            {
+                return false;
+                // Handle any errors that might occur on NextFeature().
+            }
+        }
+        private bool SetFourthNormal(ITable vat, double max, double min)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            try
+            {
+                while ((feature = updateCursor.NextRow()) != null)
+                {
+                    int normalIndex = feature.Fields.FindField("Normal");
+                    int valueIndex = feature.Fields.FindField("Value");
+                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
+                    double value = ((max - localValue) / (max - min));
+                    feature.set_Value(normalIndex, value);
+                    feature.Store();
+                }
+                return true;
+            }
+            catch (COMException comExc)
+            {
+                return false;
+                // Handle any errors that might occur on NextFeature().
+            }
+        }
+        public FieldGrid GetBufferGrid(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().BufferDict)
+                {
+                    if (item.Key == layerName)
+                    {
+                        return item.Value;
+
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
+        }
+
+        public FieldLayerObject GetFieldLayerObject(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().ReclassList)
+                {
+                    if (item.LayerObject.Name  == layerName)
+                    {
+                        return item;
+
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+
+            }
+
+        }
+
+        public FieldGrid GetPolygonGrid(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().PolyGridDict)
+                {
+                    if (item.Key == layerName)
+                    {
+                        return item.Value;
+
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+
+            }
+
+        }
+        private bool Reclassify(ILayer selectedLayer, string FieldName, string reclassMap, string inputType, string outputType)
+        {
+            try
+            {
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.Reclassify reclass = new ESRI.ArcGIS.Analyst3DTools.Reclassify();
+                reclass.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + inputType + selectedLayer.Name;//RingBuffered_
+                reclass.reclass_field = FieldName;//"Value";
+                reclass.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outputType + selectedLayer.Name;//Reclassified_
+                reclass.remap = reclassMap;// "50 1;50 100 2;100 150 3;NODATA 0";
+
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(reclass, null);
+                if (outputType == "Reclassified_")
+                {
+                    reclassList.Add(reclass.out_raster.ToString());
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        private bool Combine(string layerNames)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
+                combine.in_rasters = layerNames;
+                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Combined";               
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(combine, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool JoinField(object table,string inField, string joinTable, string joinField, string fieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
+                join.in_data = table;
+                join.in_field = inField;
+                join.join_table = joinTable;
+                join.join_field = joinField;
+                join.fields = fieldName;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(join, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public EnterpoleGrid GetEnterpoleGrid(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().EnterpoleGridDict)
+                {
+                    if (item.Key == layerName)
+                    {
+                        return item.Value;
+
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
+        }
+        private bool Slope(ILayer selectedLayer)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.Slope slope = new ESRI.ArcGIS.Analyst3DTools.Slope();
+                slope.in_raster = AppSingleton.Instance().WorkspacePath + "\\TinRaster_" + selectedLayer.Name;
+                slope.out_raster = AppSingleton.Instance().WorkspacePath + "\\Slope_" + selectedLayer.Name;
+                slope.output_measurement = "DEGREE";
+                slope.z_factor = 1;
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(slope, null);
+                return true;
+
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private bool AddField(ILayer selectedLayer, string fieldName, string type)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.AddField addField = new ESRI.ArcGIS.DataManagementTools.AddField();
+                addField.in_table = AppSingleton.Instance().WorkspacePath + "\\" + type + selectedLayer.Name;
+                addField.field_name = fieldName;
+                addField.field_type = "DOUBLE";
+                addField.field_is_nullable = "NULLABLE";
+                addField.field_is_required = "NON_REQUIRED";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(addField, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private bool RasterClipLayer(ILayer selectedLayer, string type)
+        {
+            try
+            {
+                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle rastClip = new ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle();
+                rastClip.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_" + type;//Kriging
+                rastClip.extraction_area = "INSIDE";
+                rastClip.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + type + "Clip_" + selectedLayer.Name;
+
+                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
+                IEnvelope env = fLayer.AreaOfInterest.Envelope;
+                //<<<<<<< .mine
+                //string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
+                // rastClip.clipping_geometry = geo;
+                //=======
+                string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
+                rastClip.rectangle = geo;
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(rastClip, null);
+                return true;
+                //return clip.out_feature_class.ToString();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private bool Kriging(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Kriging kriging = new ESRI.ArcGIS.SpatialAnalystTools.Kriging();
+                kriging.cell_size = AppSingleton.Instance().CellSize;
+                kriging.out_surface_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_Kriging";
+                kriging.in_point_features = selectedLayer;
+                kriging.z_field = FieldName;
+                kriging.semiVariogram_props = AppSingleton.Instance().KrigingSemiVariogram;
+                kriging.search_radius = AppSingleton.Instance().KrigingYaricap;
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(kriging, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
+        }
+        private bool IDW(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
+                idw.cell_size = AppSingleton.Instance().CellSize;
+                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_IDW";
+                idw.in_point_features = selectedLayer;
+                idw.z_field = FieldName;
+                idw.power = 3;
+                idw.search_radius = AppSingleton.Instance().IDWYaricap;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(idw, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
+        }
+        private bool CalculateField(ILayer selectedLayer)
+        {
+            try
+            {
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.CalculateField calculateField = new ESRI.ArcGIS.DataManagementTools.CalculateField();
+                calculateField.in_table = AppSingleton.Instance().WorkspacePath + "\\RingBuffered_" + selectedLayer.Name;
+                calculateField.field = "priority";
+                calculateField.expression = "1/Sqr ( [distance] )";
+                calculateField.expression_type = "VB";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(calculateField, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+        }
+        private bool PolygonToRaster(ILayer selectedLayer, string inputType, string valueField, string priorityField)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.ConversionTools.PolygonToRaster polygonToRaster = new ESRI.ArcGIS.ConversionTools.PolygonToRaster();
+                polygonToRaster.in_features = selectedLayer;
+                polygonToRaster.value_field = valueField;//"distance";
+                polygonToRaster.out_rasterdataset = AppSingleton.Instance().WorkspacePath + "\\Poly_Raster_" + selectedLayer.Name;
+                polygonToRaster.cell_assignment = "MAXIMUM_AREA";
+                polygonToRaster.cellsize = AppSingleton.Instance().CellSize;
+                if (priorityField != "")
+                {
+                    polygonToRaster.priority_field = priorityField; //"priority";
+                }
+                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
+                IEnvelope env = fLayer.AreaOfInterest.Envelope;
+                gp.SetEnvironmentValue("Extent", env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString());
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(polygonToRaster, null);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
+        }
+        private bool RingBuffer(ILayer selectedLayer, string distances)
+        {
+            try
+            {
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer ringBuffer = new ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer();
+                ringBuffer.Input_Features = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name;
+                ringBuffer.Output_Feature_class = AppSingleton.Instance().WorkspacePath + "\\RingBuffered_" + selectedLayer.Name;
+                ringBuffer.Distances = distances;//"50;100;150";
+                ringBuffer.Buffer_Unit = "Meters";
+                ringBuffer.Dissolve_Option = "NONE";
+
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(ringBuffer, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+        }
+
         void host_WizardCompleted()
         {
-        //    lastControl.SetRichTextBoxLabel("Veriler çalışma alanı sınırlarına göre kesiliyor...");
-        //    foreach (var item in AppSingleton.Instance().allLayers)
-        //    {
-        //        if (!ClipLayers(item.layer))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1103 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //    }
-        //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    foreach (var item in AppSingleton.Instance().FinalTamponKatmanListesi)
-        //    {
-        //        FieldGrid bufferGrid = GetBufferGrid(item.layer.Name);
-        //        if (bufferGrid == null)
-        //        {
-        //            MessageBox.Show("Hata Kodu :1104 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //        Dictionary<string, string> myDict = bufferGrid.FieldListObject.FieldList;
-        //        string pairList = "";
-        //        string reclassifyList = "";
-        //        foreach (var pair in myDict)
-        //        {
-        //            if (pairList == "")
-        //            {
-        //                pairList = pair.Key;
-        //            }
-        //            else
-        //            {
-        //                pairList = pairList + ";" + pair.Key;
-        //            }
+            SettingsControl control = new SettingsControl();
+            control.Load();
+            control.CheckForm();
 
-        //        }
-        //        for (int i = 0; i < myDict.Count; i++)
-        //        {
-        //            KeyValuePair<string, string> pair = myDict.ElementAt(i);
-        //            if (reclassifyList == "")
-        //            {
-        //                reclassifyList = "0 " + pair.Key + " " + pair.Value + ";";
-        //            }
-        //            else
-        //            {
-        //                KeyValuePair<string, string> previouspair = myDict.ElementAt(i - 1);
-        //                reclassifyList = reclassifyList + previouspair.Key + " " + pair.Key + " " + pair.Value + ";";
-        //            }
-        //        }
-        //        reclassifyList = reclassifyList + "NODATA " + AppSingleton.Instance().NodataValue;
-        //        lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için tampon bölge oluşturuluyor...");
-        //        if (!RingBuffer(item.layer, pairList))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1105 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("Yeni öznitelik sütunu oluşturuluyor...");
-        //        if (!AddField(item.layer, "priority", "RingBuffered_"))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1106 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
+            lastControl.SetRichTextBoxLabel("Veriler çalışma alanı sınırlarına göre kesiliyor...");
+            foreach (var item in AppSingleton.Instance().allLayers)
+            {
+                //if (!ClipLayers(item.layer))
+                //{
+                //    MessageBox.Show("Hata Kodu :1103 . Lütfen yöneticiniz ile görüşünüz.");
+                //    return;
+                //}
+            }
+            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            
 
-        //        lastControl.SetRichTextBoxLabel("Öznitelik değerleri yeniden hesaplanıyor...");
-        //        if (!CalculateField(item.layer))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1107 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //        lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için raster dönüşüm yapılıyor...");
-        //        if (!PolygonToRaster(item.layer, "RingBuffered_", "distance", "priority"))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1108 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı yeniden sınıflandırılıyor...");
-        //        if (!Reclassify(item.layer, "Value", reclassifyList, "Poly_Raster_", "Reclassified_"))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1109 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    }
-        //    foreach (var item in AppSingleton.Instance().polygonLayerList)
-        //    {
-        //        FieldGrid polyGrid = GetPolygonGrid(item.layer.Name);
-        //        if (polyGrid == null)
-        //        {
-        //            MessageBox.Show("Hata Kodu :1110 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
+            foreach (var item in AppSingleton.Instance().PolygonLayerList)
+            {
+                FieldLayerObject fieldLayerObject = GetFieldLayerObject(item.layer.Name);
+                if (fieldLayerObject == null)
+                {
+                    MessageBox.Show("Hata Kodu :1110 . Lütfen yöneticiniz ile görüşünüz.");
+                    return;
+                }
 
-        //        lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için raster dönüşüm yapılıyor...");
-        //        if (!PolygonToRaster(item.layer, "Clip_", polyGrid.FieldName, ""))
-        //        {
-        //            MessageBox.Show("Hata Kodu :1111 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        Dictionary<string, string> myDict = polyGrid.FieldListObject.FieldList;
-        //        string reclassifyList = "";
-        //        foreach (var pair in myDict)
-        //        {
-        //            if (reclassifyList == "")
-        //            {
-        //                reclassifyList = pair.Key + " " + pair.Value + ";";
-        //            }
-        //            else
-        //            {
-        //                reclassifyList = reclassifyList + pair.Key + " " + pair.Value + ";";
-        //            }
+                lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için raster dönüşüm yapılıyor...");
+                if (!PolygonToRaster(item.layer, "", fieldLayerObject.FieldName, ""))
+                {
+                    MessageBox.Show("Hata Kodu :1111 . Lütfen yöneticiniz ile görüşünüz.");
+                    return;
+                }
+                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+                Dictionary<string, string> myDict = fieldLayerObject.FieldList;
+                string reclassifyList = "";
+                foreach (var pair in myDict)
+                {
+                    if (reclassifyList == "")
+                    {
+                        reclassifyList = pair.Key + " " + pair.Value + ";";
+                    }
+                    else
+                    {
+                        reclassifyList = reclassifyList + pair.Key + " " + pair.Value + ";";
+                    }
 
-        //        }
-        //        reclassifyList = reclassifyList + "NODATA " + AppSingleton.Instance().NodataValue;
-                
-        //        lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı yeniden sınıflandırılıyor...");
+                }
+                reclassifyList = reclassifyList + "NODATA " + AppSingleton.Instance().NodataValue;
 
-        //        IFeatureClass fclass = (PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Poly_Raster_" + item.layer.Name);
+                lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı yeniden sınıflandırılıyor...");
 
-        //        Type factoryType = Type.GetTypeFromProgID(
-        //        "esriDataSourcesGDB.AccessWorkspaceFactory");
+                IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Poly_Raster_" + item.layer.Name);
 
-        //        IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
-        //            (factoryType);
+                Type factoryType = Type.GetTypeFromProgID(
+                "esriDataSourcesGDB.AccessWorkspaceFactory");
+
+                IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
+                    (factoryType);
 
 
-        //        IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(WorkspacePath, 0) as IRasterWorkspaceEx;
+                IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
 
 
-        //        //IRasterWorkspace rasterWorkspace = PersonalWorkspace as IRasterWorkspace;
-        //        IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset("Poly_Raster_" + item.layer.Name);
-        //        IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
+                //IRasterWorkspace rasterWorkspace = AppSingleton.Instance().PersonalWorkspace as IRasterWorkspace;
+                IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset("Poly_Raster_" + item.layer.Name);
+                IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
 
-        //        ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
-        //        raster.BuildAttributeTable();
-        //        ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
-        //        string returnStr= SetFieldToValue(vat, polyGrid.FieldName);
-        //        bool aragecis = true;
-        //        if (!Reclassify(item.layer, "Value", returnStr, "Poly_Raster_", "TempReclass_"))
-        //        {
-        //            aragecis = false;
-        //        }
+                ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
+                raster.BuildAttributeTable();
+                ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
 
-        //        if (aragecis == true)
-        //        {
-        //            if (!Reclassify(item.layer, "Value", reclassifyList, "TempReclass_", "Reclassified_"))
-        //            {
-        //                MessageBox.Show("Hata Kodu :1112 . Lütfen yöneticiniz ile görüşünüz.");
-        //                return;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (!Reclassify(item.layer, polyGrid.FieldName, reclassifyList, "Poly_Raster_", "Reclassified_"))
-        //            {
-        //                MessageBox.Show("Hata Kodu :1112 . Lütfen yöneticiniz ile görüşünüz.");
-        //                return;
-        //            }
-        //        }
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    }
-        //    foreach (var item in AppSingleton.Instance().FinalEnterpolasyonKatmanListesi)
-        //    {
-        //        EnterpoleGrid enterpoleGrid = GetEnterpoleGrid(item.layer.Name);
+                //Check if field Exists
+                var check = false;
+                for (int j = 0; j < vat.Fields.FieldCount; j++)
+                {
+                    IField field = vat.Fields.get_Field(j);
+                    if (field.Name == fieldLayerObject.FieldName)
+                        check = true;
+                }
 
-        //        if (enterpoleGrid == null)
-        //        {
-        //            MessageBox.Show("Hata Kodu :1113 . Lütfen yöneticiniz ile görüşünüz.");
-        //            return;
-        //        }
+                if(!check)
+                {
+                    lastControl.SetRichTextBoxLabel("Eksik kolonlar ekleniyor...");
+                    if (!JoinField(vat, "Value", item.layer.Name,fieldLayerObject.FieldName,fieldLayerObject.FieldName))
+                    {
+                        MessageBox.Show("Hata Kodu :5614 . Lütfen yöneticiniz ile görüşünüz.");
+                        return;
+                    }
+                }
 
-        //        Dictionary<string, string> myDict = enterpoleGrid.FieldListObject.FieldList;
-        //        string reclassifyList = "";
-        //        foreach (var pair in myDict)
-        //        {
-        //            string replacedKey = pair.Key.Replace("-", " ");
-        //            if (reclassifyList == "")
-        //            {
+                string returnStr = SetFieldToValue(vat, fieldLayerObject.FieldName);
+                bool aragecis = true;
+                if (!Reclassify(item.layer, "Value", returnStr, "Poly_Raster_", "TempReclass_"))
+                {
+                    aragecis = false;
+                }
 
-        //                reclassifyList = replacedKey + " " + pair.Value + ";";
-        //            }
-        //            else
-        //            {
-        //                reclassifyList = reclassifyList + replacedKey + " " + pair.Value + ";";
-        //            }
+                if (aragecis == true)
+                {
+                    if (!Reclassify(item.layer, "Value", reclassifyList, "TempReclass_", "Reclassified_"))
+                    {
+                        MessageBox.Show("Hata Kodu :1112 . Lütfen yöneticiniz ile görüşünüz.");
+                        return;
+                    }
+                }
+                else
+                {
+                    if (!Reclassify(item.layer, fieldLayerObject.FieldName, reclassifyList, "Poly_Raster_", "Reclassified_"))
+                    {
+                        MessageBox.Show("Hata Kodu :1112 . Lütfen yöneticiniz ile görüşünüz.");
+                        return;
+                    }
+                }
 
-        //        }
+                IRasterDataset reclassedDataset = rasterWorkspaceEx.OpenRasterDataset("Reclassified_" + item.layer.Name);
+                IRasterDatasetEdit2 reclassed = (IRasterDatasetEdit2)reclassedDataset;
 
-        //        if (enterpoleGrid.Hedef == "Eğim")
-        //        {
-        //            lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için üçgen yüzey modeli oluşturuluyor...");
-        //            if (!CreateTin(item.layer, enterpoleGrid))
-        //            {
-        //                MessageBox.Show("Hata Kodu :1114 . Lütfen yöneticiniz ile görüşünüz.");
-        //                return;
-        //            }
-        //            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //            lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için oluşturulan yüzey raster veri tipine dönüştürülüyor...");
-        //            if (!TinToRaster(item.layer))
-        //            {
-        //                MessageBox.Show("Hata Kodu :1115 . Lütfen yöneticiniz ile görüşünüz.");
-        //                return;
-        //            }
-        //            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //            lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için eğim haritası oluşturuluyor...");
-        //            if (!Slope(item.layer))
-        //            {
-        //                MessageBox.Show("Hata Kodu :1116 . Lütfen yöneticiniz ile görüşünüz.");
-        //                return;
-        //            }
-        //            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //            lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı sınıflandırma işlemi yapılıyor...");
-        //            if (!Reclassify(item.layer, "Value", reclassifyList, "Slope_", "Reclassified_"))
-        //            {
-        //                MessageBox.Show("Hata Kodu :1117 . Lütfen yöneticiniz ile görüşünüz.");
-        //                return;
-        //            }
-        //            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        }
-        //        if (enterpoleGrid.Hedef == "Nüfus")
-        //        {
-        //            if (enterpoleGrid.EnterpoleMethod == "Kriging")
-        //            {
-        //                lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için Kriging metodu ile yüzey oluşturuluyor...");
-        //                if (!Kriging(item.layer, enterpoleGrid.FieldName))
-        //                {
-        //                    MessageBox.Show("Hata Kodu :1118 . Lütfen yöneticiniz ile görüşünüz.");
-        //                    return;
-        //                }
-        //                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //                lastControl.SetRichTextBoxLabel("Kriging metodu ile oluşturulan yüzey çalışma alanına sınırlandırılıyor...");
-        //                if (!RasterClipLayer(item.layer, "Kriging"))
-        //                {
-        //                    MessageBox.Show("Hata Kodu :1119 . Lütfen yöneticiniz ile görüşünüz.");
-        //                    return;
-        //                }
-        //                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //                lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı yeniden sınıflandırılıyor...");
-        //                if (!Reclassify(item.layer, "Value", reclassifyList, "KrigingClip_", "Reclassified_"))
-        //                {
-        //                    MessageBox.Show("Hata Kodu :1120 . Lütfen yöneticiniz ile görüşünüz.");
-        //                    return;
-        //                }
-        //                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //            }
-        //            else if (enterpoleGrid.EnterpoleMethod == "IDW")
-        //            {
-        //                lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için IDW metodu ile yüzey oluşturuluyor...");
-        //                if (!IDW(item.layer, enterpoleGrid.FieldName))
-        //                {
-        //                    MessageBox.Show("Hata Kodu :1121 . Lütfen yöneticiniz ile görüşünüz.");
-        //                    return;
-        //                }
-        //                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //                lastControl.SetRichTextBoxLabel("IDW metodu ile oluşturulan yüzey çalışma alanına sınırlandırılıyor...");
-        //                if (!RasterClipLayer(item.layer, "IDW"))
-        //                {
-        //                    MessageBox.Show("Hata Kodu :1119 . Lütfen yöneticiniz ile görüşünüz.");
-        //                    return;
-        //                }
-        //                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //                lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı yeniden sınıflandırılıyor...");
-        //                if (!Reclassify(item.layer, "Value", reclassifyList, "IDWClip_", "Reclassified_"))
-        //                {
-        //                    MessageBox.Show("Hata Kodu :1120 . Lütfen yöneticiniz ile görüşünüz.");
-        //                    return;
-        //                }
-        //                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //            }
+                ESRI.ArcGIS.Geodatabase.IGeoDataset reclassedGeoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)reclassedDataset;
+                reclassed.BuildAttributeTable();
+
+                ITable vatReclass = (reclassed as IRasterBandCollection).Item(0).AttributeTable;
+
+                //Check if field Exists
+                var checkReclass = false;
+                for (int j = 0; j < vatReclass.Fields.FieldCount; j++)
+                {
+                    IField field = vatReclass.Fields.get_Field(j);
+                    if (field.Name == fieldLayerObject.FieldName)
+                        checkReclass = true;
+                }
+
+                if (!checkReclass)
+                {
+                    if (!JoinField(vatReclass, "Value", item.layer.Name, fieldLayerObject.FieldName, fieldLayerObject.FieldName))
+                    {
+                        MessageBox.Show("Hata Kodu :5614 . Lütfen yöneticiniz ile görüşünüz.");
+                        return;
+                    }
+                }
 
 
-        //            //CreateTin(item.layer);
-        //            //TinToRaster(item.layer);
-        //            //Slope(item.layer);
-        //            //Reclassify(item.layer, "Value", reclassifyList, "Slope_", "Reclassified_");
-        //        }
-        //    }
+                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            }
+            string rasterString = string.Empty;
+            foreach (var item in reclassList)
+            {
+                if(rasterString == string.Empty)
+                {
+                    rasterString = item;
+                }
+                else
+                {
+                    rasterString = rasterString + ";" + item;
+                }
+            }
+            foreach (var item in AppSingleton.Instance().RasterLayerList)
+            {
+                if (rasterString == string.Empty)
+                {
+                    rasterString = item.Name;
+                }
+                else
+                {
+                    rasterString = rasterString + ";" + item.Name;
+                }
+            }
+             lastControl.SetRichTextBoxLabel("Tüm raster katmanlar birleştiriliyor...");
+            if (!Combine(rasterString))
+            {
+                MessageBox.Show("Hata Kodu :2639. Lütfen yöneticiniz ile görüşünüz.");
+                return;
+            }
 
-        //    foreach (var item in reclassList)
-        //    {
-        //        IFeatureClass fclass = (PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
+            //Combine işlemleri
 
-        //        Type factoryType = Type.GetTypeFromProgID(
-        //        "esriDataSourcesGDB.AccessWorkspaceFactory");
-        //        string guid = Guid.NewGuid().ToString();
-        //        IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
-        //            (factoryType);
+            Type factoryType2 = Type.GetTypeFromProgID(
+               "esriDataSourcesGDB.AccessWorkspaceFactory");
 
-
-        //        IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(WorkspacePath, 0) as IRasterWorkspaceEx;
-
-
-        //        //IRasterWorkspace rasterWorkspace = PersonalWorkspace as IRasterWorkspace;
-        //        IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(item);
-        //        IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
-
-        //        ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
-        //        raster.BuildAttributeTable();
-        //        ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
-        //        //IFeatureClass fclass= (PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
-        //        List<double> valueList = GetUniques(vat as ITable, "Value");
-        //        double max = FindMaxValue(valueList);
-        //        double min = FindMinValue(valueList);
-        //        IFeatureLayer fLayer = new FeatureLayerClass();
-        //        fLayer.Name = item;
-        //        fLayer.FeatureClass = fclass;
-        //        lastControl.SetRichTextBoxLabel("Öznitelik ekleniyor...");
-        //        AddField(fLayer, "Normal", "");
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("Normalleştirme işlemi yapılıyor...");
-        //        foreach (var myLayer in AppSingleton.Instance().allLayersDict)
-        //        {
-        //            string layerName = myLayer.Key;
-        //            if ("Reclassified_" + layerName == item)
-        //            {
-        //                LayerType lType = myLayer.Value;
-        //                switch (lType.Metod)
-        //                {
-        //                    case "x/Maks":
-        //                        SetFirstNormal(vat, max);
-        //                        break;
-        //                    case "1-(x/Maks)":
-        //                        SetSecondNormal(vat, max);
-        //                        break;
-        //                    case "(x-Min)/(Maks-Min)":
-        //                        SetThirdNormal(vat, max, min);
-        //                        break;
-        //                    case "(Maks-x)/(Maks-Min)":
-        //                        SetFourthNormal(vat, max, min);
-        //                        break;
-        //                    default:
-        //                        Console.WriteLine("Invalid selection. Please select 1, 2, or 3.");
-        //                        break;
-        //                }
-
-        //            }
-
-        //        }
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        if (AppSingleton.Instance().IslemTipi == "TOPSIS")
-        //        {
-        //            lastControl.SetRichTextBoxLabel("Öznitelikler ekleniyor...");
-        //            AddField(fLayer, "Ax", "");
-        //            AddField(fLayer, "Bx", "");
-        //            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //            raster.BuildAttributeTable();
-        //            List<double> normalValueList = GetUniques(vat as ITable, "Normal");
-        //            List<double> carpimList = new List<double>();
-
-        //            Dictionary<double, double> ilkCarpimDict = new Dictionary<double, double>();
-        //            Dictionary<double, double> buyukDict = new Dictionary<double, double>();
-        //            Dictionary<double, double> kucukDict = new Dictionary<double, double>();
-        //            Dictionary<string, AgirlikType> agirlikDict = AppSingleton.Instance().agirlikDict;
-        //            foreach (var ag in agirlikDict)
-        //            {
-        //                var agirlikType = ag.Value;
-
-        //                if (item == "Reclassified_" + ag.Key)
-        //                {
-        //                    //Ağırlıkla Çarpılan Dict'i oluşturduk
-        //                    foreach (double normIlk in normalValueList)
-        //                    {
-        //                        ilkCarpimDict.Add(normIlk, normIlk * ag.Value.Deger);
-        //                        carpimList.Add(normIlk * ag.Value.Deger);
-        //                    }
-        //                    double normax = FindMaxValue(carpimList);
-        //                    double normin = FindMinValue(carpimList);
-        //                    foreach (var dictItem in ilkCarpimDict)
-        //                    {
-        //                        buyukDict.Add(dictItem.Key, (dictItem.Value - normax) * (dictItem.Value - normax));
-        //                        kucukDict.Add(dictItem.Key, (dictItem.Value - normin) * (dictItem.Value - normin));
-        //                    }
-        //                }
-        //            }
-        //            SetAxBx(vat, kucukDict, buyukDict);
-        //        }
+            IWorkspaceFactory workspaceFactory2 = (IWorkspaceFactory)Activator.CreateInstance
+                (factoryType2);
 
 
-        //    }
-        //    if ((AppSingleton.Instance().IslemTipi == "TOPSIS"))
-        //    {
-        //        lastControl.SetRichTextBoxLabel("TOPSIS analizi adım 1 devam ediyor...");
-        //        WeightedSumWithParam("Ax");
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("TOPSIS analizi adım 2 devam ediyor...");
-        //        WeightedSumWithParam("Bx");
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("TOPSIS analizi adım 3 devam ediyor...");
-        //        SquareRoot("Ax");
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("TOPSIS analizi adım 4 devam ediyor...");
-        //        SquareRoot("Bx");
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("TOPSIS analizi adım 5 devam ediyor...");
-        //        WeightedSumAxBx();
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //        lastControl.SetRichTextBoxLabel("TOPSIS analizi adım 6 devam ediyor...");
-        //        Divide();
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    }
+            IRasterWorkspaceEx rasterWorkspaceEx2 = workspaceFactory2.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
 
 
-        //    if (!(AppSingleton.Instance().IslemTipi == "TOPSIS"))
-        //    {
-        //        lastControl.SetRichTextBoxLabel("Genel ağırlık katmanı oluşturuluyor...");
-        //        WeightedSum(); 
-        //        lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    }
-        //    lastControl.SetRichTextBoxLabel("Başlangıç bitiş değerleri tanımlanıyor...");
-        //    if (!CreateFeatures())
-        //    {
-        //        MessageBox.Show("Hata Kodu :2001 . Lütfen yöneticiniz ile görüşünüz.");
-        //        return;
-        //    }
-        //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    lastControl.SetRichTextBoxLabel("Maliyet yüzeyi oluşturuluyor...");
-        //    if (!CostDistance())
-        //    {
-        //        MessageBox.Show("Hata Kodu :2002 . Lütfen yöneticiniz ile görüşünüz.");
-        //        return;
-        //    }
-        //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    lastControl.SetRichTextBoxLabel("En uygun yol hesaplanıyor...");
-        //    if (!CostPath())
-        //    {
-        //        MessageBox.Show("Hata Kodu :2003 . Lütfen yöneticiniz ile görüşünüz.");
-        //        return;
-        //    }
-        //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            //IRasterWorkspace rasterWorkspace = PersonalWorkspace as IRasterWorkspace;
+            IRasterDataset rasterDataset2 = rasterWorkspaceEx2.OpenRasterDataset("Combined");
+            IRasterDatasetEdit2 raster2 = (IRasterDatasetEdit2)rasterDataset2;
 
-        //    lastControl.SetRichTextBoxLabel("En uygun yol vektöre çevriliyor...");
-        //    if (!RasterToPoly())
-        //    {
-        //        MessageBox.Show("Hata Kodu :2004 . Lütfen yöneticiniz ile görüşünüz.");
-        //        return;
-        //    }
-        //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-        //    //this.Dispose();
-        //    //MessageBox.Show("Done!"); //obviously you'd do something else in a real app...
+            ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset2 = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset2;
+            raster2.BuildAttributeTable();
+            ITable vat2 = (raster2 as IRasterBandCollection).Item(0).AttributeTable;
 
+            List<string> fieldList = new List<string>();
+
+            for (int j = 0; j < vat2.Fields.FieldCount; j++)
+            {
+                IField field = vat2.Fields.get_Field(j);
+                if (field.Name.ToUpper() != "OID" && field.Name.ToUpper() != "VALUE" && field.Name.ToUpper() != "COUNT")
+                    fieldList.Add(field.Name);
+            }
+
+             lastControl.SetRichTextBoxLabel("Final katmanında eksik kolonlar tanımlanıyor...");
+
+            for (int i = 0; i < AppSingleton.Instance().PolygonLayerList.Count; i++)
+            {
+                var item = AppSingleton.Instance().PolygonLayerList[i];
+                FieldLayerObject fieldLayerObject = GetFieldLayerObject(item.layer.Name);
+                var reclassifiedlayername = AppSingleton.Instance().WorkspacePath + "\\Reclassified_" + item.layer.Name;
+                if (!JoinField(vat2, fieldList[i], reclassifiedlayername, "Value", fieldLayerObject.FieldName))
+                {
+                    MessageBox.Show("Hata Kodu :5614 . Lütfen yöneticiniz ile görüşünüz.");
+                    return;
+                }
+            }          
+
+                //foreach (var item in reclassList)
+                //{
+                //    IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
+
+                //    Type factoryType = Type.GetTypeFromProgID(
+                //    "esriDataSourcesGDB.AccessWorkspaceFactory");
+                //    string guid = Guid.NewGuid().ToString();
+                //    IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
+                //        (factoryType);
+
+
+                //    IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
+
+
+                //    //IRasterWorkspace rasterWorkspace = AppSingleton.Instance().PersonalWorkspace as IRasterWorkspace;
+                //    IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(item);
+                //    IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
+
+                //    ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
+                //    raster.BuildAttributeTable();
+                //    ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
+                //    //IFeatureClass fclass= (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
+                //    List<double> valueList = GetUniques(vat as ITable, "Value");
+                //    double max = FindMaxValue(valueList);
+                //    double min = FindMinValue(valueList);
+                //    IFeatureLayer fLayer = new FeatureLayerClass();
+                //    fLayer.Name = item;
+                //    fLayer.FeatureClass = fclass;
+                //    lastControl.SetRichTextBoxLabel("Öznitelik ekleniyor...");
+                //    AddField(fLayer, "Normal", "");
+                //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+                //    lastControl.SetRichTextBoxLabel("Normalleştirme işlemi yapılıyor...");
+                //    foreach (var myLayer in AppSingleton.Instance().AllLayersDict)
+                //    {
+                //        string layerName = myLayer.Key;
+                //        if ("Reclassified_" + layerName == item)
+                //        {
+                //            LayerType lType = myLayer.Value;
+                //            switch (lType.Metod)
+                //            {
+                //                case "x/Maks":
+                //                    SetFirstNormal(vat, max);
+                //                    break;
+                //                case "1-(x/Maks)":
+                //                    SetSecondNormal(vat, max);
+                //                    break;
+                //                case "(x-Min)/(Maks-Min)":
+                //                    SetThirdNormal(vat, max, min);
+                //                    break;
+                //                case "(Maks-x)/(Maks-Min)":
+                //                    SetFourthNormal(vat, max, min);
+                //                    break;
+                //                default:
+                //                    Console.WriteLine("Invalid selection. Please select 1, 2, or 3.");
+                //                    break;
+                //            }
+
+                //        }
+
+                //    }
+                //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+                //}
+
+                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            //this.Dispose();
+            //MessageBox.Show("Done!"); //obviously you'd do something else in a real app...
         }
     }
 }
+

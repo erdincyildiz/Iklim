@@ -171,126 +171,154 @@ namespace Iklim
                 }
             }
             AppSingleton.Instance().PoligonFieldListesi = poligonListesi;
-            CheckDict();
+
+            FillPoligonUniqueValues(poligonListesi);
+
+            //CheckDict();
             return true;
         }
-        public void UpdateFieldList(string FieldName,string layerName)
-        {
-            FieldGrid fieldGrid = AppSingleton.Instance().PolyGridDict[layerName];
-            Dictionary<string, string> fieldList = new Dictionary<string, string>();
 
-            IFeatureLayer fLayer = fieldGrid.FieldLayerObject.LayerObject.layer as IFeatureLayer;
-
-            fieldGrid.FieldLayerObject.FieldList =UtilMethods.CountUniques((ITable)fLayer.FeatureClass, FieldName);
-            AppSingleton.Instance().PolyGridDict[layerName] = fieldGrid;
-           
-        }
-        public void CheckDict()
+        private void FillPoligonUniqueValues(List<LayerField> poligonListesi)
         {
-            if (AppSingleton.Instance().PolyGridDict == null)
+            if (AppSingleton.Instance().ReclassList == null)
             {
-                AppSingleton.Instance().PolyGridDict = new Dictionary<string, FieldGrid>();
+                AppSingleton.Instance().ReclassList = new List<FieldLayerObject>();
             }
 
-            for (int i = AppSingleton.Instance().PolyGridDict.Count - 1; i >= 0; i--)
+            foreach (var item in poligonListesi)
             {
-                bool kontrol = false;
-                KeyValuePair<string, FieldGrid> peer = AppSingleton.Instance().PolyGridDict.ElementAt(i);
-
-                for (int j = dataGridView1.Rows.Count - 1; j >= 0; j--)
+                FieldLayerObject fLayerObject = new FieldLayerObject();
+                fLayerObject.LayerObject = item.LayerObject;
+                fLayerObject.FieldName = item.FieldName;
+                var dict = UtilMethods.CountUniques((ITable)(item.LayerObject.layer as IFeatureLayer).FeatureClass, item.FieldName);
+                var counter = 0;
+                for (int i = dict.Count - 1; i >= 0; i--)
                 {
-                    if (dataGridView1.Rows[j].Cells[0].Value != null)
-                    {
-                        string layerName = dataGridView1.Rows[j].Cells[0].Value.ToString();
-                        if (peer.Key == layerName)
-                        {
-                            kontrol = true;                           
-                            FieldGrid fieldGrid = peer.Value;
-                            string fieldName = "";
-                            foreach (LayerField layerField in AppSingleton.Instance().PoligonFieldListesi)
-                            {
-                                if (layerField.LayerObject.layer.Name==layerName)
-                                {
-                                    fieldName = layerField.FieldName;
-                                }
-                            }
-                            if (fieldGrid.FieldName!=fieldName)
-                            {
-                                AppSingleton.Instance().PolyGridDict[layerName].FieldName = fieldName;
-                                UpdateFieldList(fieldName, layerName);
-                            }
-                            break;
-                        }
-                        
-                    }
+                    counter++;
+                    KeyValuePair<string, string> pair = dict.ElementAt(i);
+                    dict[pair.Key] = counter.ToString();
                 }
-                if (kontrol == false)
-                {
-                    AppSingleton.Instance().PolyGridDict.Remove(peer.Key);
-                    AppSingleton.Instance().wizardHost.WizardPages.Remove(peer.Value.GridID);
-                }
-            }
-
-            for (int j = dataGridView1.Rows.Count - 1; j >= 0; j--)
-            {
-                string layerName = "";
-                if (dataGridView1.Rows.Count > 0)
-                {
-                    bool kontrol = false;
-                    if (dataGridView1.Rows[j].Cells[0].Value != null)
-                    {
-
-                        for (int i = AppSingleton.Instance().PolyGridDict.Count - 1; i >= 0; i--)
-                        {
-                            KeyValuePair<string, FieldGrid> peer = AppSingleton.Instance().PolyGridDict.ElementAt(i);
-
-                            layerName = dataGridView1.Rows[j].Cells[0].Value.ToString();
-
-                            if (peer.Key == layerName)
-                            {
-                                kontrol = true;
-                                break;
-                            }
-                        }
-
-                        if (kontrol == false)
-                        {
-                            AddToDictionaryAndWizardPages(dataGridView1.Rows[j]);
-                        }
-                    }
-                }
+                fLayerObject.FieldList = dict;
+                AppSingleton.Instance().ReclassList.Add(fLayerObject);
             }
         }
 
+        // Coka inheritance
 
+        ////public void UpdateFieldList(string FieldName,string layerName)
+        ////{
+        ////    FieldGrid fieldGrid = AppSingleton.Instance().PolyGridDict[layerName];
+        ////    Dictionary<string, string> fieldList = new Dictionary<string, string>();
 
-        private void AddToDictionaryAndWizardPages(DataGridViewRow item)
-        {
-            FieldGrid fieldGrid = new FieldGrid();
-            FieldLayerObject fieldLayerObject = new FieldLayerObject();
+        ////    IFeatureLayer fLayer = fieldGrid.FieldLayerObject.LayerObject.layer as IFeatureLayer;
 
-            foreach (LayerField layerField in AppSingleton.Instance().PoligonFieldListesi)
-            {
-                if (layerField.LayerObject.layer.Name == item.Cells[0].Value.ToString())
-                {
-                    fieldLayerObject.LayerObject = layerField.LayerObject;
-                    fieldGrid.FieldLayerObject = fieldLayerObject;
-                    fieldGrid.FieldName = layerField.FieldName;
-                    break;
-                }
-            }
-            int itemCount = AppSingleton.Instance().PolyItemCount+1;
-            fieldGrid.GridID = itemCount;
-            AppSingleton.Instance().PolyItemCount = itemCount;
+        ////    fieldGrid.FieldLayerObject.FieldList =UtilMethods.CountUniques((ITable)fLayer.FeatureClass, FieldName);
+        ////    AppSingleton.Instance().PolyGridDict[layerName] = fieldGrid;
 
-            IFeatureLayer fLayer = fieldGrid.FieldLayerObject.LayerObject.layer as IFeatureLayer;
-            
-            AppSingleton.Instance().PolyGridDict.Add(fLayer.Name,fieldGrid);
-            fieldGrid.FieldLayerObject.FieldList =UtilMethods.CountUniques((ITable)fLayer.FeatureClass, fieldGrid.FieldName);
-            fieldGrid.SetLabel(fLayer.Name);
-            AppSingleton.Instance().wizardHost.WizardPages.Add(itemCount,fieldGrid);
+        ////}
+        ////public void CheckDict()
+        ////{
+        ////    if (AppSingleton.Instance().PolyGridDict == null)
+        ////    {
+        ////        AppSingleton.Instance().PolyGridDict = new Dictionary<string, FieldGrid>();
+        ////    }
 
-        }
-       
+        ////    for (int i = AppSingleton.Instance().PolyGridDict.Count - 1; i >= 0; i--)
+        ////    {
+        ////        bool kontrol = false;
+        ////        KeyValuePair<string, FieldGrid> peer = AppSingleton.Instance().PolyGridDict.ElementAt(i);
+
+        ////        for (int j = dataGridView1.Rows.Count - 1; j >= 0; j--)
+        ////        {
+        ////            if (dataGridView1.Rows[j].Cells[0].Value != null)
+        ////            {
+        ////                string layerName = dataGridView1.Rows[j].Cells[0].Value.ToString();
+        ////                if (peer.Key == layerName)
+        ////                {
+        ////                    kontrol = true;                           
+        ////                    FieldGrid fieldGrid = peer.Value;
+        ////                    string fieldName = "";
+        ////                    foreach (LayerField layerField in AppSingleton.Instance().PoligonFieldListesi)
+        ////                    {
+        ////                        if (layerField.LayerObject.layer.Name==layerName)
+        ////                        {
+        ////                            fieldName = layerField.FieldName;
+        ////                        }
+        ////                    }
+        ////                    if (fieldGrid.FieldName!=fieldName)
+        ////                    {
+        ////                        AppSingleton.Instance().PolyGridDict[layerName].FieldName = fieldName;
+        ////                        UpdateFieldList(fieldName, layerName);
+        ////                    }
+        ////                    break;
+        ////                }
+
+        ////            }
+        ////        }
+        ////        if (kontrol == false)
+        ////        {
+        ////            AppSingleton.Instance().PolyGridDict.Remove(peer.Key);
+        ////            AppSingleton.Instance().wizardHost.WizardPages.Remove(peer.Value.GridID);
+        ////        }
+        ////    }
+
+        ////    for (int j = dataGridView1.Rows.Count - 1; j >= 0; j--)
+        ////    {
+        ////        string layerName = "";
+        ////        if (dataGridView1.Rows.Count > 0)
+        ////        {
+        ////            bool kontrol = false;
+        ////            if (dataGridView1.Rows[j].Cells[0].Value != null)
+        ////            {
+
+        ////                for (int i = AppSingleton.Instance().PolyGridDict.Count - 1; i >= 0; i--)
+        ////                {
+        ////                    KeyValuePair<string, FieldGrid> peer = AppSingleton.Instance().PolyGridDict.ElementAt(i);
+
+        ////                    layerName = dataGridView1.Rows[j].Cells[0].Value.ToString();
+
+        ////                    if (peer.Key == layerName)
+        ////                    {
+        ////                        kontrol = true;
+        ////                        break;
+        ////                    }
+        ////                }
+
+        ////                if (kontrol == false)
+        ////                {
+        ////                    AddToDictionaryAndWizardPages(dataGridView1.Rows[j]);
+        ////                }
+        ////            }
+        ////        }
+        ////    }
+        ////}
+        ////private void AddToDictionaryAndWizardPages(DataGridViewRow item)
+        ////{
+        ////    FieldGrid fieldGrid = new FieldGrid();
+        ////    FieldLayerObject fieldLayerObject = new FieldLayerObject();
+
+        ////    foreach (LayerField layerField in AppSingleton.Instance().PoligonFieldListesi)
+        ////    {
+        ////        if (layerField.LayerObject.layer.Name == item.Cells[0].Value.ToString())
+        ////        {
+        ////            fieldLayerObject.LayerObject = layerField.LayerObject;
+        ////            fieldGrid.FieldLayerObject = fieldLayerObject;
+        ////            fieldGrid.FieldName = layerField.FieldName;
+        ////            break;
+        ////        }
+        ////    }
+        ////    int itemCount = AppSingleton.Instance().PolyItemCount+1;
+        ////    fieldGrid.GridID = itemCount;
+        ////    AppSingleton.Instance().PolyItemCount = itemCount;
+
+        ////    IFeatureLayer fLayer = fieldGrid.FieldLayerObject.LayerObject.layer as IFeatureLayer;
+
+        ////    AppSingleton.Instance().PolyGridDict.Add(fLayer.Name,fieldGrid);
+        ////    fieldGrid.FieldLayerObject.FieldList =UtilMethods.CountUniques((ITable)fLayer.FeatureClass, fieldGrid.FieldName);
+        ////    fieldGrid.SetLabel(fLayer.Name);
+        ////    AppSingleton.Instance().wizardHost.WizardPages.Add(itemCount,fieldGrid);
+
+        ////}
+
     }
 }

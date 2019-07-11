@@ -48,8 +48,7 @@ namespace Iklim
                 listBoxTumKatmanlar.Items.RemoveAt(listBoxTumKatmanlar.SelectedIndex);
                 updateComboBox();
                 UpdateKullanilacakLayers();
-                UpdateEnterpoleLayers();
-               
+                UpdateEnterpoleLayers();               
             }
             catch
             {
@@ -161,7 +160,13 @@ namespace Iklim
                     lObject.Name = layer.Name;
                     listBoxTumKatmanlar.Items.Add(lObject);
                 }
-
+                else if(layer is IRasterLayer)
+                {
+                    LayerObject lObject = new LayerObject();
+                    lObject.layer = layer;
+                    lObject.Name = layer.Name;
+                    listBoxTumKatmanlar.Items.Add(lObject);
+                }
             }
             updateComboBox();
         }
@@ -189,19 +194,29 @@ namespace Iklim
         {
             List<LayerObject> EnterpoleLayer = new List<LayerObject>();
             List<LayerObject> PolygonLayer = new List<LayerObject>();
-            foreach (LayerObject LayerObject in AppSingleton.Instance().allLayers)
+            List<LayerObject> RasterLayer = new List<LayerObject>();
+            foreach (LayerObject layerObject in AppSingleton.Instance().allLayers)
             {
-                if ((LayerObject.layer as IFeatureLayer).FeatureClass.ShapeType != esriGeometryType.esriGeometryPolygon)
+                var layer = (layerObject.layer as IFeatureLayer);
+                if (layer != null)
                 {
-                    EnterpoleLayer.Add(LayerObject);
+                    if (layer.FeatureClass.ShapeType != esriGeometryType.esriGeometryPolygon)
+                    {
+                        EnterpoleLayer.Add(layerObject);
+                    }
+                    else if (layer.FeatureClass.ShapeType == esriGeometryType.esriGeometryPolygon)
+                    {
+                        PolygonLayer.Add(layerObject);
+                    }
                 }
-                else if ((LayerObject.layer as IFeatureLayer).FeatureClass.ShapeType == esriGeometryType.esriGeometryPolygon)
+                else if (layerObject.layer is IRasterLayer)
                 {
-                    PolygonLayer.Add(LayerObject);
+                    RasterLayer.Add(layerObject);
                 }
             }
             AppSingleton.Instance().EnterpoleLayerList = EnterpoleLayer;
             AppSingleton.Instance().PolygonLayerList = PolygonLayer;
+            AppSingleton.Instance().RasterLayerList = RasterLayer;
         }
 
         private void updateComboBox()

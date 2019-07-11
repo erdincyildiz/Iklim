@@ -9,5 +9,6 @@ namespace Iklim
     {
         public Dictionary<string, string> FieldList { get; set; }
         public LayerObject LayerObject { get; set; }
+        public string FieldName { get; set; }
     }
 }

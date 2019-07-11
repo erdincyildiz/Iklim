@@ -45,6 +45,8 @@ namespace Iklim
         public List<LayerObject> EnterpoleLayerList { get; set; }
         public List<LayerObject> BufferLayerList { get; set; }
         public List<LayerObject> PolygonLayerList { get; set; }
+
+        public List<LayerObject> RasterLayerList { get; set; }
         public List<LayerObject> AllLayers { get; set; }
 
         public Dictionary<string, FieldGrid> PolyGridDict { get; set; }
@@ -53,8 +55,13 @@ namespace Iklim
         public Dictionary<string, LayerType> AllLayersDict { get; set; }
 
         public Dictionary<string, AgirlikType> AgirlikDict { get; set; }
+        public List<FieldLayerObject> ReclassList { get; set; }
 
         public WizardHost wizardHost { get; set; }
+
+        public IWorkspace PersonalWorkspace { get; set; }
+
+        public string Path { get; set; }
 
         public void CreateWorkspacePath()
         {
@@ -63,13 +70,14 @@ namespace Iklim
                 MessageBox.Show(WorkspacePath);
                 return;
             }
-            string path =Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Iklim\\" + DateTime.Today.ToShortDateString().Replace("/", ".") + "\\";           
+            string path ="C:"+ "\\Iklim\\" + DateTime.Today.ToShortDateString().Replace("/", ".") + "\\";
+            Path = path;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);                
 
             }
-            clearFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Iklim");
+            clearFolder("C:"+ "\\Iklim");
             CreateAccessWorkspace(path);
         }
 
@@ -90,7 +98,8 @@ namespace Iklim
                 // Cast the workspace name object to the IName interface and open the workspace.
                 IName name = (IName)workspaceName;
                 IWorkspace workspace = (IWorkspace)name.Open();
-                WorkspacePath = path + guid + ".mdb";                
+                WorkspacePath = path + guid + ".mdb";
+                PersonalWorkspace = workspace;
             }
             catch (Exception ex)
             {
