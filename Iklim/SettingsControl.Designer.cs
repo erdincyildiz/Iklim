@@ -75,7 +75,7 @@
             // 
             // txtPiksel
             // 
-            this.txtPiksel.Location = new System.Drawing.Point(6, 40);
+            this.txtPiksel.Location = new System.Drawing.Point(6, 43);
             this.txtPiksel.Name = "txtPiksel";
             this.txtPiksel.Size = new System.Drawing.Size(71, 20);
             this.txtPiksel.TabIndex = 0;
@@ -135,7 +135,7 @@
             // 
             // txtNoData
             // 
-            this.txtNoData.Location = new System.Drawing.Point(6, 140);
+            this.txtNoData.Location = new System.Drawing.Point(6, 142);
             this.txtNoData.Name = "txtNoData";
             this.txtNoData.Size = new System.Drawing.Size(71, 20);
             this.txtNoData.TabIndex = 0;
@@ -472,7 +472,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
             this.Name = "SettingsControl";
-            this.Size = new System.Drawing.Size(682, 449);
+            this.Size = new System.Drawing.Size(676, 458);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

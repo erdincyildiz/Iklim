@@ -800,11 +800,11 @@ namespace Iklim
             lastControl.SetRichTextBoxLabel("Veriler çalışma alanı sınırlarına göre kesiliyor...");
             foreach (var item in AppSingleton.Instance().allLayers)
             {
-                //if (!ClipLayers(item.layer))
-                //{
-                //    MessageBox.Show("Hata Kodu :1103 . Lütfen yöneticiniz ile görüşünüz.");
-                //    return;
-                //}
+                if (!ClipLayers(item.layer))
+                {
+                    MessageBox.Show("Hata Kodu :1103 . Lütfen yöneticiniz ile görüşünüz.");
+                    return;
+                }
             }
             lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
             
@@ -819,7 +819,7 @@ namespace Iklim
                 }
 
                 lastControl.SetRichTextBoxLabel(item.layer.Name + " katmanı için raster dönüşüm yapılıyor...");
-                if (!PolygonToRaster(item.layer, "", fieldLayerObject.FieldName, ""))
+                if (!PolygonToRaster(item.layer, "Clip_", fieldLayerObject.FieldName, ""))
                 {
                     MessageBox.Show("Hata Kodu :1111 . Lütfen yöneticiniz ile görüşünüz.");
                     return;

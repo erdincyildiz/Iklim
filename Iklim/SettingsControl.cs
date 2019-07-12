@@ -28,6 +28,7 @@ namespace Iklim
             cmbYarıcapIDW.SelectedIndex = 0;
             cmbYarıcapKriging.SelectedIndex = 0;
             cmbDataType.SelectedIndex = 0;
+            txtPiksel.Text = AppSingleton.Instance().CellSize.ToString() ;
         }
         public void Save()
         {
