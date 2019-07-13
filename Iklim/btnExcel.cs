@@ -10,7 +10,7 @@
         {
             AppSingleton.Instance().CreateWorkspacePath();
             XYEventTableForm form = new XYEventTableForm();
-            form.Show();
+            form.ShowDialog();
         }
 
         protected override void OnUpdate()

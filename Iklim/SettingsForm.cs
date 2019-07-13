@@ -20,12 +20,13 @@ namespace Iklim
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
             settingsControl1.CheckForm();
+             AppSingleton.Instance().SettingsControl = this.settingsControl1;
             this.Close();
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            settingsControl1.Load();
+            settingsControl1.Load();           
         }
     }
 }

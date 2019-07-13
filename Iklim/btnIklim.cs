@@ -14,10 +14,11 @@ namespace Iklim
             //  TODO: Sample code showing how to access button host
             //
             ArcMap.Application.CurrentTool = null;
-            MainForm mainForm = new MainForm();
-            mainForm.Show();
             IMxDocument mxDocument = ArcMap.Document;
             AppSingleton.Instance().MxDocument = mxDocument;
+            MainForm mainForm = new MainForm();
+            mainForm.ShowDialog();
+           
         }
 
         protected override void OnUpdate()

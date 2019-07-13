@@ -793,9 +793,10 @@ namespace Iklim
 
         void host_WizardCompleted()
         {
-            SettingsControl control = new SettingsControl();
-            control.Load();
-            control.CheckForm();
+            if(AppSingleton.Instance().SettingsControl == null)
+            {
+                MessageBox.Show("Lütfen öncelikli olarak ayarlar pencerisinde seçiminizi yapıp kaydedin.");
+            }
 
             lastControl.SetRichTextBoxLabel("Veriler çalışma alanı sınırlarına göre kesiliyor...");
             foreach (var item in AppSingleton.Instance().allLayers)
@@ -829,13 +830,18 @@ namespace Iklim
                 string reclassifyList = "";
                 foreach (var pair in myDict)
                 {
-                    if (reclassifyList == "")
+                    var key = pair.Key;
+                    if (key.Contains(" "))
                     {
-                        reclassifyList = pair.Key + " " + pair.Value + ";";
+                        key  = "'" + key + "'";
+                    }
+                        if (reclassifyList == "")
+                    {
+                        reclassifyList = key + " " + pair.Value + ";";
                     }
                     else
                     {
-                        reclassifyList = reclassifyList + pair.Key + " " + pair.Value + ";";
+                        reclassifyList = reclassifyList + key + " " + pair.Value + ";";
                     }
 
                 }

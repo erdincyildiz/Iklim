@@ -61,23 +61,19 @@ namespace Iklim
 
         public IWorkspace PersonalWorkspace { get; set; }
 
+        public SettingsControl SettingsControl { get; set; }
         public string Path { get; set; }
 
         public void CreateWorkspacePath()
         {
-            if (WorkspacePath != null)
-            {
-                MessageBox.Show(WorkspacePath);
-                return;
-            }
-            string path ="C:"+ "\\Iklim\\" + DateTime.Today.ToShortDateString().Replace("/", ".") + "\\";
+            string path =Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Iklim\\" + DateTime.Today.ToShortDateString().Replace("/", ".") + "\\";
             Path = path;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);                
 
             }
-            clearFolder("C:"+ "\\Iklim");
+            clearFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Iklim");
             CreateAccessWorkspace(path);
         }
 
