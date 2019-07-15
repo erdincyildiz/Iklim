@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblInfo1.Text" xml:space="preserve">
+    <value>Sözel bir veri dosyasından coğrafi veri üretilmek için bu aracı kullanabilirsiniz. *.xlsx dosyalarını veri olarak almaktadır. Girdi olarak seçtiğiniz dosyanın içerisinde her bir veri satırına ait x ve y değerlerini içeren sütunları aşağıdaki açılır listelerden belirleyiniz. Sonuç ürün harita ekranına eklenecektir.</value>
+  </data>
 </root>

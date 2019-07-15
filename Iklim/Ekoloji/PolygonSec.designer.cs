@@ -28,19 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PolygonSec));
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.LayerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnName = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
+            this.grpbxInfoPolygonSec = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.grpbxInfoPolygonSec.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 10);
+            this.label2.Location = new System.Drawing.Point(72, 209);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(274, 20);
             this.label2.TabIndex = 21;
@@ -74,24 +78,47 @@
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 30);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(6, 16);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(508, 13);
+            this.label3.Size = new System.Drawing.Size(664, 32);
             this.label3.TabIndex = 27;
-            this.label3.Text = "Analizde kullanılacak olan katmanlardan poligon olarak kullanılacak olanları aşağ" +
-    "ıdaki listeden özelleştiriniz.";
+            this.label3.Text = "Analizde kullanılmak üzere bir önceki ekranda seçilen vektör katmanların her biri" +
+    " için bir öznitelik sütunu seçilmelidir. Oluşturulacak raster sonuç yüzeyde bu ö" +
+    "znitelik değeri yer alacaktır. ";
+            // 
+            // grpbxInfoPolygonSec
+            // 
+            this.grpbxInfoPolygonSec.Controls.Add(this.label1);
+            this.grpbxInfoPolygonSec.Controls.Add(this.label3);
+            this.grpbxInfoPolygonSec.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpbxInfoPolygonSec.Location = new System.Drawing.Point(3, 3);
+            this.grpbxInfoPolygonSec.Name = "grpbxInfoPolygonSec";
+            this.grpbxInfoPolygonSec.Size = new System.Drawing.Size(676, 100);
+            this.grpbxInfoPolygonSec.TabIndex = 28;
+            this.grpbxInfoPolygonSec.TabStop = false;
+            this.grpbxInfoPolygonSec.Text = "Girdi Katmanları İçin Özniteliklerin Belirlenmesi";
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(6, 48);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(664, 44);
+            this.label1.TabIndex = 27;
+            this.label1.Text = resources.GetString("label1.Text");
             // 
             // PolygonSec
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.grpbxInfoPolygonSec);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label2);
             this.Name = "PolygonSec";
             this.Size = new System.Drawing.Size(682, 449);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.grpbxInfoPolygonSec.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -104,6 +131,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn LayerName;
         private System.Windows.Forms.DataGridViewComboBoxColumn ColumnName;
         private System.Windows.Forms.Label label3;
-
+        private System.Windows.Forms.GroupBox grpbxInfoPolygonSec;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -67,6 +67,8 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
+            this.cmbYontem = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -102,7 +104,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmbYontem);
             this.groupBox1.Controls.Add(this.chbAra);
+            this.groupBox1.Controls.Add(this.label19);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.txtNoData);
             this.groupBox1.Controls.Add(this.label1);
@@ -461,6 +465,26 @@
             this.label16.TabIndex = 1;
             this.label16.Text = "Arama yarıçapı:";
             // 
+            // cmbYontem
+            // 
+            this.cmbYontem.FormattingEnabled = true;
+            this.cmbYontem.Items.AddRange(new object[] {
+            "IDW",
+            "KRIGING"});
+            this.cmbYontem.Location = new System.Drawing.Point(6, 220);
+            this.cmbYontem.Name = "cmbYontem";
+            this.cmbYontem.Size = new System.Drawing.Size(121, 21);
+            this.cmbYontem.TabIndex = 5;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(6, 189);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(101, 13);
+            this.label19.TabIndex = 4;
+            this.label19.Text = "Uygulama Yöntemi :";
+            // 
             // SettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -527,5 +551,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox txtLagKriging;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox cmbYontem;
+        private System.Windows.Forms.Label label19;
     }
 }

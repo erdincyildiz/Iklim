@@ -123,4 +123,7 @@
   <metadata name="ColumnName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Aşağıdaki listede, bir önceki ekranda analize girmesi için seçilen vektör katmanlar listelenmektedir. Bu katmanların yanında yer alan açılır liste içerisinden hangi öznitelik sütunu kullanılacak ise onun seçilmesi gereklidir. Raster verilerde doğrudan hücre değerlerine göre analiz gerçekleştirilir ve raster veri setinde yer alan öznitelik değerlerinin hepsi sonuç verisetine aktarılır.</value>
+  </data>
 </root>

@@ -64,6 +64,7 @@ namespace Iklim
         public SettingsControl SettingsControl { get; set; }
         public string Path { get; set; }
 
+        public string UygulamaYontemi { get; set; }
         public void CreateWorkspacePath()
         {
             string path =Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Iklim\\" + DateTime.Today.ToShortDateString().Replace("/", ".") + "\\";
@@ -135,5 +136,55 @@ namespace Iklim
 
             return instance;
         }
+
+        public string Kriging(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Kriging kriging = new ESRI.ArcGIS.SpatialAnalystTools.Kriging();
+                kriging.cell_size = AppSingleton.Instance().CellSize;
+                kriging.out_surface_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_Kriging_" + FieldName;
+                kriging.in_point_features = selectedLayer;
+                kriging.z_field = FieldName;
+                kriging.semiVariogram_props = AppSingleton.Instance().KrigingSemiVariogram + " " + AppSingleton.Instance().KrigingLagSayisi;
+                kriging.search_radius = AppSingleton.Instance().KrigingYaricap;
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(kriging, null);
+                return kriging.out_surface_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        public string IDW(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
+                idw.cell_size = AppSingleton.Instance().CellSize;
+                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_IDW_" + FieldName;
+                idw.in_point_features = selectedLayer;
+                idw.z_field = FieldName;
+                idw.power = 3;
+                idw.search_radius = AppSingleton.Instance().IDWYaricap;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(idw, null);
+                return idw.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+
     }
 }

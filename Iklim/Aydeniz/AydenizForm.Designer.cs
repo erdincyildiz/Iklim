@@ -1,6 +1,6 @@
 ﻿namespace Iklim
 {
-    partial class ErincForm
+    partial class AydenizForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,30 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ucErinc = new Iklim.UcErinc();
+            this.ucAydeniz = new Iklim.ucAydeniz();
             this.SuspendLayout();
             // 
-            // ucErinc
+            // ucAydeniz
             // 
-            this.ucErinc.Location = new System.Drawing.Point(3, 3);
-            this.ucErinc.Name = "ucErinc";
-            this.ucErinc.Size = new System.Drawing.Size(694, 412);
-            this.ucErinc.TabIndex = 0;
+            this.ucAydeniz.Location = new System.Drawing.Point(4, 12);
+            this.ucAydeniz.Name = "ucAydeniz";
+            this.ucAydeniz.Size = new System.Drawing.Size(740, 399);
+            this.ucAydeniz.TabIndex = 0;
             // 
-            // ErincForm
+            // AydenizForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 379);
-            this.Controls.Add(this.ucErinc);
-            this.Name = "ErincForm";
-            this.Text = "Erinc";
+            this.ClientSize = new System.Drawing.Size(754, 424);
+            this.Controls.Add(this.ucAydeniz);
+            this.Name = "AydenizForm";
+            this.Text = "AydenizForm";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private UcErinc ucErinc;
+        private ucAydeniz ucAydeniz;
     }
 }

@@ -116,6 +116,19 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aydeniz\AydenizForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Aydeniz\AydenizForm.Designer.cs">
+      <DependentUpon>AydenizForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Aydeniz\btnAydeniz.cs" />
+    <Compile Include="Aydeniz\UcAydeniz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Aydeniz\UcAydeniz.Designer.cs">
+      <DependentUpon>UcAydeniz.cs</DependentUpon>
+    </Compile>
     <Compile Include="btnSettings.cs" />
     <Compile Include="Ekoloji\AgirlikType.cs" />
     <Compile Include="Ekoloji\btnEkoloji.cs" />
@@ -212,6 +225,12 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Third\UcThird.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Third\UcThird.Designer.cs">
+      <DependentUpon>UcThird.cs</DependentUpon>
+    </Compile>
     <Compile Include="UcErinc.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -257,6 +276,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Aydeniz\AydenizForm.resx">
+      <DependentUpon>AydenizForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Aydeniz\ucAydeniz.resx">
+      <DependentUpon>UcAydeniz.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ekoloji\BufferKatmanSec.resx">
       <DependentUpon>BufferKatmanSec.cs</DependentUpon>
     </EmbeddedResource>
@@ -293,6 +318,9 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Third\UcThird.resx">
+      <DependentUpon>UcThird.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UcErinc.resx">
       <DependentUpon>UcErinc.cs</DependentUpon>
     </EmbeddedResource>
@@ -311,6 +339,9 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\btnSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\btnAydeniz.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>

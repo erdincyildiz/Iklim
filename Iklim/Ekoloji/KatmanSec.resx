@@ -112,9 +112,18 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblInfo2.Text" xml:space="preserve">
+    <value>Lejanta yüklenmiş katmanlardan analize girdi olmasını istenilen katmanlar sağda yer alan "Kullanılacak Katmanlar" alanına aktarılır. Bunun yanı sıra aşağıda yer alan "Sınır Katmanı" kısmında da proje analiz sınırını ifade eden katman seçilir.</value>
+  </data>
+  <data name="lblInfo1.Text" xml:space="preserve">
+    <value>Farklı katmanlarda bulunan alan geometrisine sahip vektör veriler ya da raster yüzeylerin girdi olarak alındığı bu uygulamada kullanıcı bu girdiler üzerindeki seçecekleri özniteliklere göre birleştirilmiş bir veri seti elde eder. </value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Ekolojik sit alanlarının belirlenmesi analizi sadece belirtilecek proje sınırları içerisinde kalan alan için gerçekleştirilecektir. Proje alanının poligon geometrisine sahip bir katmanda yer alması gereklidir.</value>
+  </data>
 </root>

@@ -20,7 +20,13 @@ namespace Iklim
         private void btnErinc_Click(object sender, EventArgs e)
         {
             ErincForm erincForm = new ErincForm();
-            erincForm.Show();
+            erincForm.ShowDialog();
+        }
+
+        private void btnAydeniz_Click(object sender, EventArgs e)
+        {
+            AydenizForm aydenizForm = new AydenizForm();
+            aydenizForm.ShowDialog();
         }
     }
 }

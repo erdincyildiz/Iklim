@@ -29,6 +29,7 @@ namespace Iklim
             cmbYarıcapKriging.SelectedIndex = 0;
             cmbDataType.SelectedIndex = 0;
             txtPiksel.Text = AppSingleton.Instance().CellSize.ToString() ;
+            cmbYontem.SelectedIndex = 0;
         }
         public void Save()
         {
@@ -84,6 +85,7 @@ namespace Iklim
             }
             AppSingleton.Instance().KrigingSemiVariogram = cmbSemiVariogramKriging.SelectedItem.ToString();
             AppSingleton.Instance().KrigingLagSayisi = txtLagKriging.Text;
+            AppSingleton.Instance().UygulamaYontemi = cmbYontem.SelectedItem.ToString();
             return true;
         }
 

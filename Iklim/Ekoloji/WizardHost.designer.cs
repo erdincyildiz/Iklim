@@ -125,7 +125,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "WizardHost";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Doğalgaz İletim Hattı Optimum Güzergah Analizi Aracı  (111Y041)";
+            this.Text = "Ekolojik Sit Alanlarının Belirlenmesi";
             this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
