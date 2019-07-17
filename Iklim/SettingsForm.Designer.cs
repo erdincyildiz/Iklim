@@ -28,16 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.settingsControl1 = new Iklim.SettingsControl();
             this.btnSaveSettings = new System.Windows.Forms.Button();
+            this.settingsControl1 = new Iklim.SettingsControl();
             this.SuspendLayout();
-            // 
-            // settingsControl1
-            // 
-            this.settingsControl1.Location = new System.Drawing.Point(12, 12);
-            this.settingsControl1.Name = "settingsControl1";
-            this.settingsControl1.Size = new System.Drawing.Size(655, 449);
-            this.settingsControl1.TabIndex = 0;
             // 
             // btnSaveSettings
             // 
@@ -49,13 +42,20 @@
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
             // 
+            // settingsControl1
+            // 
+            this.settingsControl1.Location = new System.Drawing.Point(5, 3);
+            this.settingsControl1.Name = "settingsControl1";
+            this.settingsControl1.Size = new System.Drawing.Size(676, 458);
+            this.settingsControl1.TabIndex = 2;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(693, 502);
-            this.Controls.Add(this.btnSaveSettings);
             this.Controls.Add(this.settingsControl1);
+            this.Controls.Add(this.btnSaveSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "SettingsForm";
             this.Text = "Ayarlar";
@@ -65,8 +65,7 @@
         }
 
         #endregion
-
-        private SettingsControl settingsControl1;
         private System.Windows.Forms.Button btnSaveSettings;
+        private SettingsControl settingsControl1;
     }
 }

@@ -206,6 +206,18 @@
     <Compile Include="btnExcel.cs" />
     <Compile Include="AppSingleton.cs" />
     <Compile Include="Ekoloji\LayerObject.cs" />
+    <Compile Include="Koppen\KoppenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Koppen\KoppenForm.Designer.cs">
+      <DependentUpon>KoppenForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Koppen\ucKoppen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Koppen\ucKoppen.Designer.cs">
+      <DependentUpon>ucKoppen.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,11 +243,23 @@
     <Compile Include="Third\UcThird.Designer.cs">
       <DependentUpon>UcThird.cs</DependentUpon>
     </Compile>
+    <Compile Include="Thornwaite\ucThornWaite.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Thornwaite\ucThornWaite.Designer.cs">
+      <DependentUpon>ucThornWaite.cs</DependentUpon>
+    </Compile>
     <Compile Include="UcErinc.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UcErinc.Designer.cs">
       <DependentUpon>UcErinc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucTools.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucTools.Designer.cs">
+      <DependentUpon>ucTools.cs</DependentUpon>
     </Compile>
     <Compile Include="XYEventTableForm.cs">
       <SubType>Form</SubType>
@@ -309,6 +333,12 @@
     <EmbeddedResource Include="ErincForm.resx">
       <DependentUpon>ErincForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Koppen\KoppenForm.resx">
+      <DependentUpon>KoppenForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Koppen\ucKoppen.resx">
+      <DependentUpon>ucKoppen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -342,6 +372,17 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\btnAydeniz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\cadastre_v1_fill_colorful_128.png" />
+    <AddInContent Include="Images\climate_v1_fill_colorful_128.png" />
+    <AddInContent Include="Images\combine_v1_fill_colorful_128.png" />
+    <AddInContent Include="Images\ecology_v1_fill_colorful_128.png" />
+    <AddInContent Include="Images\settings_v1_fill_colorful_128.png" />
+    <AddInContent Include="Images\tools_v1_fill_colorful_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\climate_v1_fill_colorful_40.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>

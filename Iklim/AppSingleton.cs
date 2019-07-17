@@ -185,6 +185,28 @@ namespace Iklim
             }
         }
 
+        public string Reclassify(ILayer selectedLayer, string FieldName, string reclassMap, string inputType, string outputType)
+        {
+            try
+            {
 
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.Reclassify reclass = new ESRI.ArcGIS.Analyst3DTools.Reclassify();
+                reclass.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + inputType + selectedLayer.Name;//RingBuffered_
+                reclass.reclass_field = FieldName;//"Value";
+                reclass.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outputType + selectedLayer.Name;//Reclassified_
+                reclass.remap = reclassMap;// "50 1;50 100 2;100 150 3;NODATA 0";
+
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(reclass, null);
+                return reclass.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
     }
 }

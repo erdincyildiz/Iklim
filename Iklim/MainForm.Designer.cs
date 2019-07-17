@@ -52,6 +52,7 @@
             this.btnKoppen.TabIndex = 0;
             this.btnKoppen.Text = "Köppen";
             this.btnKoppen.UseVisualStyleBackColor = true;
+            this.btnKoppen.Click += new System.EventHandler(this.btnKoppen_Click);
             // 
             // btnKoppenGreiger
             // 

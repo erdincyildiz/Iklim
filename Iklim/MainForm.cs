@@ -28,5 +28,11 @@ namespace Iklim
             AydenizForm aydenizForm = new AydenizForm();
             aydenizForm.ShowDialog();
         }
+
+        private void btnKoppen_Click(object sender, EventArgs e)
+        {
+            KoppenForm koppenForm = new KoppenForm();
+            koppenForm.ShowDialog();
+        }
     }
 }

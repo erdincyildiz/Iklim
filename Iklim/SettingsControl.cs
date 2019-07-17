@@ -23,6 +23,11 @@ namespace Iklim
 
         public new void Load()
         {
+            if( AppSingleton.Instance().CellSize == 0)
+            {
+                AppSingleton.Instance().CellSize = 10;
+            }
+
             cmbTinToRasterMethod.SelectedIndex = 0;
             cmbSemiVariogramKriging.SelectedIndex = 0;
             cmbYarıcapIDW.SelectedIndex = 0;
@@ -30,6 +35,7 @@ namespace Iklim
             cmbDataType.SelectedIndex = 0;
             txtPiksel.Text = AppSingleton.Instance().CellSize.ToString() ;
             cmbYontem.SelectedIndex = 0;
+           
         }
         public void Save()
         {

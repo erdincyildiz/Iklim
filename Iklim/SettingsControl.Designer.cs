@@ -32,7 +32,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbYontem = new System.Windows.Forms.ComboBox();
             this.chbAra = new System.Windows.Forms.CheckBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtNoData = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -67,8 +69,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.cmbYontem = new System.Windows.Forms.ComboBox();
-            this.label19 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -81,7 +81,7 @@
             this.txtPiksel.Name = "txtPiksel";
             this.txtPiksel.Size = new System.Drawing.Size(71, 20);
             this.txtPiksel.TabIndex = 0;
-            this.txtPiksel.Text = "0.021";
+            this.txtPiksel.Text = "10";
             // 
             // label1
             // 
@@ -118,6 +118,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Genel Ayarlar";
             // 
+            // cmbYontem
+            // 
+            this.cmbYontem.FormattingEnabled = true;
+            this.cmbYontem.Items.AddRange(new object[] {
+            "IDW",
+            "KRIGING"});
+            this.cmbYontem.Location = new System.Drawing.Point(6, 220);
+            this.cmbYontem.Name = "cmbYontem";
+            this.cmbYontem.Size = new System.Drawing.Size(121, 21);
+            this.cmbYontem.TabIndex = 5;
+            // 
             // chbAra
             // 
             this.chbAra.AutoSize = true;
@@ -127,6 +138,15 @@
             this.chbAra.TabIndex = 2;
             this.chbAra.Text = "Ara işlem katmanlarını\r\nlejanta ekle";
             this.chbAra.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(6, 189);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(101, 13);
+            this.label19.TabIndex = 4;
+            this.label19.Text = "Uygulama Yöntemi :";
             // 
             // label6
             // 
@@ -464,26 +484,6 @@
             this.label16.Size = new System.Drawing.Size(79, 13);
             this.label16.TabIndex = 1;
             this.label16.Text = "Arama yarıçapı:";
-            // 
-            // cmbYontem
-            // 
-            this.cmbYontem.FormattingEnabled = true;
-            this.cmbYontem.Items.AddRange(new object[] {
-            "IDW",
-            "KRIGING"});
-            this.cmbYontem.Location = new System.Drawing.Point(6, 220);
-            this.cmbYontem.Name = "cmbYontem";
-            this.cmbYontem.Size = new System.Drawing.Size(121, 21);
-            this.cmbYontem.TabIndex = 5;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(6, 189);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(101, 13);
-            this.label19.TabIndex = 4;
-            this.label19.Text = "Uygulama Yöntemi :";
             // 
             // SettingsControl
             // 

@@ -1,6 +1,6 @@
 ﻿namespace Iklim
 {
-    partial class ErincForm
+    partial class KoppenForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,30 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ucErinc = new Iklim.UcErinc();
+            this.ucKoppen = new Iklim.ucKoppen();
             this.SuspendLayout();
             // 
-            // ucErinc
+            // ucKoppen
             // 
-            this.ucErinc.Location = new System.Drawing.Point(3, 3);
-            this.ucErinc.Name = "ucErinc";
-            this.ucErinc.Size = new System.Drawing.Size(694, 412);
-            this.ucErinc.TabIndex = 0;
+            this.ucKoppen.Location = new System.Drawing.Point(-3, 1);
+            this.ucKoppen.Name = "ucKoppen";
+            this.ucKoppen.Size = new System.Drawing.Size(698, 450);
+            this.ucKoppen.TabIndex = 0;
             // 
-            // ErincForm
+            // KoppenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 452);
-            this.Controls.Add(this.ucErinc);
-            this.Name = "ErincForm";
-            this.Text = "Erinc";
+            this.Controls.Add(this.ucKoppen);
+            this.Name = "KoppenForm";
+            this.Text = "KoppenForm";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private UcErinc ucErinc;
+        private ucKoppen ucKoppen;
     }
 }

@@ -37,7 +37,6 @@ namespace Iklim
             AppSingleton.Instance().BufferItemCount = 300;
             host.ShowFirstButton = false;
             host.ShowLastButton = false;
-            host.Text = "Doğalgaz İletim Hattı Optimum Güzergah Analizi Aracı  (111Y041)";
             host.WizardCompleted += new WizardHost.WizardCompletedEventHandler(host_WizardCompleted);
             KatmanSec katmanSec = new KatmanSec();
 
@@ -523,7 +522,6 @@ namespace Iklim
                 return false;
             }
         }
-
 
         private bool Combine(string layerNames)
         {
