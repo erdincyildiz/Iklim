@@ -54,9 +54,11 @@ namespace Iklim
 
             if (rbYillik.Checked)
             {
-                var IDWT = IDW((cmbVeriYillik.SelectedItem as LayerObject).layer, cmbOrtalamaSicaklikYillik.SelectedItem.ToString(), "IDWT");
+                var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbVeriYillik.SelectedItem as LayerObject).layer);
+
+                var IDWT = IDW(clipLayer, cmbOrtalamaSicaklikYillik.SelectedItem.ToString(), "IDWT");
                 var T = Int(IDWT, "T");
-                var IDWP = IDW((cmbVeriYillik.SelectedItem as LayerObject).layer, cmbToplamYagisYillik.SelectedItem.ToString(), "IDWP");
+                var IDWP = IDW(clipLayer, cmbToplamYagisYillik.SelectedItem.ToString(), "IDWP");
                 var P = Int(IDWP, "P");
                 var idm = RasterCalculatorYillik(P, T, "IDM");
 
@@ -202,7 +204,7 @@ namespace Iklim
             }
         }
 
-        public string IDW(ILayer selectedLayer, string FieldName, string layerName)
+        public string IDW(object selectedLayer, string FieldName, string layerName)
         {
             try
             {

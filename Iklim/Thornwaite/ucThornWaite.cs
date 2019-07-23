@@ -29,17 +29,20 @@ namespace Iklim
                 MessageBox.Show("Öncelikli katmanı belirleyiniz.");
                 return;
             }
-            var s = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbYillikSuFazlasi.SelectedItem.ToString(), "s");
-            var d = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbYillikSuEksigi.SelectedItem.ToString(), "d");
-            var etp = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbETP.SelectedItem.ToString(), "etp");
-            var petp = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbPETP.SelectedItem.ToString(), "sei");
-            var aPetAgu = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbPETPAgustos.SelectedItem.ToString(), "aPetAgu");
-            var aPetTem = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbPETPTemmuz.SelectedItem.ToString(), "aPetTem");
-            var aPetHaz = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbPETPHaziran.SelectedItem.ToString(), "aPetHaz");
-            var suEksYaz = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbSuEksigiYaz.SelectedItem.ToString(), "suEksYaz");
-            var suFazYaz = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbSuFazlasiYaz.SelectedItem.ToString(), "suFazYaz");
-            var suEksKis = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbSuEksigiKis.SelectedItem.ToString(), "suEksKis");
-            var suFazKis = IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbSuFazlasiKis.SelectedItem.ToString(), "suFazKis");
+
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbUygulamaKatmani.SelectedItem as LayerObject).layer);
+
+            var s = AppSingleton.Instance().IDW(clipLayer, cmbYillikSuFazlasi.SelectedItem.ToString(), "s");
+            var d = AppSingleton.Instance().IDW(clipLayer, cmbYillikSuEksigi.SelectedItem.ToString(), "d");
+            var etp = AppSingleton.Instance().IDW(clipLayer, cmbETP.SelectedItem.ToString(), "etp");
+            var petp = AppSingleton.Instance().IDW(clipLayer, cmbPETP.SelectedItem.ToString(), "sei");
+            var aPetAgu = AppSingleton.Instance().IDW(clipLayer, cmbPETPAgustos.SelectedItem.ToString(), "aPetAgu");
+            var aPetTem = AppSingleton.Instance().IDW(clipLayer, cmbPETPTemmuz.SelectedItem.ToString(), "aPetTem");
+            var aPetHaz = AppSingleton.Instance().IDW(clipLayer, cmbPETPHaziran.SelectedItem.ToString(), "aPetHaz");
+            var suEksYaz = AppSingleton.Instance().IDW(clipLayer, cmbSuEksigiYaz.SelectedItem.ToString(), "suEksYaz");
+            var suFazYaz = AppSingleton.Instance().IDW(clipLayer, cmbSuFazlasiYaz.SelectedItem.ToString(), "suFazYaz");
+            var suEksKis = AppSingleton.Instance().IDW(clipLayer, cmbSuEksigiKis.SelectedItem.ToString(), "suEksKis");
+            var suFazKis = AppSingleton.Instance().IDW(clipLayer, cmbSuFazlasiKis.SelectedItem.ToString(), "suFazKis");
 
             var yei = RasterCalculatorYei(s, d, etp, "yei");
             var sei = petp;
@@ -404,10 +407,15 @@ namespace Iklim
                     LayerObjectList.Add(lObject);
                 }
             }
-            var comboBox = cmbUygulamaKatmani;
+            UpdateComboboxWithLayers(cmbProjectArea, LayerObjectList);
+            UpdateComboboxWithLayers(cmbUygulamaKatmani, LayerObjectList);
+        }
+
+        private void UpdateComboboxWithLayers(ComboBox comboBox, List<LayerObject> layerObjectList)
+        {
             comboBox.BindingContext = new BindingContext();
             comboBox.DataSource = null;
-            comboBox.DataSource = LayerObjectList;
+            comboBox.DataSource = layerObjectList;
             comboBox.DisplayMember = "Name";
             comboBox.SelectedIndex = -1;
         }

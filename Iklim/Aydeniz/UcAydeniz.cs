@@ -42,14 +42,18 @@ namespace Iklim
                     LayerObjectList.Add(lObject);
                 }
             }
-            var comboBox = cmbUygulamaKatmani;
+            UpdateComboboxWithLayers(cmbUygulamaKatmani, LayerObjectList);
+            UpdateComboboxWithLayers(cmbProjectArea, LayerObjectList);
+        }
+
+        private void UpdateComboboxWithLayers(ComboBox comboBox, List<LayerObject> layerObjectList)
+        {
             comboBox.BindingContext = new BindingContext();
             comboBox.DataSource = null;
-            comboBox.DataSource = LayerObjectList;
+            comboBox.DataSource = layerObjectList;
             comboBox.DisplayMember = "Name";
             comboBox.SelectedIndex = -1;
         }
-
         private void cmbUygulamaKatmani_SelectedIndexChanged(object sender, EventArgs e)
         {
             LayerObject layerObject = (LayerObject)cmbUygulamaKatmani.SelectedItem;
@@ -94,27 +98,29 @@ namespace Iklim
                 MessageBox.Show("Öncelikli katmanı belirleyiniz.");
                 return;
             }
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbUygulamaKatmani.SelectedItem as LayerObject).layer);
+
             string nN = string.Empty;
             string nP = string.Empty;
             string Y = string.Empty;
             string S = string.Empty;
             string gS = string.Empty;
-            if (AppSingleton.Instance().UygulamaYontemi == "IDW")
-            {
-                nN = AppSingleton.Instance().IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbNn.SelectedItem.ToString());
-                nP = AppSingleton.Instance().IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbNp.SelectedItem.ToString());
-                Y = AppSingleton.Instance().IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbY.SelectedItem.ToString());
-                S = AppSingleton.Instance().IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbS.SelectedItem.ToString());
-                gS = AppSingleton.Instance().IDW((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbGs.SelectedItem.ToString());
-            }
-            else if (AppSingleton.Instance().UygulamaYontemi == "KRIGING")
-            {
-                nN = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbNn.SelectedItem.ToString());
-                nP = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbNp.SelectedItem.ToString());
-                Y = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbY.SelectedItem.ToString());
-                S = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbS.SelectedItem.ToString());
-                gS = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbGs.SelectedItem.ToString());
-            }
+            //if (AppSingleton.Instance().UygulamaYontemi == "IDW")
+            //{
+                nN = AppSingleton.Instance().IDW(clipLayer, cmbNn.SelectedItem.ToString(),"nN");
+                nP = AppSingleton.Instance().IDW(clipLayer, cmbNp.SelectedItem.ToString(),"nP");
+                Y = AppSingleton.Instance().IDW(clipLayer, cmbY.SelectedItem.ToString(),"Y");
+                S = AppSingleton.Instance().IDW(clipLayer, cmbS.SelectedItem.ToString(),"S");
+                gS = AppSingleton.Instance().IDW(clipLayer, cmbGs.SelectedItem.ToString(),"gS");
+            //}
+            //else if (AppSingleton.Instance().UygulamaYontemi == "KRIGING")
+            //{
+            //    nN = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbNn.SelectedItem.ToString());
+            //    nP = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbNp.SelectedItem.ToString());
+            //    Y = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbY.SelectedItem.ToString());
+            //    S = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbS.SelectedItem.ToString());
+            //    gS = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbGs.SelectedItem.ToString());
+            //}
             string nKS = RasterCalculatorNKS(nN, nP, Y, S, gS);
             string kKS = RasterCalculatorKKS(nKS);
 

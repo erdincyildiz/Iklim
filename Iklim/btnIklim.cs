@@ -23,7 +23,7 @@ namespace Iklim
 
         protected override void OnUpdate()
         {
-            Enabled = ArcMap.Application != null;
+           
         }
     }
 }

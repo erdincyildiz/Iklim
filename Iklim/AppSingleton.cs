@@ -3,6 +3,7 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.DataSourcesRaster;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -231,6 +232,58 @@ namespace Iklim
                 return string.Empty;
             }
         }
+
+        public string RasterClipLayer(object selectedLayer,IFeatureLayer sinirLayer)
+        {
+            try
+            {
+                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle rastClip = new ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle();
+                rastClip.in_raster = selectedLayer;//Kriging
+                rastClip.extraction_area = "INSIDE";
+                rastClip.out_raster = AppSingleton.Instance().WorkspacePath + "\\ClipRaster";
+
+                IFeatureLayer fLayer = sinirLayer;
+                IEnvelope env = fLayer.AreaOfInterest.Envelope;
+               
+                string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
+                rastClip.rectangle = geo;
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(rastClip, null);
+                return rastClip.out_raster.ToString() ;
+                //return clip.out_feature_class.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty ;
+            }
+        }
+
+        public string ClipLayers(ILayer sinirLayer, ILayer selectedLayer)
+        {
+            try
+            {
+                IFeatureWorkspace fWorkspace = PersonalWorkspace as IFeatureWorkspace;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.AnalysisTools.Clip clip = new ESRI.ArcGIS.AnalysisTools.Clip();
+                clip.in_features = selectedLayer;
+                clip.clip_features = sinirLayer;
+                clip.out_feature_class = WorkspacePath + "\\Clip_" + selectedLayer.Name;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(clip, null);
+                //return clip.out_feature_class.ToString();
+                return clip.out_feature_class.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         public string Int(string layerName, string outName)
         {
             try

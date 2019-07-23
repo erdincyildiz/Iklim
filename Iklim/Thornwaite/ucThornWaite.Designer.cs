@@ -50,8 +50,10 @@
             this.lblSuFazlasi = new System.Windows.Forms.Label();
             this.cmbPETPTemmuz = new System.Windows.Forms.ComboBox();
             this.cmbPETPHaziran = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.cmbProjectArea = new System.Windows.Forms.ComboBox();
             this.cmbUygulamaKatmani = new System.Windows.Forms.ComboBox();
             this.cmbPETP = new System.Windows.Forms.ComboBox();
             this.lblYillikSuEksigi = new System.Windows.Forms.Label();
@@ -60,8 +62,6 @@
             this.cmbETP = new System.Windows.Forms.ComboBox();
             this.cmbYillikSuEksigi = new System.Windows.Forms.ComboBox();
             this.btnCalistir = new System.Windows.Forms.Button();
-            this.cmbProjectArea = new System.Windows.Forms.ComboBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.SuspendLayout();
@@ -298,6 +298,16 @@
             this.cmbPETPHaziran.Size = new System.Drawing.Size(95, 21);
             this.cmbPETPHaziran.TabIndex = 23;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(6, 17);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(134, 13);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "Proje Analiz Sınırı Katmanı :";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -317,6 +327,15 @@
             this.label5.Size = new System.Drawing.Size(181, 13);
             this.label5.TabIndex = 17;
             this.label5.Text = "Yıllık Potansiyel Evapotranspirasyon :";
+            // 
+            // cmbProjectArea
+            // 
+            this.cmbProjectArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbProjectArea.FormattingEnabled = true;
+            this.cmbProjectArea.Location = new System.Drawing.Point(414, 14);
+            this.cmbProjectArea.Name = "cmbProjectArea";
+            this.cmbProjectArea.Size = new System.Drawing.Size(259, 21);
+            this.cmbProjectArea.TabIndex = 24;
             // 
             // cmbUygulamaKatmani
             // 
@@ -393,26 +412,6 @@
             this.btnCalistir.Text = "Çalıştır";
             this.btnCalistir.UseVisualStyleBackColor = true;
             this.btnCalistir.Click += new System.EventHandler(this.btnCalistir_Click);
-            // 
-            // cmbProjectArea
-            // 
-            this.cmbProjectArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbProjectArea.FormattingEnabled = true;
-            this.cmbProjectArea.Location = new System.Drawing.Point(414, 14);
-            this.cmbProjectArea.Name = "cmbProjectArea";
-            this.cmbProjectArea.Size = new System.Drawing.Size(259, 21);
-            this.cmbProjectArea.TabIndex = 24;
-            this.cmbProjectArea.SelectedIndexChanged += new System.EventHandler(this.cmbUygulamaKatmani_SelectedIndexChanged);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(6, 17);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(134, 13);
-            this.label14.TabIndex = 25;
-            this.label14.Text = "Proje Analiz Sınırı Katmanı :";
             // 
             // ucThornWaite
             // 

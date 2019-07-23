@@ -193,8 +193,10 @@ namespace Iklim
             SettingsControl control = new SettingsControl();
             control.Load();
             control.CheckForm();
-            var yagisLayer = IDW((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtYag.SelectedItem.ToString());
-            var sicaklikLayer = IDW((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtSic.SelectedItem.ToString());
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbCalismaAlani.SelectedItem as LayerObject).layer, (cmbVeriSeti.SelectedItem as LayerObject).layer);
+
+            var yagisLayer = AppSingleton.Instance().IDW(clipLayer, cmbOrtYag.SelectedItem.ToString(),"yagisLayer");
+            var sicaklikLayer = AppSingleton.Instance().IDW(clipLayer, cmbOrtSic.SelectedItem.ToString(),"sicaklikLayer");
             var sonucRaster = Divide(yagisLayer, sicaklikLayer);
             Int(sonucRaster, "Final");
             var vat = AppSingleton.Instance().BuildRasterAttributeTable("Final");

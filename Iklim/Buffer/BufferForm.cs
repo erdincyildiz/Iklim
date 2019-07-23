@@ -10,16 +10,12 @@ using System.Windows.Forms;
 
 namespace Iklim
 {
-    public partial class ToolForm : Form
+    public partial class BufferForm : Form
     {
-        public ToolForm()
+        public BufferForm()
         {
             InitializeComponent();
-        }
-
-        private void ucTools1_Load(object sender, EventArgs e)
-        {
-         
+            bufferKatmanSec1.Init();
         }
     }
 }

@@ -17,8 +17,7 @@ namespace Iklim
     {
         public btnEkoloji()
         {
-            AppSingleton.Instance().CreateWorkspacePath();
-            RunProgram();
+           
         }
         public BufferKatmanSec bufferKatmanSec;
         public EnterpolasyonKatmanSec enterpolasyonKatmanSec;
@@ -65,6 +64,8 @@ namespace Iklim
 
         protected override void OnClick()
         {
+            AppSingleton.Instance().CreateWorkspacePath();
+            RunProgram();
         }
 
         protected override void OnUpdate()

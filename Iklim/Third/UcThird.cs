@@ -22,7 +22,10 @@ namespace Iklim
 
         private void btnCalistir_Click(object sender, EventArgs e)
         {
-            var layerNames = (cmbEkolojikSitAlani.SelectedItem as LayerObject).Name + ";" + (cmbIklimSiniri.SelectedItem as LayerObject).Name;
+            var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimSiniri.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
+            var ekolojiClipLayer= AppSingleton.Instance().RasterClipLayer((cmbEkolojikSitAlani.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
+
+            var layerNames = iklimClipLayer+ ";" + ekolojiClipLayer;
             AppSingleton.Instance().Combine(layerNames, "Combined");
         }
 

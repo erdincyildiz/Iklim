@@ -22,5 +22,11 @@ namespace Iklim
             XYEventTableForm XYEventTableForm = new XYEventTableForm();
             XYEventTableForm.ShowDialog();
         }
+
+        private void btnTampon_Click(object sender, EventArgs e)
+        {
+            BufferForm form = new BufferForm();
+            form.ShowDialog();
+        }
     }
 }

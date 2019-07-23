@@ -43,6 +43,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnOk = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -190,10 +191,21 @@
             this.label4.Text = "Enterpolasyon yapmak için seçilen katmanlar ile ilgili özelleştirmeleri aşağıdaki" +
     " pencerede tamamlayınız. ";
             // 
+            // btnOk
+            // 
+            this.btnOk.Location = new System.Drawing.Point(506, 445);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.TabIndex = 29;
+            this.btnOk.Text = "Çalıştır";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            // 
             // BufferKatmanSec
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnOk);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -208,7 +220,7 @@
             this.Controls.Add(this.listBoxKullanilacaklarBuffer);
             this.Controls.Add(this.listBoxTumKatmanlarBuffer);
             this.Name = "BufferKatmanSec";
-            this.Size = new System.Drawing.Size(682, 449);
+            this.Size = new System.Drawing.Size(682, 494);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -232,6 +244,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-
+        private System.Windows.Forms.Button btnOk;
     }
 }

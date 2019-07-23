@@ -130,6 +130,12 @@
       <DependentUpon>UcAydeniz.cs</DependentUpon>
     </Compile>
     <Compile Include="btnSettings.cs" />
+    <Compile Include="Buffer\BufferForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Buffer\BufferForm.Designer.cs">
+      <DependentUpon>BufferForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DemartonneGottman\DeMArtonnGotmannForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,10 +166,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Config.esriaddinx</DependentUpon>
     </Compile>
-    <Compile Include="Ekoloji\BufferKatmanSec.cs">
+    <Compile Include="Buffer\BufferKatmanSec.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ekoloji\BufferKatmanSec.designer.cs">
+    <Compile Include="Buffer\BufferKatmanSec.designer.cs">
       <DependentUpon>BufferKatmanSec.cs</DependentUpon>
     </Compile>
     <Compile Include="Ekoloji\EmptyControl.cs">
@@ -362,6 +368,9 @@
     <EmbeddedResource Include="Aydeniz\ucAydeniz.resx">
       <DependentUpon>UcAydeniz.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Buffer\BufferForm.resx">
+      <DependentUpon>BufferForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DemartonneGottman\DeMArtonnGotmannForm.resx">
       <DependentUpon>DeMArtonnGotmannForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -374,7 +383,7 @@
     <EmbeddedResource Include="Demartonne\ucDeMartonne.resx">
       <DependentUpon>ucDeMartonne.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ekoloji\BufferKatmanSec.resx">
+    <EmbeddedResource Include="Buffer\BufferKatmanSec.resx">
       <DependentUpon>BufferKatmanSec.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ekoloji\EmptyControl.resx">

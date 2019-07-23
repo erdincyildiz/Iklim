@@ -3,6 +3,7 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Iklim
@@ -63,8 +64,11 @@ namespace Iklim
                 return;
             }
 
-            var fClass = ((cmbInputLayer.SelectedItem as LayerObject).layer as IFeatureLayer).FeatureClass;
-            var copiedfclass = CopyFeatureClass(fClass);
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
+            var layerName = Path.GetFileNameWithoutExtension(clipLayer);
+            IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
+            
+            var copiedfclass = CopyFeatureClass(clipClass);
 
             IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
 

@@ -1,6 +1,6 @@
 ﻿namespace Iklim
 {
-    partial class ToolForm
+    partial class BufferForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,31 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ucTools1 = new Iklim.ucTools();
+            this.bufferKatmanSec1 = new Iklim.BufferKatmanSec();
             this.SuspendLayout();
             // 
-            // ucTools1
+            // bufferKatmanSec1
             // 
-            this.ucTools1.Location = new System.Drawing.Point(19, 3);
-            this.ucTools1.Name = "ucTools1";
-            this.ucTools1.Size = new System.Drawing.Size(638, 366);
-            this.ucTools1.TabIndex = 0;
-            this.ucTools1.Load += new System.EventHandler(this.ucTools1_Load);
+            this.bufferKatmanSec1.Location = new System.Drawing.Point(12, 12);
+            this.bufferKatmanSec1.Name = "bufferKatmanSec1";
+            this.bufferKatmanSec1.Size = new System.Drawing.Size(682, 491);
+            this.bufferKatmanSec1.TabIndex = 0;
             // 
-            // ToolForm
+            // BufferForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 373);
-            this.Controls.Add(this.ucTools1);
-            this.Name = "ToolForm";
-            this.Text = "ToolForm";
+            this.ClientSize = new System.Drawing.Size(730, 515);
+            this.Controls.Add(this.bufferKatmanSec1);
+            this.Name = "BufferForm";
+            this.Text = "BufferForm";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ucTools ucTools1;
+        private BufferKatmanSec bufferKatmanSec1;
     }
 }

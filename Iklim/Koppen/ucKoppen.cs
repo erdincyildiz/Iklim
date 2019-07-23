@@ -116,8 +116,11 @@ namespace Iklim
                 return;
             }
 
-            var fClass = ((cmbInputLayer.SelectedItem as LayerObject).layer as IFeatureLayer).FeatureClass;
-            var copiedfclass = CopyFeatureClass(fClass);
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
+            var layerName = System.IO.Path.GetFileNameWithoutExtension(clipLayer);
+            IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
+
+            var copiedfclass = CopyFeatureClass(clipClass);
 
             IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
 

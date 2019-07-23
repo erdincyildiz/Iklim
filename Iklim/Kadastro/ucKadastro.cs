@@ -22,11 +22,17 @@ namespace Iklim
 
         private void btnCalistir_Click(object sender, EventArgs e)
         {
-            var fClass = RasterToPolygon((cmbIklimEkoloji.SelectedItem as LayerObject).layer);
-            InterSect(fClass, (cmbKadastro.SelectedItem as LayerObject).Name);
+            var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimEkoloji.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
+
+            var fClass = RasterToPolygon(iklimClipLayer);
+
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbKadastro.SelectedItem as LayerObject).layer);
+
+
+            InterSect(fClass, clipLayer);
         }
 
-        private string RasterToPolygon(ILayer rasterlayer)
+        private string RasterToPolygon(object rasterlayer)
         {
             ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
             ESRI.ArcGIS.ConversionTools.RasterToPolygon rasterToPolygon = new ESRI.ArcGIS.ConversionTools.RasterToPolygon();
@@ -50,7 +56,7 @@ namespace Iklim
             intersect.join_attributes = "All";
             intersect.output_type = "INPUT";
             gp.AddOutputsToMap = true;
-            gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+            gp.AddOutputsToMap = true;
             gp.OverwriteOutput = true;
             gp.Execute(intersect, null);
             return intersect.out_feature_class.ToString();

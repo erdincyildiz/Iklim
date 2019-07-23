@@ -509,6 +509,30 @@ namespace Iklim
             FillDatagrid();
         }
 
+        public void Init()
+        {
+            ArcMap.Application.CurrentTool = null;
+            IMxDocument mxDocument = ArcMap.Document;
+            IMap map = mxDocument.FocusMap;
+            int layerCount = map.LayerCount;
+            List<LayerObject> LayerObjectList = new List<LayerObject>();
+            for (int i = 0; i < layerCount; i++)
+            {
+                IFeatureLayer layer = map.get_Layer(i) as IFeatureLayer;
+                if (layer != null)
+                {
+                    if (layer.FeatureClass.ShapeType != esriGeometryType.esriGeometryPolygon)
+                    {
+                        LayerObject lObject = new LayerObject();
+                        lObject.layer = layer;
+                        lObject.Name = layer.Name;
+                        LayerObjectList.Add(lObject);
+                    }
+                }
+            }
+
+            UpdateKatmanList(LayerObjectList);
+        }
         public void UpdateFieldList(string FieldName, string layerName)
         {
             FieldGrid fieldGrid = AppSingleton.Instance().BufferDict[layerName];
@@ -525,17 +549,13 @@ namespace Iklim
 
         }
 
-        public void UpdateKatmanList()
+        public void UpdateKatmanList( List<LayerObject> LayerObjectList)
         {
             listBoxTumKatmanlarBuffer.DataSource = null;
-            foreach (LayerObject LayerObject in AppSingleton.Instance().BufferLayerList)
+            foreach (LayerObject LayerObject in LayerObjectList)
             {
                 listBoxTumKatmanlarBuffer.Items.Add(LayerObject);
-            }
-            foreach (LayerObject LayerObject in AppSingleton.Instance().PolygonLayerList)
-            {
-                listBoxTumKatmanlarBuffer.Items.Add(LayerObject);
-            }
+            }            
         }
 
         private void UpdateKullanilacakBufferLayers()
@@ -561,5 +581,44 @@ namespace Iklim
             FillDatagrid();
         }
         #endregion Methods of BufferKatmanSec
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            for (int j = dataGridView1.Rows.Count - 1; j >= 0; j--)
+            {
+                if (dataGridView1.Rows[j].Cells[0].Value != null)
+                {
+                    string layerName = dataGridView1.Rows[j].Cells[0].Value.ToString();
+                    string buffer = dataGridView1.Rows[j].Cells[1].Value.ToString().Replace(",",";");
+                    RingBuffer(layerName, buffer);
+                }
+            }
+        }
+
+        private bool RingBuffer(string selectedLayer, string distances)
+        {
+            try
+            {
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer ringBuffer = new ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer();
+                ringBuffer.Input_Features = selectedLayer;
+                ringBuffer.Output_Feature_class = AppSingleton.Instance().WorkspacePath  + "\\RingBuffered_" + selectedLayer;
+                ringBuffer.Distances = distances;//"50;100;150";
+                ringBuffer.Buffer_Unit = "Meters";
+                ringBuffer.Dissolve_Option = "NONE";
+
+
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(ringBuffer, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+        }
     }
 }
