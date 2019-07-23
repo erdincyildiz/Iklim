@@ -1,5 +1,6 @@
 ﻿using ESRI.ArcGIS.ArcMapUI;
 using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.DataSourcesRaster;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using System;
@@ -162,6 +163,52 @@ namespace Iklim
             }
         }
 
+        public bool AddField(object table, string fieldName, string type)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.AddField addField = new ESRI.ArcGIS.DataManagementTools.AddField();
+                addField.in_table = table;
+                addField.field_name = fieldName;
+                addField.field_type = type;
+                addField.field_is_nullable = "NULLABLE";
+                addField.field_is_required = "NON_REQUIRED";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(addField, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public string IDW(object fclass, string FieldName, string outLayerName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
+                idw.cell_size = AppSingleton.Instance().CellSize;
+                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outLayerName;
+                idw.in_point_features = fclass;
+                idw.z_field = FieldName;
+                idw.power = 3;
+                idw.search_radius = AppSingleton.Instance().IDWYaricap;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(idw, null);
+                return idw.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         public string IDW(ILayer selectedLayer, string FieldName)
         {
             try
@@ -184,7 +231,68 @@ namespace Iklim
                 return string.Empty;
             }
         }
+        public string Int(string layerName, string outName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Int intRaster = new ESRI.ArcGIS.SpatialAnalystTools.Int();
+                intRaster.in_raster_or_constant = layerName;
+                intRaster.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outName;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(intRaster, null);
+                return intRaster.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
 
+        public ITable BuildRasterAttributeTable(string rasterName)
+        {
+            try
+            {
+
+            
+            Type factoryType = Type.GetTypeFromProgID(
+                "esriDataSourcesGDB.AccessWorkspaceFactory");
+            IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
+               (factoryType);
+            IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
+            IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(rasterName);
+            IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
+
+            ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
+            raster.BuildAttributeTable();
+            ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
+                return vat;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
+        public string Combine(string layerNames, string outLayerName)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
+                combine.in_rasters = layerNames;
+                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outLayerName;
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(combine, null);
+                return combine.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
         public string Reclassify(ILayer selectedLayer, string FieldName, string reclassMap, string inputType, string outputType)
         {
             try

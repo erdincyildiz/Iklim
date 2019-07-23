@@ -34,5 +34,23 @@ namespace Iklim
             KoppenForm koppenForm = new KoppenForm();
             koppenForm.ShowDialog();
         }
+
+        private void btnThornwaithe_Click(object sender, EventArgs e)
+        {
+            ThornwaiteForm thornForm = new ThornwaiteForm();
+            thornForm.ShowDialog();
+        }
+
+        private void btnKoppenGreiger_Click(object sender, EventArgs e)
+        {
+            DeMartonneForm deMartonneForm = new DeMartonneForm();
+            deMartonneForm.ShowDialog();
+        }
+
+        private void btnTrewertha_Click(object sender, EventArgs e)
+        {
+            DeMArtonnGotmannForm demartonForm = new DeMArtonnGotmannForm();
+            demartonForm.ShowDialog();
+        }
     }
 }

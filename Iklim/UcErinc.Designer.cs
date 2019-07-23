@@ -150,7 +150,7 @@
             this.grpbxInfoErinc.Size = new System.Drawing.Size(688, 100);
             this.grpbxInfoErinc.TabIndex = 14;
             this.grpbxInfoErinc.TabStop = false;
-            this.grpbxInfoErinc.Text = "İklim Sınırlarının Belirlenmesi - Erinç Metodu";
+            this.grpbxInfoErinc.Text = "İklim Sınırlarının Belirlenmesi - Erinç Yöntemi";
             // 
             // lblInfo4
             // 
@@ -168,10 +168,10 @@
             this.lblInfo6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInfo6.Location = new System.Drawing.Point(6, 82);
             this.lblInfo6.Name = "lblInfo6";
-            this.lblInfo6.Size = new System.Drawing.Size(423, 13);
+            this.lblInfo6.Size = new System.Drawing.Size(424, 13);
             this.lblInfo6.TabIndex = 0;
-            this.lblInfo6.Text = "seçilmelidir. Ardından analiz çalıştırılır ve Erinç metoduna göre iklim sınırları" +
-    " katmanı oluşur.";
+            this.lblInfo6.Text = "seçilmelidir. Ardından analiz çalıştırılır ve Erinç yöntemine göre iklim sınırlar" +
+    "ı katmanı oluşur.";
             // 
             // lblInfo5
             // 

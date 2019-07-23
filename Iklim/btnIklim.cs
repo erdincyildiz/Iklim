@@ -8,7 +8,7 @@ namespace Iklim
         {
         }
 
-        protected override void OnClick()
+        protected override void OnClick()                                                          
         {
             //
             //  TODO: Sample code showing how to access button host

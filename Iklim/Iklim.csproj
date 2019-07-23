@@ -130,6 +130,30 @@
       <DependentUpon>UcAydeniz.cs</DependentUpon>
     </Compile>
     <Compile Include="btnSettings.cs" />
+    <Compile Include="DemartonneGottman\DeMArtonnGotmannForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DemartonneGottman\DeMArtonnGotmannForm.Designer.cs">
+      <DependentUpon>DeMArtonnGotmannForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DemartonneGottman\ucDeMartonneGottman.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemartonneGottman\ucDeMartonneGottman.Designer.cs">
+      <DependentUpon>ucDeMartonneGottman.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Demartonne\DeMartonnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Demartonne\DeMartonnForm.Designer.cs">
+      <DependentUpon>DeMartonnForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Demartonne\ucDeMartonne.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Demartonne\ucDeMartonne.Designer.cs">
+      <DependentUpon>ucDeMartonne.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ekoloji\AgirlikType.cs" />
     <Compile Include="Ekoloji\btnEkoloji.cs" />
     <Compile Include="Config.Designer.cs">
@@ -206,6 +230,19 @@
     <Compile Include="btnExcel.cs" />
     <Compile Include="AppSingleton.cs" />
     <Compile Include="Ekoloji\LayerObject.cs" />
+    <Compile Include="Kadastro\btnKadastro.cs" />
+    <Compile Include="Kadastro\KadastroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kadastro\KadastroForm.Designer.cs">
+      <DependentUpon>KadastroForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kadastro\ucKadastro.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Kadastro\ucKadastro.Designer.cs">
+      <DependentUpon>ucKadastro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Koppen\KoppenForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,17 +274,36 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Third\UcThird.cs">
+    <Compile Include="Third\btnThird.cs" />
+    <Compile Include="Third\ThirdForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Third\ThirdForm.Designer.cs">
+      <DependentUpon>ThirdForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Third\ucThird.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Third\UcThird.Designer.cs">
-      <DependentUpon>UcThird.cs</DependentUpon>
+    <Compile Include="Third\ucThird.Designer.cs">
+      <DependentUpon>ucThird.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Thornwaite\ThornwaiteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Thornwaite\ThornwaiteForm.Designer.cs">
+      <DependentUpon>ThornwaiteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Thornwaite\ucThornWaite.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Thornwaite\ucThornWaite.Designer.cs">
       <DependentUpon>ucThornWaite.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolForm.Designer.cs">
+      <DependentUpon>ToolForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UcErinc.cs">
       <SubType>UserControl</SubType>
@@ -306,6 +362,18 @@
     <EmbeddedResource Include="Aydeniz\ucAydeniz.resx">
       <DependentUpon>UcAydeniz.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DemartonneGottman\DeMArtonnGotmannForm.resx">
+      <DependentUpon>DeMArtonnGotmannForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DemartonneGottman\ucDeMartonneGottman.resx">
+      <DependentUpon>ucDeMartonneGottman.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Demartonne\DeMartonnForm.resx">
+      <DependentUpon>DeMartonnForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Demartonne\ucDeMartonne.resx">
+      <DependentUpon>ucDeMartonne.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ekoloji\BufferKatmanSec.resx">
       <DependentUpon>BufferKatmanSec.cs</DependentUpon>
     </EmbeddedResource>
@@ -333,6 +401,12 @@
     <EmbeddedResource Include="ErincForm.resx">
       <DependentUpon>ErincForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Kadastro\KadastroForm.resx">
+      <DependentUpon>KadastroForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kadastro\ucKadastro.resx">
+      <DependentUpon>ucKadastro.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Koppen\KoppenForm.resx">
       <DependentUpon>KoppenForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -348,11 +422,26 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Third\UcThird.resx">
-      <DependentUpon>UcThird.cs</DependentUpon>
+    <EmbeddedResource Include="Third\ThirdForm.resx">
+      <DependentUpon>ThirdForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Third\ucThird.resx">
+      <DependentUpon>ucThird.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Thornwaite\ThornwaiteForm.resx">
+      <DependentUpon>ThornwaiteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Thornwaite\ucThornWaite.resx">
+      <DependentUpon>ucThornWaite.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolForm.resx">
+      <DependentUpon>ToolForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UcErinc.resx">
       <DependentUpon>UcErinc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucTools.resx">
+      <DependentUpon>ucTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="XYEventTableForm.resx">
       <DependentUpon>XYEventTableForm.cs</DependentUpon>
@@ -383,6 +472,15 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\climate_v1_fill_colorful_40.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\btnThird.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\btnKadastro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\cadastre_v1_fill_colorful_64.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>

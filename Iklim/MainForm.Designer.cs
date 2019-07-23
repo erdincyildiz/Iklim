@@ -61,8 +61,9 @@
             this.btnKoppenGreiger.Name = "btnKoppenGreiger";
             this.btnKoppenGreiger.Size = new System.Drawing.Size(75, 75);
             this.btnKoppenGreiger.TabIndex = 1;
-            this.btnKoppenGreiger.Text = "Köppen Greiger";
+            this.btnKoppenGreiger.Text = "De Martonne";
             this.btnKoppenGreiger.UseVisualStyleBackColor = true;
+            this.btnKoppenGreiger.Click += new System.EventHandler(this.btnKoppenGreiger_Click);
             // 
             // btnTrewertha
             // 
@@ -71,8 +72,9 @@
             this.btnTrewertha.Name = "btnTrewertha";
             this.btnTrewertha.Size = new System.Drawing.Size(75, 75);
             this.btnTrewertha.TabIndex = 2;
-            this.btnTrewertha.Text = "Trewertha";
+            this.btnTrewertha.Text = "De Martonne - Gottman";
             this.btnTrewertha.UseVisualStyleBackColor = true;
+            this.btnTrewertha.Click += new System.EventHandler(this.btnTrewertha_Click);
             // 
             // btnThornwaithe
             // 
@@ -83,6 +85,7 @@
             this.btnThornwaithe.TabIndex = 3;
             this.btnThornwaithe.Text = "Thornwaithe";
             this.btnThornwaithe.UseVisualStyleBackColor = true;
+            this.btnThornwaithe.Click += new System.EventHandler(this.btnThornwaithe_Click);
             // 
             // btnAydeniz
             // 

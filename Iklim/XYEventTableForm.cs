@@ -50,7 +50,7 @@ namespace Iklim
                     for (int fieldIndex = 0; fieldIndex < reader.FieldCount; fieldIndex++)
                     {
                         fieldList.Add(reader.GetString(fieldIndex));
-                    }                    
+                    }
                 }
             }
 
@@ -67,21 +67,22 @@ namespace Iklim
 
         private void btnUygula_Click(object sender, EventArgs e)
         {
-            var name = Path.GetFileNameWithoutExtension(txtExcel.Text); 
+            AppSingleton.Instance().CreateWorkspacePath();
+            var name = Path.GetFileNameWithoutExtension(txtExcel.Text);
 
             ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
             ESRI.ArcGIS.ConversionTools.ExcelToTable excelToTable = new ESRI.ArcGIS.ConversionTools.ExcelToTable();
             excelToTable.Input_Excel_File = txtExcel.Text;
-            excelToTable.Output_Table = AppSingleton.Instance().WorkspacePath + "\\" +name;
+            excelToTable.Output_Table = AppSingleton.Instance().WorkspacePath + "\\" + name;
             gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
             gp.OverwriteOutput = true;
             gp.Execute(excelToTable, null);
 
             ESRI.ArcGIS.DataManagementTools.MakeXYEventLayer makeLayer = new ESRI.ArcGIS.DataManagementTools.MakeXYEventLayer();
-            makeLayer.table =   excelToTable.Output_Table;
+            makeLayer.table = excelToTable.Output_Table;
             makeLayer.in_x_field = cmbXColumn.SelectedItem.ToString();
             makeLayer.in_y_field = cmbYColumn.SelectedItem.ToString();
-            makeLayer.out_layer = excelToTable.Output_Table +"_layer";
+            makeLayer.out_layer = excelToTable.Output_Table + "_layer";
             makeLayer.spatial_reference = "WGS 1984";
 
             gp.AddOutputsToMap = true;

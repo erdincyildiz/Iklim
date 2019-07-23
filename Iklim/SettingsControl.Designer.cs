@@ -128,6 +128,7 @@
             this.cmbYontem.Name = "cmbYontem";
             this.cmbYontem.Size = new System.Drawing.Size(121, 21);
             this.cmbYontem.TabIndex = 5;
+            this.cmbYontem.Visible = false;
             // 
             // chbAra
             // 
@@ -147,6 +148,7 @@
             this.label19.Size = new System.Drawing.Size(101, 13);
             this.label19.TabIndex = 4;
             this.label19.Text = "Uygulama Yöntemi :";
+            this.label19.Visible = false;
             // 
             // label6
             // 

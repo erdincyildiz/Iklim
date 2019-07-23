@@ -168,6 +168,24 @@ namespace Iklim
                 return false;
             }
         }
+        public string Int(string layerName, string outName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Int intRaster = new ESRI.ArcGIS.SpatialAnalystTools.Int();
+                intRaster.in_raster_or_constant = layerName;
+                intRaster.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outName;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(intRaster, null);
+                return intRaster.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
@@ -175,10 +193,49 @@ namespace Iklim
             SettingsControl control = new SettingsControl();
             control.Load();
             control.CheckForm();
-            var yagisLayer = Kriging((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtYag.SelectedItem.ToString());
-            var sicaklikLayer = Kriging((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtSic.SelectedItem.ToString());
+            var yagisLayer = IDW((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtYag.SelectedItem.ToString());
+            var sicaklikLayer = IDW((cmbVeriSeti.SelectedItem as LayerObject).layer, cmbOrtSic.SelectedItem.ToString());
             var sonucRaster = Divide(yagisLayer, sicaklikLayer);
-            Reclassify(sonucRaster);
+            Int(sonucRaster, "Final");
+            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Final");
+
+            AppSingleton.Instance().AddField(vat, "IKLIMTIPI", "TEXT");
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            int idmField = vat.FindField("VALUE");
+            int ozellikField = vat.FindField("IKLIMTIPI");
+            while ((feature = updateCursor.NextRow()) != null)
+            {
+                var ozellik = string.Empty;
+                var Ieye = Convert.ToInt32(feature.get_Value(idmField));
+                if (Ieye < 8)
+                {
+                    ozellik = "Tam Kurak";
+                }
+                else if (8 <= Ieye & Ieye < 15)
+                {
+                    ozellik = "Kurak";
+                }
+                else if (15 <= Ieye & Ieye < 23)
+                {
+                    ozellik = "Yarı Kurak";
+                }
+                else if (23 <= Ieye & Ieye < 40)
+                {
+                    ozellik = "Yarı Nemli";
+                }
+                else if (40 <= Ieye & Ieye < 55)
+                {
+                    ozellik = "Nemli";
+                }
+                else
+                {
+                    ozellik = "Çok Nemli";
+                }
+                feature.set_Value(ozellikField, ozellik);
+                feature.Store();
+            }
         }
     }
 }

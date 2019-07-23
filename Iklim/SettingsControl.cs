@@ -106,7 +106,7 @@ namespace Iklim
                     txtMesafeIDW.Enabled = false;
                     txtMinNoktaIDW.Enabled = false;
                 }
-                if (cmbYarıcapIDW.SelectedItem.ToString() == "Fixed")
+                else if (cmbYarıcapIDW.SelectedItem.ToString() == "Fixed")
                 {
                     txtNoktaSayisiIDW.Enabled = false;
                     txtMaxUzaklikIDW.Enabled = false;
@@ -136,7 +136,7 @@ namespace Iklim
                     txtMesafeKriging.Enabled = false;
                     txtMinNoktaKriging.Enabled = false;
                 }
-                if (cmbYarıcapKriging.SelectedItem.ToString() == "Fixed")
+                else if (cmbYarıcapKriging.SelectedItem.ToString() == "Fixed")
                 {
                     txtNoktaSayisiKriging.Enabled = false;
                     txtMaxUzaklikKriging.Enabled = false;

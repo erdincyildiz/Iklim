@@ -16,5 +16,11 @@ namespace Iklim
         {
             InitializeComponent();
         }
+
+        private void btnXYTable_Click(object sender, EventArgs e)
+        {
+            XYEventTableForm XYEventTableForm = new XYEventTableForm();
+            XYEventTableForm.ShowDialog();
+        }
     }
 }

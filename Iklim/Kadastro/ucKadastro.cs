@@ -13,18 +13,49 @@ using ESRI.ArcGIS.Geodatabase;
 
 namespace Iklim
 {
-    public partial class ucThird : UserControl
+    public partial class ucKadastro : UserControl
     {
-        public ucThird()
+        public ucKadastro()
         {
             InitializeComponent();
         }
 
         private void btnCalistir_Click(object sender, EventArgs e)
         {
-            var layerNames = (cmbEkolojikSitAlani.SelectedItem as LayerObject).Name + ";" + (cmbIklimSiniri.SelectedItem as LayerObject).Name;
-            AppSingleton.Instance().Combine(layerNames, "Combined");
+            var fClass = RasterToPolygon((cmbIklimEkoloji.SelectedItem as LayerObject).layer);
+            InterSect(fClass, (cmbKadastro.SelectedItem as LayerObject).Name);
         }
+
+        private string RasterToPolygon(ILayer rasterlayer)
+        {
+            ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+            ESRI.ArcGIS.ConversionTools.RasterToPolygon rasterToPolygon = new ESRI.ArcGIS.ConversionTools.RasterToPolygon();
+            rasterToPolygon.in_raster = rasterlayer;
+            rasterToPolygon.out_polygon_features = AppSingleton.Instance().WorkspacePath + "\\RasterToPolygon";
+            rasterToPolygon.simplify = "SIMPLIFY";
+            rasterToPolygon.raster_field = "Value";
+            gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+            gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+            gp.OverwriteOutput = true;
+            gp.Execute(rasterToPolygon, null);
+            return rasterToPolygon.out_polygon_features.ToString();
+        }
+
+        private string InterSect(string flayer,string kadastroLayer)
+        {
+            ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+            ESRI.ArcGIS.AnalysisTools.Intersect intersect = new ESRI.ArcGIS.AnalysisTools.Intersect();
+            intersect.in_features = flayer + ";" + kadastroLayer;
+            intersect.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\Final";
+            intersect.join_attributes = "All";
+            intersect.output_type = "INPUT";
+            gp.AddOutputsToMap = true;
+            gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+            gp.OverwriteOutput = true;
+            gp.Execute(intersect, null);
+            return intersect.out_feature_class.ToString();
+        }
+
 
         public void Init()
         {
@@ -55,8 +86,8 @@ namespace Iklim
                     LayerObjectList2.Add(lObject);
                 }
             }
-            UpdateComboboxWithLayers(cmbEkolojikSitAlani, LayerObjectList);
-            UpdateComboboxWithLayers(cmbIklimSiniri, LayerObjectList);
+            UpdateComboboxWithLayers(cmbIklimEkoloji, LayerObjectList);
+            UpdateComboboxWithLayers(cmbKadastro, LayerObjectList2);
             UpdateComboboxWithLayers(cmbProjectArea, LayerObjectList2);
         }
 
