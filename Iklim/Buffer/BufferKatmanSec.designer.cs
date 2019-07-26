@@ -36,14 +36,14 @@
             this.BtnSolaHepsiniGecirBuffer = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.LayerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tampon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnOk = new System.Windows.Forms.Button();
+            this.LayerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tampon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -129,19 +129,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(501, 150);
             this.dataGridView1.TabIndex = 22;
             // 
-            // LayerName
-            // 
-            this.LayerName.HeaderText = "Katman Adı";
-            this.LayerName.Name = "LayerName";
-            this.LayerName.Width = 200;
-            // 
-            // Tampon
-            // 
-            this.Tampon.FillWeight = 200F;
-            this.Tampon.HeaderText = "Tampon";
-            this.Tampon.Name = "Tampon";
-            this.Tampon.Width = 200;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -201,6 +188,20 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
+            // LayerName
+            // 
+            this.LayerName.HeaderText = "Katman Adı";
+            this.LayerName.Name = "LayerName";
+            this.LayerName.ReadOnly = true;
+            this.LayerName.Width = 200;
+            // 
+            // Tampon
+            // 
+            this.Tampon.FillWeight = 200F;
+            this.Tampon.HeaderText = "Tampon";
+            this.Tampon.Name = "Tampon";
+            this.Tampon.Width = 200;
+            // 
             // BufferKatmanSec
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -237,13 +238,13 @@
         private System.Windows.Forms.Button BtnSolaHepsiniGecirBuffer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LayerName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Tampon;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LayerName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Tampon;
     }
 }

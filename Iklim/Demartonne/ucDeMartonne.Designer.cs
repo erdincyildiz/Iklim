@@ -49,6 +49,7 @@
             this.cmbToplamYagisYillik = new System.Windows.Forms.ComboBox();
             this.cmbVeriYillik = new System.Windows.Forms.ComboBox();
             this.btnOk = new System.Windows.Forms.Button();
+            this.tpSonuc = new Iklim.TextProgressBar();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -287,10 +288,24 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
+            // tpSonuc
+            // 
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(89, 366);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 41;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
+            // 
             // ucDeMartonne
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tpSonuc);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.grpbxInput);
             this.Controls.Add(this.grpbxInfo);
@@ -328,5 +343,6 @@
         private System.Windows.Forms.ComboBox cmbProjectArea;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnOk;
+        private TextProgressBar tpSonuc;
     }
 }

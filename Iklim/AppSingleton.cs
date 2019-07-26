@@ -271,7 +271,8 @@ namespace Iklim
                 ESRI.ArcGIS.AnalysisTools.Clip clip = new ESRI.ArcGIS.AnalysisTools.Clip();
                 clip.in_features = selectedLayer;
                 clip.clip_features = sinirLayer;
-                clip.out_feature_class = WorkspacePath + "\\Clip_" + selectedLayer.Name;
+                var layerName = System.IO.Path.GetFileNameWithoutExtension(selectedLayer.Name); 
+                clip.out_feature_class = WorkspacePath + "\\Clip_" + layerName;
                 gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
                 gp.OverwriteOutput = true;
                 gp.Execute(clip, null);

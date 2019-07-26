@@ -792,9 +792,11 @@ namespace Iklim
 
         void host_WizardCompleted()
         {
-            if(AppSingleton.Instance().SettingsControl == null)
+            if (AppSingleton.Instance().SettingsControl == null)
             {
-                MessageBox.Show("Lütfen öncelikli olarak ayarlar pencerisinde seçiminizi yapıp kaydedin.");
+                SettingsControl control = new SettingsControl();
+                control.Load();
+                control.CheckForm();
             }
 
             lastControl.SetRichTextBoxLabel("Veriler çalışma alanı sınırlarına göre kesiliyor...");

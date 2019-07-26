@@ -51,6 +51,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CircularProgressBar, Version=2.7.0.7, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CircularProgressBar.2.7.0.7\lib\net40\CircularProgressBar.dll</HintPath>
+    </Reference>
     <Reference Include="ESRI.ArcGIS.AnalysisTools, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="ESRI.ArcGIS.Analyst3DTools, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="ESRI.ArcGIS.AxPublisherControls, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
@@ -96,6 +99,9 @@
     <Reference Include="ESRI.ArcGIS.System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="WinFormAnimation, Version=1.6.0.4, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
+      <HintPath>..\packages\WinFormAnimation.1.6.0.4\lib\net40\WinFormAnimation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ESRI.ArcGIS.Version, Version=10.6.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
@@ -135,6 +141,9 @@
     </Compile>
     <Compile Include="Buffer\BufferForm.Designer.cs">
       <DependentUpon>BufferForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\TextProgressBar.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DemartonneGottman\DeMArtonnGotmannForm.cs">
       <SubType>Form</SubType>
@@ -248,6 +257,18 @@
     </Compile>
     <Compile Include="Kadastro\ucKadastro.Designer.cs">
       <DependentUpon>ucKadastro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Koppen - Copy\KoppenFormSablon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Koppen - Copy\KoppenFormSablon.Designer.cs">
+      <DependentUpon>KoppenFormSablon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Koppen - Copy\ucKoppenSablon.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Koppen - Copy\ucKoppenSablon.Designer.cs">
+      <DependentUpon>ucKoppenSablon.cs</DependentUpon>
     </Compile>
     <Compile Include="Koppen\KoppenForm.cs">
       <SubType>Form</SubType>
@@ -415,6 +436,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Kadastro\ucKadastro.resx">
       <DependentUpon>ucKadastro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Koppen - Copy\KoppenFormSablon.resx">
+      <DependentUpon>KoppenFormSablon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Koppen - Copy\ucKoppenSablon.resx">
+      <DependentUpon>ucKoppenSablon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Koppen\KoppenForm.resx">
       <DependentUpon>KoppenForm.cs</DependentUpon>

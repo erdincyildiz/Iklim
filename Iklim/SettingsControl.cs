@@ -25,7 +25,7 @@ namespace Iklim
         {
             if( AppSingleton.Instance().CellSize == 0)
             {
-                AppSingleton.Instance().CellSize = 10;
+                AppSingleton.Instance().CellSize = 0.1;
             }
 
             cmbTinToRasterMethod.SelectedIndex = 0;

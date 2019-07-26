@@ -46,8 +46,13 @@
             this.grpbxInput = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbProjectArea = new System.Windows.Forms.ComboBox();
+            this.tpSonuc = new Iklim.TextProgressBar();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbYillik = new System.Windows.Forms.RadioButton();
+            this.rbAylik = new System.Windows.Forms.RadioButton();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -214,7 +219,7 @@
             this.grpbxInput.Controls.Add(this.cmbNn);
             this.grpbxInput.Controls.Add(this.cmbNp);
             this.grpbxInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpbxInput.Location = new System.Drawing.Point(3, 56);
+            this.grpbxInput.Location = new System.Drawing.Point(3, 116);
             this.grpbxInput.Name = "grpbxInput";
             this.grpbxInput.Size = new System.Drawing.Size(734, 211);
             this.grpbxInput.TabIndex = 16;
@@ -240,10 +245,60 @@
             this.cmbProjectArea.Size = new System.Drawing.Size(259, 21);
             this.cmbProjectArea.TabIndex = 14;
             // 
+            // tpSonuc
+            // 
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(64, 359);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 17;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rbYillik);
+            this.groupBox1.Controls.Add(this.rbAylik);
+            this.groupBox1.Location = new System.Drawing.Point(9, 59);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(634, 45);
+            this.groupBox1.TabIndex = 18;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "gbAnaliz";
+            // 
+            // rbYillik
+            // 
+            this.rbYillik.AutoSize = true;
+            this.rbYillik.Checked = true;
+            this.rbYillik.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbYillik.Location = new System.Drawing.Point(6, 19);
+            this.rbYillik.Name = "rbYillik";
+            this.rbYillik.Size = new System.Drawing.Size(120, 17);
+            this.rbYillik.TabIndex = 0;
+            this.rbYillik.TabStop = true;
+            this.rbYillik.Text = "Yıllık Kuraklık Analizi";
+            this.rbYillik.UseVisualStyleBackColor = true;
+            // 
+            // rbAylik
+            // 
+            this.rbAylik.AutoSize = true;
+            this.rbAylik.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAylik.Location = new System.Drawing.Point(155, 19);
+            this.rbAylik.Name = "rbAylik";
+            this.rbAylik.Size = new System.Drawing.Size(121, 17);
+            this.rbAylik.TabIndex = 0;
+            this.rbAylik.Text = "Aylık Kuraklık Analizi";
+            this.rbAylik.UseVisualStyleBackColor = true;
+            // 
             // ucAydeniz
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.tpSonuc);
             this.Controls.Add(this.grpbxInput);
             this.Controls.Add(this.grpbxInfo);
             this.Controls.Add(this.btnOk);
@@ -253,6 +308,8 @@
             this.grpbxInfo.PerformLayout();
             this.grpbxInput.ResumeLayout(false);
             this.grpbxInput.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -276,5 +333,9 @@
         private System.Windows.Forms.GroupBox grpbxInput;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cmbProjectArea;
+        private TextProgressBar tpSonuc;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rbYillik;
+        private System.Windows.Forms.RadioButton rbAylik;
     }
 }

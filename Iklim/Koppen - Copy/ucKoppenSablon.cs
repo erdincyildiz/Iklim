@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace Iklim
 {
-    public partial class ucKoppen : UserControl
+    public partial class ucKoppenSablon : UserControl
     {
-        public ucKoppen()
+        public ucKoppenSablon()
         {
             InitializeComponent();
         }
@@ -61,34 +61,7 @@ namespace Iklim
                     IField field = fLayer.FeatureClass.Fields.get_Field(j);
                     fieldList.Add(field.Name);
                 }
-                //Sıcaklık Comboları
-                FillCmboboboxWithFieldList(cmbYillikOrtSic, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicOcak, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicSubat, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicMart, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicNisan, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicMayis, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicHaziran, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicTemmuz, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicAgustos, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicEylul, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicEkim, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicKasim, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikSicAralik, fieldList);
-                //Yağış Comboları
-                FillCmboboboxWithFieldList(cmbYillikTopYag, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagOcak, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagSubat, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagMart, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagNisan, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagMayis, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagHaziran, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagTemmuz, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagAgustos, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagEylul, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagEkim, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagKasim, fieldList);
-                FillCmboboboxWithFieldList(cmbAylikYagAralik, fieldList);
+                //Sıcaklık Comboları               
             }
         }
 
@@ -124,133 +97,7 @@ namespace Iklim
                 return;
             }
 
-            if (cmbAylikSicOcak.SelectedIndex < 0)
-            {
-                MessageBox.Show("Ocak ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikSicSubat.SelectedIndex < 0)
-            {
-                MessageBox.Show("Şubat ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikSicMart.SelectedIndex < 0)
-            {
-                MessageBox.Show("Mart ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikSicNisan.SelectedIndex < 0)
-            {
-                MessageBox.Show("Nisan ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicMayis.SelectedIndex < 0)
-            {
-                MessageBox.Show("Mayıs ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicHaziran.SelectedIndex < 0)
-            {
-                MessageBox.Show("Haziran ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicTemmuz.SelectedIndex < 0)
-            {
-                MessageBox.Show("Temmuz ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicAgustos.SelectedIndex < 0)
-            {
-                MessageBox.Show("Ağustos ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicEylul.SelectedIndex < 0)
-            {
-                MessageBox.Show("Eylül ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicEkim.SelectedIndex < 0)
-            {
-                MessageBox.Show("Ekim ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicKasim.SelectedIndex < 0)
-            {
-                MessageBox.Show("Kasım ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikSicAralik.SelectedIndex < 0)
-            {
-                MessageBox.Show("Aralık ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikYagOcak.SelectedIndex < 0)
-            {
-                MessageBox.Show("Ocak ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikYagSubat.SelectedIndex < 0)
-            {
-                MessageBox.Show("Şubat ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikYagMart.SelectedIndex < 0)
-            {
-                MessageBox.Show("Mart ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-            if (cmbAylikYagNisan.SelectedIndex < 0)
-            {
-                MessageBox.Show("Nisan ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagMayis.SelectedIndex < 0)
-            {
-                MessageBox.Show("Mayıs ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagHaziran.SelectedIndex < 0)
-            {
-                MessageBox.Show("Haziran ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagTemmuz.SelectedIndex < 0)
-            {
-                MessageBox.Show("Temmuz ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagAgustos.SelectedIndex < 0)
-            {
-                MessageBox.Show("Ağustos ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagEylul.SelectedIndex < 0)
-            {
-                MessageBox.Show("Eylül ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagEkim.SelectedIndex < 0)
-            {
-                MessageBox.Show("Ekim ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagKasim.SelectedIndex < 0)
-            {
-                MessageBox.Show("Kasım ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbAylikYagAralik.SelectedIndex < 0)
-            {
-                MessageBox.Show("Aralık ayı yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
+           
             AppSingleton.Instance().CreateWorkspacePath();
             if (AppSingleton.Instance().SettingsControl == null)
             {
@@ -279,44 +126,44 @@ namespace Iklim
             var layer = (cmbInputLayer.SelectedItem as LayerObject).layer;
 
 
-            var YilOrtSic = IDW(fclass, cmbYillikOrtSic.SelectedItem.ToString(), "YilOrtSic");
-            var AySicOcak = IDW(fclass, cmbAylikSicOcak.SelectedItem.ToString(), "AySicOca");
-            var AySicSubat = IDW(fclass, cmbAylikSicSubat.SelectedItem.ToString(), "AySicSub");
-            var AySicMart = IDW(fclass, cmbAylikSicMart.SelectedItem.ToString(), "AySicMar");
-            var AySicNisan = IDW(fclass, cmbAylikSicNisan.SelectedItem.ToString(), "AySicNis");
-            var AySicMayis = IDW(fclass, cmbAylikSicMayis.SelectedItem.ToString(), "AySicMay");
-            var AySicHaziran = IDW(fclass, cmbAylikSicHaziran.SelectedItem.ToString(), "AySicHaz");
-            var AySicTemmuz = IDW(fclass, cmbAylikSicTemmuz.SelectedItem.ToString(), "AySicTem");
-            var AySicAgustos = IDW(fclass, cmbAylikSicAgustos.SelectedItem.ToString(), "AySicAgu");
-            var AySicEylul = IDW(fclass, cmbAylikSicEylul.SelectedItem.ToString(), "AySicEyl");
-            var AySicEkim = IDW(fclass, cmbAylikSicEkim.SelectedItem.ToString(), "AySicEki");
-            var AySicKasim = IDW(fclass, cmbAylikSicKasim.SelectedItem.ToString(), "AySicKas");
-            var AySicAralik = IDW(fclass, cmbAylikSicAralik.SelectedItem.ToString(), "AySicAra");
+            //var YilOrtSic = IDW(fclass, cmbYillikOrtSic.SelectedItem.ToString(), "YilOrtSic");
+            //var AySicOcak = IDW(fclass, cmbAylikSicOcak.SelectedItem.ToString(), "AySicOca");
+            //var AySicSubat = IDW(fclass, cmbAylikSicSubat.SelectedItem.ToString(), "AySicSub");
+            //var AySicMart = IDW(fclass, cmbAylikSicMart.SelectedItem.ToString(), "AySicMar");
+            //var AySicNisan = IDW(fclass, cmbAylikSicNisan.SelectedItem.ToString(), "AySicNis");
+            //var AySicMayis = IDW(fclass, cmbAylikSicMayis.SelectedItem.ToString(), "AySicMay");
+            //var AySicHaziran = IDW(fclass, cmbAylikSicHaziran.SelectedItem.ToString(), "AySicHaz");
+            //var AySicTemmuz = IDW(fclass, cmbAylikSicTemmuz.SelectedItem.ToString(), "AySicTem");
+            //var AySicAgustos = IDW(fclass, cmbAylikSicAgustos.SelectedItem.ToString(), "AySicAgu");
+            //var AySicEylul = IDW(fclass, cmbAylikSicEylul.SelectedItem.ToString(), "AySicEyl");
+            //var AySicEkim = IDW(fclass, cmbAylikSicEkim.SelectedItem.ToString(), "AySicEki");
+            //var AySicKasim = IDW(fclass, cmbAylikSicKasim.SelectedItem.ToString(), "AySicKas");
+            //var AySicAralik = IDW(fclass, cmbAylikSicAralik.SelectedItem.ToString(), "AySicAra");
 
-            string layerNames = YilOrtSic + ";" + AySicOcak + ";" + AySicSubat + ";" + AySicMart
-                + ";" + AySicNisan + ";" + AySicMayis + ";" + AySicHaziran + ";" + AySicTemmuz
-                + ";" + AySicAgustos + ";" + AySicEylul + ";" + AySicEkim + ";" + AySicKasim + ";" + AySicAralik;
-            var combine1 = Combine(layerNames, "CombineSic");
-            var YilTopYag = IDW(fclass, cmbYillikTopYag.SelectedItem.ToString(), "YilTopYag");
-            var AyYagOcak = IDW(fclass, cmbAylikYagOcak.SelectedItem.ToString(), "AyYagOca");
-            var AyYagSubat = IDW(fclass, cmbAylikYagSubat.SelectedItem.ToString(), "AyYagSub");
-            var AyYagMart = IDW(fclass, cmbAylikYagMart.SelectedItem.ToString(), "AyYagMar");
-            var AyYagNisan = IDW(fclass, cmbAylikYagNisan.SelectedItem.ToString(), "AyYagNis");
-            var AyYagMayis = IDW(fclass, cmbAylikYagMayis.SelectedItem.ToString(), "AyYagMay");
-            var AyYagHaziran = IDW(fclass, cmbAylikYagHaziran.SelectedItem.ToString(), "AyYagHaz");
-            var AyYagTemmuz = IDW(fclass, cmbAylikYagTemmuz.SelectedItem.ToString(), "AyYagTem");
-            var AyYagAgustos = IDW(fclass, cmbAylikYagAgustos.SelectedItem.ToString(), "AyYagAgu");
-            var AyYagEylul = IDW(fclass, cmbAylikYagEylul.SelectedItem.ToString(), "AyYagEyl");
-            var AyYagEkim = IDW(fclass, cmbAylikYagEkim.SelectedItem.ToString(), "AyYagEki");
-            var AyYagKasim = IDW(fclass, cmbAylikYagKasim.SelectedItem.ToString(), "AyYagKas");
-            var AyYagAralik = IDW(fclass, cmbAylikYagAralik.SelectedItem.ToString(), "AyYagAra");
+            //string layerNames = YilOrtSic + ";" + AySicOcak + ";" + AySicSubat + ";" + AySicMart
+            //    + ";" + AySicNisan + ";" + AySicMayis + ";" + AySicHaziran + ";" + AySicTemmuz
+            //    + ";" + AySicAgustos + ";" + AySicEylul + ";" + AySicEkim + ";" + AySicKasim + ";" + AySicAralik;
+            //var combine1 = Combine(layerNames, "CombineSic");
+            //var YilTopYag = IDW(fclass, cmbYillikTopYag.SelectedItem.ToString(), "YilTopYag");
+            //var AyYagOcak = IDW(fclass, cmbAylikYagOcak.SelectedItem.ToString(), "AyYagOca");
+            //var AyYagSubat = IDW(fclass, cmbAylikYagSubat.SelectedItem.ToString(), "AyYagSub");
+            //var AyYagMart = IDW(fclass, cmbAylikYagMart.SelectedItem.ToString(), "AyYagMar");
+            //var AyYagNisan = IDW(fclass, cmbAylikYagNisan.SelectedItem.ToString(), "AyYagNis");
+            //var AyYagMayis = IDW(fclass, cmbAylikYagMayis.SelectedItem.ToString(), "AyYagMay");
+            //var AyYagHaziran = IDW(fclass, cmbAylikYagHaziran.SelectedItem.ToString(), "AyYagHaz");
+            //var AyYagTemmuz = IDW(fclass, cmbAylikYagTemmuz.SelectedItem.ToString(), "AyYagTem");
+            //var AyYagAgustos = IDW(fclass, cmbAylikYagAgustos.SelectedItem.ToString(), "AyYagAgu");
+            //var AyYagEylul = IDW(fclass, cmbAylikYagEylul.SelectedItem.ToString(), "AyYagEyl");
+            //var AyYagEkim = IDW(fclass, cmbAylikYagEkim.SelectedItem.ToString(), "AyYagEki");
+            //var AyYagKasim = IDW(fclass, cmbAylikYagKasim.SelectedItem.ToString(), "AyYagKas");
+            //var AyYagAralik = IDW(fclass, cmbAylikYagAralik.SelectedItem.ToString(), "AyYagAra");
 
-            string layerNames2 = YilTopYag + ";" + AyYagOcak + ";" + AyYagSubat + ";" + AyYagMart
-                + ";" + AyYagNisan + ";" + AyYagMayis + ";" + AyYagHaziran + ";" + AyYagTemmuz
-                + ";" + AyYagAgustos + ";" + AyYagEylul + ";" + AyYagEkim + ";" + AyYagKasim + ";" + AyYagAralik;
-            var combine2 = Combine(layerNames2, "CombineYag");
-            Combine(combine1 + ";" + combine2, "FinalCombined");
-            FindIklimForValues();
+            //string layerNames2 = YilTopYag + ";" + AyYagOcak + ";" + AyYagSubat + ";" + AyYagMart
+            //    + ";" + AyYagNisan + ";" + AyYagMayis + ";" + AyYagHaziran + ";" + AyYagTemmuz
+            //    + ";" + AyYagAgustos + ";" + AyYagEylul + ";" + AyYagEkim + ";" + AyYagKasim + ";" + AyYagAralik;
+            //var combine2 = Combine(layerNames2, "CombineYag");
+            //Combine(combine1 + ";" + combine2, "FinalCombined");
+            //FindIklimForValues();
         }
 
         private void FindIklimForValues()
@@ -688,89 +535,89 @@ namespace Iklim
         }
         private void MultiplyFeatureValue(IFeature feature)
         {
-            //Sicaklik Fields
-            int yillikOrtSicField = feature.Fields.FindField(cmbYillikOrtSic.SelectedItem.ToString());
-            var yillikOrtSicValue = Convert.ToDouble(feature.get_Value(yillikOrtSicField)) * 10000;
-            int aylikSicOcakField = feature.Fields.FindField(cmbAylikSicOcak.SelectedItem.ToString());
-            var aylikSicOcakValue = Convert.ToDouble(feature.get_Value(aylikSicOcakField)) * 10000;
-            int aylikSicSubatField = feature.Fields.FindField(cmbAylikSicSubat.SelectedItem.ToString());
-            var aylikSicSubatValue = Convert.ToDouble(feature.get_Value(aylikSicSubatField)) * 10000;
-            int aylikSicMartField = feature.Fields.FindField(cmbAylikSicMart.SelectedItem.ToString());
-            var aylikSicMartValue = Convert.ToDouble(feature.get_Value(aylikSicMartField)) * 10000;
-            int aylikSicNisanField = feature.Fields.FindField(cmbAylikSicNisan.SelectedItem.ToString());
-            var aylikSicNisanValue = Convert.ToDouble(feature.get_Value(aylikSicNisanField)) * 10000;
-            int aylikSicMayisField = feature.Fields.FindField(cmbAylikSicMayis.SelectedItem.ToString());
-            var aylikSicMayisValue = Convert.ToDouble(feature.get_Value(aylikSicMayisField)) * 10000;
-            int aylikSicHaziranField = feature.Fields.FindField(cmbAylikSicHaziran.SelectedItem.ToString());
-            var aylikSicHaziranValue = Convert.ToDouble(feature.get_Value(aylikSicHaziranField)) * 10000;
-            int aylikSicTemmuzField = feature.Fields.FindField(cmbAylikSicTemmuz.SelectedItem.ToString());
-            var aylikSicTemmuzValue = Convert.ToDouble(feature.get_Value(aylikSicTemmuzField)) * 10000;
-            int aylikSicAgustosField = feature.Fields.FindField(cmbAylikSicAgustos.SelectedItem.ToString());
-            var aylikSicAgustosValue = Convert.ToDouble(feature.get_Value(aylikSicAgustosField)) * 10000;
-            int aylikSicEylulField = feature.Fields.FindField(cmbAylikSicEylul.SelectedItem.ToString());
-            var aylikSicEylulValue = Convert.ToDouble(feature.get_Value(aylikSicEylulField)) * 10000;
-            int aylikSicEkimField = feature.Fields.FindField(cmbAylikSicEkim.SelectedItem.ToString());
-            var aylikSicEkimValue = Convert.ToDouble(feature.get_Value(aylikSicEkimField)) * 10000;
-            int aylikSicKasimField = feature.Fields.FindField(cmbAylikSicKasim.SelectedItem.ToString());
-            var aylikSicKasimValue = Convert.ToDouble(feature.get_Value(aylikSicKasimField)) * 10000;
-            int aylikSicAralikField = feature.Fields.FindField(cmbAylikSicAralik.SelectedItem.ToString());
-            var aylikSicAralikValue = Convert.ToDouble(feature.get_Value(aylikSicAralikField)) * 10000;
+            ////Sicaklik Fields
+            //int yillikOrtSicField = feature.Fields.FindField(cmbYillikOrtSic.SelectedItem.ToString());
+            //var yillikOrtSicValue = Convert.ToDouble(feature.get_Value(yillikOrtSicField)) * 10000;
+            //int aylikSicOcakField = feature.Fields.FindField(cmbAylikSicOcak.SelectedItem.ToString());
+            //var aylikSicOcakValue = Convert.ToDouble(feature.get_Value(aylikSicOcakField)) * 10000;
+            //int aylikSicSubatField = feature.Fields.FindField(cmbAylikSicSubat.SelectedItem.ToString());
+            //var aylikSicSubatValue = Convert.ToDouble(feature.get_Value(aylikSicSubatField)) * 10000;
+            //int aylikSicMartField = feature.Fields.FindField(cmbAylikSicMart.SelectedItem.ToString());
+            //var aylikSicMartValue = Convert.ToDouble(feature.get_Value(aylikSicMartField)) * 10000;
+            //int aylikSicNisanField = feature.Fields.FindField(cmbAylikSicNisan.SelectedItem.ToString());
+            //var aylikSicNisanValue = Convert.ToDouble(feature.get_Value(aylikSicNisanField)) * 10000;
+            //int aylikSicMayisField = feature.Fields.FindField(cmbAylikSicMayis.SelectedItem.ToString());
+            //var aylikSicMayisValue = Convert.ToDouble(feature.get_Value(aylikSicMayisField)) * 10000;
+            //int aylikSicHaziranField = feature.Fields.FindField(cmbAylikSicHaziran.SelectedItem.ToString());
+            //var aylikSicHaziranValue = Convert.ToDouble(feature.get_Value(aylikSicHaziranField)) * 10000;
+            //int aylikSicTemmuzField = feature.Fields.FindField(cmbAylikSicTemmuz.SelectedItem.ToString());
+            //var aylikSicTemmuzValue = Convert.ToDouble(feature.get_Value(aylikSicTemmuzField)) * 10000;
+            //int aylikSicAgustosField = feature.Fields.FindField(cmbAylikSicAgustos.SelectedItem.ToString());
+            //var aylikSicAgustosValue = Convert.ToDouble(feature.get_Value(aylikSicAgustosField)) * 10000;
+            //int aylikSicEylulField = feature.Fields.FindField(cmbAylikSicEylul.SelectedItem.ToString());
+            //var aylikSicEylulValue = Convert.ToDouble(feature.get_Value(aylikSicEylulField)) * 10000;
+            //int aylikSicEkimField = feature.Fields.FindField(cmbAylikSicEkim.SelectedItem.ToString());
+            //var aylikSicEkimValue = Convert.ToDouble(feature.get_Value(aylikSicEkimField)) * 10000;
+            //int aylikSicKasimField = feature.Fields.FindField(cmbAylikSicKasim.SelectedItem.ToString());
+            //var aylikSicKasimValue = Convert.ToDouble(feature.get_Value(aylikSicKasimField)) * 10000;
+            //int aylikSicAralikField = feature.Fields.FindField(cmbAylikSicAralik.SelectedItem.ToString());
+            //var aylikSicAralikValue = Convert.ToDouble(feature.get_Value(aylikSicAralikField)) * 10000;
 
-            //Yagis Fields
-            int yillikTopYagField = feature.Fields.FindField(cmbYillikTopYag.SelectedItem.ToString());
-            var yillikTopYagValue = Convert.ToDouble(feature.get_Value(yillikTopYagField)) * 10000;
-            int aylikYagOcakField = feature.Fields.FindField(cmbAylikYagOcak.SelectedItem.ToString());
-            var aylikYagOcakValue = Convert.ToDouble(feature.get_Value(aylikYagOcakField)) * 10000;
-            int aylikYagSubatField = feature.Fields.FindField(cmbAylikYagSubat.SelectedItem.ToString());
-            var aylikYagSubatValue = Convert.ToDouble(feature.get_Value(aylikYagSubatField)) * 10000;
-            int aylikYagMartField = feature.Fields.FindField(cmbAylikYagMart.SelectedItem.ToString());
-            var aylikYagMartValue = Convert.ToDouble(feature.get_Value(aylikYagMartField)) * 10000;
-            int aylikYagNisanField = feature.Fields.FindField(cmbAylikYagNisan.SelectedItem.ToString());
-            var aylikYagNisanValue = Convert.ToDouble(feature.get_Value(aylikYagNisanField)) * 10000;
-            int aylikYagMayisField = feature.Fields.FindField(cmbAylikYagMayis.SelectedItem.ToString());
-            var aylikYagMayisValue = Convert.ToDouble(feature.get_Value(aylikYagMayisField)) * 10000;
-            int aylikYagHaziranField = feature.Fields.FindField(cmbAylikYagHaziran.SelectedItem.ToString());
-            var aylikYagHaziranValue = Convert.ToDouble(feature.get_Value(aylikYagHaziranField)) * 10000;
-            int aylikYagTemmuzField = feature.Fields.FindField(cmbAylikYagTemmuz.SelectedItem.ToString());
-            var aylikYagTemmuzValue = Convert.ToDouble(feature.get_Value(aylikYagTemmuzField)) * 10000;
-            int aylikYagAgustosField = feature.Fields.FindField(cmbAylikYagAgustos.SelectedItem.ToString());
-            var aylikYagAgustosValue = Convert.ToDouble(feature.get_Value(aylikYagAgustosField)) * 10000;
-            int aylikYagEylulField = feature.Fields.FindField(cmbAylikYagEylul.SelectedItem.ToString());
-            var aylikYagEylulValue = Convert.ToDouble(feature.get_Value(aylikYagEylulField)) * 10000;
-            int aylikYagEkimField = feature.Fields.FindField(cmbAylikYagEkim.SelectedItem.ToString());
-            var aylikYagEkimValue = Convert.ToDouble(feature.get_Value(aylikYagEkimField)) * 10000;
-            int aylikYagKasimField = feature.Fields.FindField(cmbAylikYagKasim.SelectedItem.ToString());
-            var aylikYagKasimValue = Convert.ToDouble(feature.get_Value(aylikYagKasimField)) * 10000;
-            int aylikYagAralikField = feature.Fields.FindField(cmbAylikYagAralik.SelectedItem.ToString());
-            var aylikYagAralikValue = Convert.ToDouble(feature.get_Value(aylikYagAralikField)) * 10000;
+            ////Yagis Fields
+            //int yillikTopYagField = feature.Fields.FindField(cmbYillikTopYag.SelectedItem.ToString());
+            //var yillikTopYagValue = Convert.ToDouble(feature.get_Value(yillikTopYagField)) * 10000;
+            //int aylikYagOcakField = feature.Fields.FindField(cmbAylikYagOcak.SelectedItem.ToString());
+            //var aylikYagOcakValue = Convert.ToDouble(feature.get_Value(aylikYagOcakField)) * 10000;
+            //int aylikYagSubatField = feature.Fields.FindField(cmbAylikYagSubat.SelectedItem.ToString());
+            //var aylikYagSubatValue = Convert.ToDouble(feature.get_Value(aylikYagSubatField)) * 10000;
+            //int aylikYagMartField = feature.Fields.FindField(cmbAylikYagMart.SelectedItem.ToString());
+            //var aylikYagMartValue = Convert.ToDouble(feature.get_Value(aylikYagMartField)) * 10000;
+            //int aylikYagNisanField = feature.Fields.FindField(cmbAylikYagNisan.SelectedItem.ToString());
+            //var aylikYagNisanValue = Convert.ToDouble(feature.get_Value(aylikYagNisanField)) * 10000;
+            //int aylikYagMayisField = feature.Fields.FindField(cmbAylikYagMayis.SelectedItem.ToString());
+            //var aylikYagMayisValue = Convert.ToDouble(feature.get_Value(aylikYagMayisField)) * 10000;
+            //int aylikYagHaziranField = feature.Fields.FindField(cmbAylikYagHaziran.SelectedItem.ToString());
+            //var aylikYagHaziranValue = Convert.ToDouble(feature.get_Value(aylikYagHaziranField)) * 10000;
+            //int aylikYagTemmuzField = feature.Fields.FindField(cmbAylikYagTemmuz.SelectedItem.ToString());
+            //var aylikYagTemmuzValue = Convert.ToDouble(feature.get_Value(aylikYagTemmuzField)) * 10000;
+            //int aylikYagAgustosField = feature.Fields.FindField(cmbAylikYagAgustos.SelectedItem.ToString());
+            //var aylikYagAgustosValue = Convert.ToDouble(feature.get_Value(aylikYagAgustosField)) * 10000;
+            //int aylikYagEylulField = feature.Fields.FindField(cmbAylikYagEylul.SelectedItem.ToString());
+            //var aylikYagEylulValue = Convert.ToDouble(feature.get_Value(aylikYagEylulField)) * 10000;
+            //int aylikYagEkimField = feature.Fields.FindField(cmbAylikYagEkim.SelectedItem.ToString());
+            //var aylikYagEkimValue = Convert.ToDouble(feature.get_Value(aylikYagEkimField)) * 10000;
+            //int aylikYagKasimField = feature.Fields.FindField(cmbAylikYagKasim.SelectedItem.ToString());
+            //var aylikYagKasimValue = Convert.ToDouble(feature.get_Value(aylikYagKasimField)) * 10000;
+            //int aylikYagAralikField = feature.Fields.FindField(cmbAylikYagAralik.SelectedItem.ToString());
+            //var aylikYagAralikValue = Convert.ToDouble(feature.get_Value(aylikYagAralikField)) * 10000;
 
-            feature.set_Value(yillikOrtSicField, yillikOrtSicValue);
-            feature.set_Value(aylikSicOcakField, aylikSicOcakValue);
-            feature.set_Value(aylikSicSubatField, aylikSicSubatValue);
-            feature.set_Value(aylikSicMartField, aylikSicMartValue);
-            feature.set_Value(aylikSicNisanField, aylikSicNisanValue);
-            feature.set_Value(aylikSicMayisField, aylikSicMayisValue);
-            feature.set_Value(aylikSicHaziranField, aylikSicHaziranValue);
-            feature.set_Value(aylikSicTemmuzField, aylikSicTemmuzValue);
-            feature.set_Value(aylikSicAgustosField, aylikSicAgustosValue);
-            feature.set_Value(aylikSicEylulField, aylikSicEylulValue);
-            feature.set_Value(aylikSicEkimField, aylikSicEkimValue);
-            feature.set_Value(aylikSicKasimField, aylikSicKasimValue);
-            feature.set_Value(aylikSicAralikField, aylikSicAralikValue);
-            feature.set_Value(yillikTopYagField, yillikTopYagValue);
-            feature.set_Value(aylikYagOcakField, aylikYagOcakValue);
-            feature.set_Value(aylikYagSubatField, aylikYagSubatValue);
-            feature.set_Value(aylikYagMartField, aylikYagMartValue);
-            feature.set_Value(aylikYagNisanField, aylikYagNisanValue);
-            feature.set_Value(aylikYagMayisField, aylikYagMayisValue);
-            feature.set_Value(aylikYagHaziranField, aylikYagHaziranValue);
-            feature.set_Value(aylikYagTemmuzField, aylikYagTemmuzValue);
-            feature.set_Value(aylikYagAgustosField, aylikYagAgustosValue);
-            feature.set_Value(aylikYagEylulField, aylikYagEylulValue);
-            feature.set_Value(aylikYagEkimField, aylikYagEkimValue);
-            feature.set_Value(aylikYagKasimField, aylikYagKasimValue);
-            feature.set_Value(aylikYagAralikField, aylikYagAralikValue);
-            feature.Store();
+            //feature.set_Value(yillikOrtSicField, yillikOrtSicValue);
+            //feature.set_Value(aylikSicOcakField, aylikSicOcakValue);
+            //feature.set_Value(aylikSicSubatField, aylikSicSubatValue);
+            //feature.set_Value(aylikSicMartField, aylikSicMartValue);
+            //feature.set_Value(aylikSicNisanField, aylikSicNisanValue);
+            //feature.set_Value(aylikSicMayisField, aylikSicMayisValue);
+            //feature.set_Value(aylikSicHaziranField, aylikSicHaziranValue);
+            //feature.set_Value(aylikSicTemmuzField, aylikSicTemmuzValue);
+            //feature.set_Value(aylikSicAgustosField, aylikSicAgustosValue);
+            //feature.set_Value(aylikSicEylulField, aylikSicEylulValue);
+            //feature.set_Value(aylikSicEkimField, aylikSicEkimValue);
+            //feature.set_Value(aylikSicKasimField, aylikSicKasimValue);
+            //feature.set_Value(aylikSicAralikField, aylikSicAralikValue);
+            //feature.set_Value(yillikTopYagField, yillikTopYagValue);
+            //feature.set_Value(aylikYagOcakField, aylikYagOcakValue);
+            //feature.set_Value(aylikYagSubatField, aylikYagSubatValue);
+            //feature.set_Value(aylikYagMartField, aylikYagMartValue);
+            //feature.set_Value(aylikYagNisanField, aylikYagNisanValue);
+            //feature.set_Value(aylikYagMayisField, aylikYagMayisValue);
+            //feature.set_Value(aylikYagHaziranField, aylikYagHaziranValue);
+            //feature.set_Value(aylikYagTemmuzField, aylikYagTemmuzValue);
+            //feature.set_Value(aylikYagAgustosField, aylikYagAgustosValue);
+            //feature.set_Value(aylikYagEylulField, aylikYagEylulValue);
+            //feature.set_Value(aylikYagEkimField, aylikYagEkimValue);
+            //feature.set_Value(aylikYagKasimField, aylikYagKasimValue);
+            //feature.set_Value(aylikYagAralikField, aylikYagAralikValue);
+            //feature.Store();
         }
         public string IDW(object fclass, string FieldName,string outLayerName)
         {
@@ -833,38 +680,4 @@ namespace Iklim
             }
         }
     }
-}
-
-public class Sicaklik
-{
-    public double YilOrtSic { get; set; }
-    public double AySicOca { get; set; }
-    public double AySicSub { get; set; }
-    public double AySicMar { get; set; }
-    public double AySicNis { get; set; }
-    public double AySicMay { get; set; }
-    public double AySicHaz { get; set; }
-    public double AySicTem { get; set; }
-    public double AySicAgu { get; set; }
-    public double AySicEyl { get; set; }
-    public double AySicEki { get; set; }
-    public double AySicKas { get; set; }
-    public double AySicAra { get; set; }
-}
-
-public class Yagis
-{
-    public double YilTopYag { get; set; }
-    public double AyYagOca { get; set; }
-    public double AyYagSub { get; set; }
-    public double AyYagMar { get; set; }
-    public double AyYagNis { get; set; }
-    public double AyYagMay { get; set; }
-    public double AyYagHaz { get; set; }
-    public double AyYagTem { get; set; }
-    public double AyYagAgu { get; set; }
-    public double AyYagEyl { get; set; }
-    public double AyYagEki { get; set; }
-    public double AyYagKas { get; set; }
-    public double AyYagAra { get; set; }
 }

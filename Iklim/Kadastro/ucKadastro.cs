@@ -22,14 +22,59 @@ namespace Iklim
 
         private void btnCalistir_Click(object sender, EventArgs e)
         {
+           
+
+            if (cmbIklimEkoloji.SelectedIndex < 0)
+            {
+                MessageBox.Show("İklim-Ekoloji katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbProjectArea.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbKadastro.SelectedIndex < 0)
+            {
+                MessageBox.Show("Kadastro katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            AppSingleton.Instance().CreateWorkspacePath();
+            if (AppSingleton.Instance().SettingsControl == null)
+            {
+                SettingsControl control = new SettingsControl();
+                control.Load();
+                control.CheckForm();
+            }
+            tpSonuc.Visible = true;
+            tpSonuc.CustomText = "İklim Katmanı kesiliyor...";
+            tpSonuc.Maximum = 5;
+            
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
             var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimEkoloji.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
+            tpSonuc.CustomText = "Poligona dönüştürülüyor...";
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
 
             var fClass = RasterToPolygon(iklimClipLayer);
+            tpSonuc.CustomText = "Kadastro Katmanı kesiliyor...";
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
 
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbKadastro.SelectedItem as LayerObject).layer);
 
+            tpSonuc.CustomText = "Katmanlar kesiştiriliyor...";
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
 
             InterSect(fClass, clipLayer);
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
+
         }
 
         private string RasterToPolygon(object rasterlayer)

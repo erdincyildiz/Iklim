@@ -52,16 +52,55 @@ namespace Iklim
                 control.CheckForm();
             }
 
+            if (cmbProjectArea.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
             if (rbYillik.Checked)
             {
+                if (cmbVeriYillik.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                    return;
+                }
+
+                if (cmbOrtalamaSicaklikYillik.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Yıllık Ortalama Sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                    return;
+                }
+                if (cmbToplamYagisYillik.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Yıllık Toplam Yağış değeri belirlenmeden işlem yapılamaz.");
+                    return;
+                }
+                tpSonuc.Visible = true;
+                tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+                tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+                tpSonuc.Maximum = 8;
+                tpSonuc.Step = 1;
+                tpSonuc.PerformStep();
+
                 var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbVeriYillik.SelectedItem as LayerObject).layer);
-
+                tpSonuc.CustomText = "T Katmanı oluşturuluyor...";
+                tpSonuc.PerformStep();
                 var IDWT = IDW(clipLayer, cmbOrtalamaSicaklikYillik.SelectedItem.ToString(), "IDWT");
+                tpSonuc.CustomText = "T Katmanı tamsayıya çevriliyor...";
+                tpSonuc.PerformStep();
                 var T = Int(IDWT, "T");
+                tpSonuc.CustomText = "P Katmanı oluşturuluyor...";
+                tpSonuc.PerformStep();
                 var IDWP = IDW(clipLayer, cmbToplamYagisYillik.SelectedItem.ToString(), "IDWP");
+                tpSonuc.CustomText = "P Katmanı tamsayıya çevriliyor...";
+                tpSonuc.PerformStep();
                 var P = Int(IDWP, "P");
+                tpSonuc.CustomText = "IDM Katmanı oluşturuluyor...";
+                tpSonuc.PerformStep();
                 var idm = RasterCalculatorYillik(P, T, "IDM");
-
+                tpSonuc.CustomText = "Veriler ekleniyor...";
+                tpSonuc.PerformStep();
                 ITable vatYillik = BuildRasterAttributeTable("IDM");
                 AddField(vatYillik, "OZELLIK", "TEXT");
                 IQueryFilter queryFilter = new QueryFilterClass();
@@ -100,15 +139,53 @@ namespace Iklim
                     feature.set_Value(ozellikField, ozellik);
                     feature.Store();
                 }
+                tpSonuc.CustomText = "İşlem tamamlandı...";
+                tpSonuc.PerformStep();
+                (this.Parent as Form).Close();
             }
             else
             {
-                var IDWT = IDW((cmbVeriAylik.SelectedItem as LayerObject).layer, cmbOrtalamaSicaklikAylik.SelectedItem.ToString(), "IDWT");
-                var T = Int(IDWT, "T");
-                var IDWP = IDW((cmbVeriAylik.SelectedItem as LayerObject).layer, cmbToplamYagisAylik.SelectedItem.ToString(), "IDWP");
-                var P = Int(IDWP, "P");
-                var idm = RasterCalculatorAylik(P, T, "IDM");
+                if (cmbVeriAylik.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                    return;
+                }
 
+                if (cmbOrtalamaSicaklikAylik.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Aylık Ortalama Sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                    return;
+                }
+                if (cmbToplamYagisAylik.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Aylık Toplam Yağış değeri belirlenmeden işlem yapılamaz.");
+                    return;
+                }
+                tpSonuc.Visible = true;
+                tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+                tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+                tpSonuc.Maximum = 8;
+                tpSonuc.Step = 1;
+                tpSonuc.PerformStep();
+                var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbVeriAylik.SelectedItem as LayerObject).layer);
+                tpSonuc.CustomText = "T Katmanı oluşturuluyor...";
+                tpSonuc.PerformStep();
+
+                var IDWT = IDW(clipLayer, cmbOrtalamaSicaklikAylik.SelectedItem.ToString(), "IDWT");
+                tpSonuc.CustomText = "T Katmanı tamsayıya çevriliyor...";
+                tpSonuc.PerformStep();
+                var T = Int(IDWT, "T");
+                tpSonuc.CustomText = "P Katmanı oluşturuluyor...";
+                tpSonuc.PerformStep();
+                var IDWP = IDW(clipLayer, cmbToplamYagisAylik.SelectedItem.ToString(), "IDWP");
+                tpSonuc.CustomText = "P Katmanı tamsayıya çevriliyor...";
+                tpSonuc.PerformStep();
+                var P = Int(IDWP, "P");
+                tpSonuc.CustomText = "IDM Katmanı oluşturuluyor...";
+                tpSonuc.PerformStep();
+                var idm = RasterCalculatorAylik(P, T, "IDM");
+                tpSonuc.CustomText = "Veriler ekleniyor...";
+                tpSonuc.PerformStep();
                 ITable vatAylik = BuildRasterAttributeTable("IDM");
                 AddField(vatAylik, "OZELLIK", "TEXT");
                 IQueryFilter queryFilter = new QueryFilterClass();
@@ -147,6 +224,9 @@ namespace Iklim
                     feature.set_Value(ozellikField, ozellik);
                     feature.Store();
                 }
+                tpSonuc.CustomText = "İşlem tamamlandı...";
+                tpSonuc.PerformStep();
+                (this.Parent as Form).Close();
             }
         }
 
@@ -171,7 +251,7 @@ namespace Iklim
             try
             {
                 ESRI.ArcGIS.SpatialAnalystTools.RasterCalculator rasterCalculator = new ESRI.ArcGIS.SpatialAnalystTools.RasterCalculator();
-                rasterCalculator.expression = "('" + P + "' + 12)/('" + T + "' + 10)";
+                rasterCalculator.expression = "('" + P + "' * 12)/('" + T + "' + 10)";
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
                 rasterCalculator.output_raster = AppSingleton.Instance().WorkspacePath + "\\" + layerName;
                 gp.AddOutputsToMap = true;//AppSingleton.Instance().AralariEkle;

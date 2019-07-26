@@ -67,6 +67,16 @@ namespace Iklim
 
         private void btnUygula_Click(object sender, EventArgs e)
         {
+            if (cmbXColumn.SelectedIndex < 0)
+            {
+                MessageBox.Show("X değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbYColumn.SelectedIndex < 0)
+            {
+                MessageBox.Show("Y değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
             AppSingleton.Instance().CreateWorkspacePath();
             var name = Path.GetFileNameWithoutExtension(txtExcel.Text);
 

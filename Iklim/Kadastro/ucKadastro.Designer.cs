@@ -39,6 +39,7 @@
             this.cmbKadastro = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnCalistir = new System.Windows.Forms.Button();
+            this.tpSonuc = new Iklim.TextProgressBar();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.SuspendLayout();
@@ -158,10 +159,24 @@
             this.btnCalistir.UseVisualStyleBackColor = true;
             this.btnCalistir.Click += new System.EventHandler(this.btnCalistir_Click);
             // 
+            // tpSonuc
+            // 
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(68, 247);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 13;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
+            // 
             // ucKadastro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tpSonuc);
             this.Controls.Add(this.btnCalistir);
             this.Controls.Add(this.grpbxInput);
             this.Controls.Add(this.grpbxInfo);
@@ -187,5 +202,6 @@
         private System.Windows.Forms.ComboBox cmbKadastro;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnCalistir;
+        private TextProgressBar tpSonuc;
     }
 }

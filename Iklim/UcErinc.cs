@@ -189,10 +189,34 @@ namespace Iklim
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+
+            if (cmbVeriSeti.SelectedIndex < 0)
+            {
+                MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbCalismaAlani.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbOrtSic.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Ortalama Sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbOrtYag.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Toplam Yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
             AppSingleton.Instance().CreateWorkspacePath();
-            SettingsControl control = new SettingsControl();
-            control.Load();
-            control.CheckForm();
+            if (AppSingleton.Instance().SettingsControl == null)
+            {
+                SettingsControl control = new SettingsControl();
+                control.Load();
+                control.CheckForm();
+            }
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbCalismaAlani.SelectedItem as LayerObject).layer, (cmbVeriSeti.SelectedItem as LayerObject).layer);
 
             var yagisLayer = AppSingleton.Instance().IDW(clipLayer, cmbOrtYag.SelectedItem.ToString(),"yagisLayer");

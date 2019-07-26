@@ -586,7 +586,7 @@ namespace Iklim
         {
             for (int j = dataGridView1.Rows.Count - 1; j >= 0; j--)
             {
-                if (dataGridView1.Rows[j].Cells[0].Value != null)
+                if (dataGridView1.Rows[j].Cells[0].Value != null && dataGridView1.Rows[j].Cells[1].Value.ToString() != string.Empty)
                 {
                     string layerName = dataGridView1.Rows[j].Cells[0].Value.ToString();
                     string buffer = dataGridView1.Rows[j].Cells[1].Value.ToString().Replace(",",";");

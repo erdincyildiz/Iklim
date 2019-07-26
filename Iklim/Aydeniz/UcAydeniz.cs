@@ -83,8 +83,139 @@ namespace Iklim
             comboBox.SelectedIndex = -1;
         }
 
+        private void CalculateNpYillik(string layerName) {
+            IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
+
+            var copiedfclass = CopyFeatureClass(clipClass);
+
+            IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
+
+            IQueryFilter queryFilter = new QueryFilterClass();
+
+            AppSingleton.Instance().AddField(fclass, "npYillik", "DOUBLE");
+
+            IFeatureCursor updateCursor = fclass.Search(queryFilter, false);
+            IFeature feature = null;
+
+            while ((feature = updateCursor.NextFeature()) != null)
+            {
+                var counter = 0;
+                var ocaTmp = feature.get_Value(feature.Fields.FindField("ocaTmp"));
+                var subTmp = feature.get_Value(feature.Fields.FindField("subTmp"));
+                var marTmp = feature.get_Value(feature.Fields.FindField("marTmp"));
+                var nisTmp = feature.get_Value(feature.Fields.FindField("nisTmp"));
+                var mayTmp = feature.get_Value(feature.Fields.FindField("mayTmp"));
+                var hazTmp = feature.get_Value(feature.Fields.FindField("hazTmp"));
+                var temTmp = feature.get_Value(feature.Fields.FindField("temTmp"));
+                var aguTmp = feature.get_Value(feature.Fields.FindField("aguTmp"));
+                var eylTmp = feature.get_Value(feature.Fields.FindField("eylTmp"));
+                var ekiTmp = feature.get_Value(feature.Fields.FindField("ekiTmp"));
+                var kasTmp = feature.get_Value(feature.Fields.FindField("kasTmp"));
+                var araTmp = feature.get_Value(feature.Fields.FindField("araTmp"));
+               
+
+                var ocaRain = feature.get_Value(feature.Fields.FindField("ocaRain"));
+                var subRain = feature.get_Value(feature.Fields.FindField("subRain"));
+                var marRain = feature.get_Value(feature.Fields.FindField("marRain"));
+                var nisRain = feature.get_Value(feature.Fields.FindField("nisRain"));
+                var mayRain = feature.get_Value(feature.Fields.FindField("mayRain"));
+                var hazRain = feature.get_Value(feature.Fields.FindField("hazRain"));
+                var temRain = feature.get_Value(feature.Fields.FindField("temRain"));
+                var aguRain = feature.get_Value(feature.Fields.FindField("aguRain"));
+                var eylRain = feature.get_Value(feature.Fields.FindField("eylRain"));
+                var ekiRain = feature.get_Value(feature.Fields.FindField("ekiRain"));
+                var kasRain = feature.get_Value(feature.Fields.FindField("kasRain"));
+                var araRain = feature.get_Value(feature.Fields.FindField("araRain"));
+
+                var ocaNispNem = feature.get_Value(feature.Fields.FindField("ocaNispNem"));
+                var subNispNem = feature.get_Value(feature.Fields.FindField("subNispNem"));
+                var marNispNem = feature.get_Value(feature.Fields.FindField("marNispNem"));
+                var nisNispNem = feature.get_Value(feature.Fields.FindField("nisNispNem"));
+                var mayNispNem = feature.get_Value(feature.Fields.FindField("mayNispNem"));
+                var hazNispNem = feature.get_Value(feature.Fields.FindField("hazNispNem"));
+                var temNispNem = feature.get_Value(feature.Fields.FindField("temNispNem"));
+                var aguNispNem = feature.get_Value(feature.Fields.FindField("aguNispNem"));
+                var eylNispNem = feature.get_Value(feature.Fields.FindField("eylNispNem"));
+                var ekiNispNem = feature.get_Value(feature.Fields.FindField("ekiNispNem"));
+                var kasNispNem = feature.get_Value(feature.Fields.FindField("kasNispNem"));
+                var araNispNem = feature.get_Value(feature.Fields.FindField("araNispNem"));
+
+                var ocaguneSur = feature.get_Value(feature.Fields.FindField("ocaguneSur"));
+                var subguneSur = feature.get_Value(feature.Fields.FindField("subguneSur"));
+                var marguneSur = feature.get_Value(feature.Fields.FindField("marguneSur"));
+                var nisguneSur = feature.get_Value(feature.Fields.FindField("nisguneSur"));
+                var mayguneSur = feature.get_Value(feature.Fields.FindField("mayguneSur"));
+                var hazguneSur = feature.get_Value(feature.Fields.FindField("hazguneSur"));
+                var temguneSur = feature.get_Value(feature.Fields.FindField("temguneSur"));
+                var aguguneSur = feature.get_Value(feature.Fields.FindField("aguguneSur"));
+                var eylguneSur = feature.get_Value(feature.Fields.FindField("eylguneSur"));
+                var ekiguneSur = feature.get_Value(feature.Fields.FindField("ekiguneSur"));
+                var kasguneSur = feature.get_Value(feature.Fields.FindField("kasguneSur"));
+                var araguneSur = feature.get_Value(feature.Fields.FindField("araguneSur"));
+            }
+        }
+
+        private string CopyFeatureClass(object featureClass)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.CopyFeatures copyFeatures = new ESRI.ArcGIS.DataManagementTools.CopyFeatures();
+                copyFeatures.in_features = featureClass;
+                copyFeatures.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\" + "Copy";
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(copyFeatures, null);
+                return copyFeatures.out_feature_class.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         private void btnOk_Click(object sender, EventArgs e)
         {
+
+            if (cmbUygulamaKatmani.SelectedIndex < 0)
+            {
+                MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbProjectArea.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbNn.SelectedIndex < 0)
+            {
+                MessageBox.Show("Nn değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbGs.SelectedIndex < 0)
+            {
+                MessageBox.Show("Gs değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbNp.SelectedIndex < 0)
+            {
+                MessageBox.Show("Np değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbY.SelectedIndex < 0)
+            {
+                MessageBox.Show("Y değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbS.SelectedIndex < 0)
+            {
+                MessageBox.Show("S değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }     
+
             AppSingleton.Instance().CreateWorkspacePath();
             if (AppSingleton.Instance().SettingsControl == null)
             {
@@ -93,12 +224,19 @@ namespace Iklim
                 control.CheckForm();
             }
 
-            if (cmbUygulamaKatmani.SelectedIndex < 0)
-            {
-                MessageBox.Show("Öncelikli katmanı belirleyiniz.");
-                return;
-            }
+            tpSonuc.Visible = false;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+            tpSonuc.Maximum = 13;
+            tpSonuc.Step = 1;
+             tpSonuc.PerformStep();
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbUygulamaKatmani.SelectedItem as LayerObject).layer);
+
+            if (rbYillik.Checked)
+            {
+                var clipLayerName = Path.GetFileNameWithoutExtension(clipLayer);
+                CalculateNpYillik(clipLayerName);
+            }
 
             string nN = string.Empty;
             string nP = string.Empty;
@@ -107,11 +245,21 @@ namespace Iklim
             string gS = string.Empty;
             //if (AppSingleton.Instance().UygulamaYontemi == "IDW")
             //{
-                nN = AppSingleton.Instance().IDW(clipLayer, cmbNn.SelectedItem.ToString(),"nN");
-                nP = AppSingleton.Instance().IDW(clipLayer, cmbNp.SelectedItem.ToString(),"nP");
-                Y = AppSingleton.Instance().IDW(clipLayer, cmbY.SelectedItem.ToString(),"Y");
-                S = AppSingleton.Instance().IDW(clipLayer, cmbS.SelectedItem.ToString(),"S");
-                gS = AppSingleton.Instance().IDW(clipLayer, cmbGs.SelectedItem.ToString(),"gS");
+             tpSonuc.CustomText = "nN Katmanı oluşturuluyor...";
+              tpSonuc.PerformStep();
+            nN = AppSingleton.Instance().IDW(clipLayer, cmbNn.SelectedItem.ToString(), "nN");
+            tpSonuc.CustomText = "nP Katmanı oluşturuluyor...";
+              tpSonuc.PerformStep();
+            nP = AppSingleton.Instance().IDW(clipLayer, cmbNp.SelectedItem.ToString(), "nP");
+            tpSonuc.CustomText = "Y Katmanı oluşturuluyor...";
+              tpSonuc.PerformStep();
+            Y = AppSingleton.Instance().IDW(clipLayer, cmbY.SelectedItem.ToString(), "Y");
+            tpSonuc.CustomText = "S Katmanı oluşturuluyor...";
+              tpSonuc.PerformStep();
+            S = AppSingleton.Instance().IDW(clipLayer, cmbS.SelectedItem.ToString(), "S");
+            tpSonuc.CustomText = "gS Katmanı oluşturuluyor...";
+              tpSonuc.PerformStep();
+            gS = AppSingleton.Instance().IDW(clipLayer, cmbGs.SelectedItem.ToString(), "gS");
             //}
             //else if (AppSingleton.Instance().UygulamaYontemi == "KRIGING")
             //{
@@ -121,18 +269,33 @@ namespace Iklim
             //    S = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbS.SelectedItem.ToString());
             //    gS = AppSingleton.Instance().Kriging((cmbUygulamaKatmani.SelectedItem as LayerObject).layer, cmbGs.SelectedItem.ToString());
             //}
+
+            tpSonuc.CustomText = "nKS Katmanı oluşturuluyor...";
+             tpSonuc.PerformStep();
+            if(rbAylik.Checked)
+            {
+                nP = "12";
+            }
             string nKS = RasterCalculatorNKS(nN, nP, Y, S, gS);
+            tpSonuc.CustomText = "kKS Katmanı oluşturuluyor...";
+             tpSonuc.PerformStep();
             string kKS = RasterCalculatorKKS(nKS);
 
             var nksStr = "0 0.400000 1;0.400000 0.670000 2;0.670000 1 3;1 1.330000 4;1.330000 2 5;2 4 6;4 100000 7;NODATA 0";
             var kksStr = "0 0.250000 7;0.250000 0.500000 6;0.500000 0.750000 5;0.750000 1 4;1 1.500000 3;1.500000 2.500000 2;2.500000 100000 1;NODATA 0";
+            tpSonuc.CustomText = "nKS Katmanı sınıflandırılıyor...";
+             tpSonuc.PerformStep();
             var rNKS = Reclassify(Path.GetFileNameWithoutExtension(nKS), "Value", nksStr, "R_");
+            tpSonuc.CustomText = "kKS Katmanı sınıflandırılıyor...";
+             tpSonuc.PerformStep();
             var rKKS = Reclassify(Path.GetFileNameWithoutExtension(kKS), "Value", kksStr, "R_");
-
+            tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+             tpSonuc.PerformStep();
             string combine = Combine(rNKS + ";" + rKKS);
-
+            tpSonuc.CustomText = "Veriler ekleniyor...";
+             tpSonuc.PerformStep();
             Type factoryType = Type.GetTypeFromProgID(
-               "esriDataSourcesGDB.AccessWorkspaceFactory");
+            "esriDataSourcesGDB.AccessWorkspaceFactory");
 
             IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
                 (factoryType);
@@ -199,6 +362,9 @@ namespace Iklim
                 feature.set_Value(sonucField, sonucValue);
                 feature.Store();
             }
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
         }
 
         private string Combine(string layerNames)

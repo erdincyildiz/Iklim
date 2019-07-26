@@ -16,6 +16,73 @@ namespace Iklim
 
         private void btnCalistir_Click(object sender, EventArgs e)
         {
+
+            if (cmbUygulamaKatmani.SelectedIndex < 0)
+            {
+                MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbProjectArea.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbYillikSuEksigi.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Su eksiği değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbYillikSuFazlasi.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Su fazlası değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbETP.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Gerçek Evapotranspirasyon değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbPETP.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Potansiyel Evapotranspirasyon değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbPETPHaziran.SelectedIndex < 0)
+            {
+                MessageBox.Show("Haziran ayı Potansiyel Evapotranspirasyon değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbPETPTemmuz.SelectedIndex < 0)
+            {
+                MessageBox.Show("Temmuz ayı Potansiyel Evapotranspirasyon değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbPETPAgustos.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ağustos ayı Potansiyel Evapotranspirasyon değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbSuFazlasiYaz.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yaz ayları su fazlası değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbSuFazlasiKis.SelectedIndex < 0)
+            {
+                MessageBox.Show("Kış ayları su fazlası değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbSuEksigiYaz.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yaz ayları su eksiği değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbSuEksigiKis.SelectedIndex < 0)
+            {
+                MessageBox.Show("Kış ayları su eksiği değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
             AppSingleton.Instance().CreateWorkspacePath();
             if (AppSingleton.Instance().SettingsControl == null)
             {

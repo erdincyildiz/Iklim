@@ -50,18 +50,163 @@ namespace Iklim
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            if (cmbInputLayer.SelectedIndex < 0)
+            {
+                MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbInputBorder.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbYillikOrtSic.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Ortalama Sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbYillikTopYag.SelectedIndex < 0)
+            {
+                MessageBox.Show("Yıllık Toplam Yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikSicOcak.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ocak ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikSicSubat.SelectedIndex < 0)
+            {
+                MessageBox.Show("Şubat ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikSicMart.SelectedIndex < 0)
+            {
+                MessageBox.Show("Mart ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikSicNisan.SelectedIndex < 0)
+            {
+                MessageBox.Show("Nisan ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicMayis.SelectedIndex < 0)
+            {
+                MessageBox.Show("Mayıs ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicHaziran.SelectedIndex < 0)
+            {
+                MessageBox.Show("Haziran ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicTemmuz.SelectedIndex < 0)
+            {
+                MessageBox.Show("Temmuz ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicAgustos.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ağustos ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicEylul.SelectedIndex < 0)
+            {
+                MessageBox.Show("Eylül ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicEkim.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ekim ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicKasim.SelectedIndex < 0)
+            {
+                MessageBox.Show("Kasım ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikSicAralik.SelectedIndex < 0)
+            {
+                MessageBox.Show("Aralık ayı sıcaklık değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikYagOcak.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ocak ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikYagSubat.SelectedIndex < 0)
+            {
+                MessageBox.Show("Şubat ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikYagMart.SelectedIndex < 0)
+            {
+                MessageBox.Show("Mart ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+            if (cmbAylikYagNisan.SelectedIndex < 0)
+            {
+                MessageBox.Show("Nisan ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagMayis.SelectedIndex < 0)
+            {
+                MessageBox.Show("Mayıs ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagHaziran.SelectedIndex < 0)
+            {
+                MessageBox.Show("Haziran ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagTemmuz.SelectedIndex < 0)
+            {
+                MessageBox.Show("Temmuz ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagAgustos.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ağustos ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagEylul.SelectedIndex < 0)
+            {
+                MessageBox.Show("Eylül ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagEkim.SelectedIndex < 0)
+            {
+                MessageBox.Show("Ekim ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagKasim.SelectedIndex < 0)
+            {
+                MessageBox.Show("Kasım ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbAylikYagAralik.SelectedIndex < 0)
+            {
+                MessageBox.Show("Aralık ayı yağış değeri belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+
+
             AppSingleton.Instance().CreateWorkspacePath();
             if (AppSingleton.Instance().SettingsControl == null)
             {
                 SettingsControl control = new SettingsControl();
                 control.Load();
                 control.CheckForm();
-            }
-
-            if (cmbInputLayer.SelectedIndex < 0)
-            {
-                MessageBox.Show("Öncelikle uygulama katmanını belirleyiniz.");
-                return;
             }
 
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
