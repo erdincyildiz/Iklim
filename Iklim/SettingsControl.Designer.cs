@@ -81,7 +81,7 @@
             this.txtPiksel.Name = "txtPiksel";
             this.txtPiksel.Size = new System.Drawing.Size(71, 20);
             this.txtPiksel.TabIndex = 0;
-            this.txtPiksel.Text = "0.1";
+            this.txtPiksel.Text = "1000";
             // 
             // label1
             // 

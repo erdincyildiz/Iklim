@@ -102,7 +102,7 @@ namespace Iklim
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            
+
             if (cmbInputLayer.SelectedIndex < 0)
             {
                 MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
@@ -258,12 +258,18 @@ namespace Iklim
                 control.Load();
                 control.CheckForm();
             }
+            tpSonuc.Visible = true;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+            tpSonuc.Maximum = 33;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
 
-            
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
             var layerName = System.IO.Path.GetFileNameWithoutExtension(clipLayer);
             IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
-
+            tpSonuc.CustomText = "Katman kopyalanıyor...";
+            tpSonuc.PerformStep();
             var copiedfclass = CopyFeatureClass(clipClass);
 
             IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
@@ -278,50 +284,134 @@ namespace Iklim
             }
             var layer = (cmbInputLayer.SelectedItem as LayerObject).layer;
 
-
+            tpSonuc.CustomText = "YilOrtSic katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var YilOrtSic = IDW(fclass, cmbYillikOrtSic.SelectedItem.ToString(), "YilOrtSic");
+            tpSonuc.CustomText = "AySicOca katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicOcak = IDW(fclass, cmbAylikSicOcak.SelectedItem.ToString(), "AySicOca");
+            tpSonuc.CustomText = "AySicSub katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicSubat = IDW(fclass, cmbAylikSicSubat.SelectedItem.ToString(), "AySicSub");
+            tpSonuc.CustomText = "AySicMar katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicMart = IDW(fclass, cmbAylikSicMart.SelectedItem.ToString(), "AySicMar");
+            tpSonuc.CustomText = "AySicNis katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicNisan = IDW(fclass, cmbAylikSicNisan.SelectedItem.ToString(), "AySicNis");
+            tpSonuc.CustomText = "AySicMay katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicMayis = IDW(fclass, cmbAylikSicMayis.SelectedItem.ToString(), "AySicMay");
+            tpSonuc.CustomText = "AySicHaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicHaziran = IDW(fclass, cmbAylikSicHaziran.SelectedItem.ToString(), "AySicHaz");
+            tpSonuc.CustomText = "AySicTem katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicTemmuz = IDW(fclass, cmbAylikSicTemmuz.SelectedItem.ToString(), "AySicTem");
+            tpSonuc.CustomText = "AySicAgu katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicAgustos = IDW(fclass, cmbAylikSicAgustos.SelectedItem.ToString(), "AySicAgu");
+            tpSonuc.CustomText = "AySicEyl katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicEylul = IDW(fclass, cmbAylikSicEylul.SelectedItem.ToString(), "AySicEyl");
+            tpSonuc.CustomText = "AySicEki katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicEkim = IDW(fclass, cmbAylikSicEkim.SelectedItem.ToString(), "AySicEki");
+            tpSonuc.CustomText = "AySicKas katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicKasim = IDW(fclass, cmbAylikSicKasim.SelectedItem.ToString(), "AySicKas");
+            tpSonuc.CustomText = "AySicAra katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AySicAralik = IDW(fclass, cmbAylikSicAralik.SelectedItem.ToString(), "AySicAra");
 
             string layerNames = YilOrtSic + ";" + AySicOcak + ";" + AySicSubat + ";" + AySicMart
                 + ";" + AySicNisan + ";" + AySicMayis + ";" + AySicHaziran + ";" + AySicTemmuz
                 + ";" + AySicAgustos + ";" + AySicEylul + ";" + AySicEkim + ";" + AySicKasim + ";" + AySicAralik;
+            tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+            tpSonuc.PerformStep();
             var combine1 = Combine(layerNames, "CombineSic");
+            tpSonuc.CustomText = "YilTopYag katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var YilTopYag = IDW(fclass, cmbYillikTopYag.SelectedItem.ToString(), "YilTopYag");
+            tpSonuc.CustomText = "AyYagOca katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagOcak = IDW(fclass, cmbAylikYagOcak.SelectedItem.ToString(), "AyYagOca");
+            tpSonuc.CustomText = "AyYagSub katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagSubat = IDW(fclass, cmbAylikYagSubat.SelectedItem.ToString(), "AyYagSub");
+            tpSonuc.CustomText = "AyYagMar katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagMart = IDW(fclass, cmbAylikYagMart.SelectedItem.ToString(), "AyYagMar");
+            tpSonuc.CustomText = "AyYagNis katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagNisan = IDW(fclass, cmbAylikYagNisan.SelectedItem.ToString(), "AyYagNis");
+            tpSonuc.CustomText = "AyYagMay katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagMayis = IDW(fclass, cmbAylikYagMayis.SelectedItem.ToString(), "AyYagMay");
+            tpSonuc.CustomText = "AyYagHaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagHaziran = IDW(fclass, cmbAylikYagHaziran.SelectedItem.ToString(), "AyYagHaz");
+            tpSonuc.CustomText = "AyYagTem katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagTemmuz = IDW(fclass, cmbAylikYagTemmuz.SelectedItem.ToString(), "AyYagTem");
+            tpSonuc.CustomText = "AyYagAgu katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagAgustos = IDW(fclass, cmbAylikYagAgustos.SelectedItem.ToString(), "AyYagAgu");
+            tpSonuc.CustomText = "AyYagEyl katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagEylul = IDW(fclass, cmbAylikYagEylul.SelectedItem.ToString(), "AyYagEyl");
+            tpSonuc.CustomText = "AyYagEki katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagEkim = IDW(fclass, cmbAylikYagEkim.SelectedItem.ToString(), "AyYagEki");
+            tpSonuc.CustomText = "AyYagKas katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagKasim = IDW(fclass, cmbAylikYagKasim.SelectedItem.ToString(), "AyYagKas");
+            tpSonuc.CustomText = "AyYagAra katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var AyYagAralik = IDW(fclass, cmbAylikYagAralik.SelectedItem.ToString(), "AyYagAra");
 
             string layerNames2 = YilTopYag + ";" + AyYagOcak + ";" + AyYagSubat + ";" + AyYagMart
                 + ";" + AyYagNisan + ";" + AyYagMayis + ";" + AyYagHaziran + ";" + AyYagTemmuz
                 + ";" + AyYagAgustos + ";" + AyYagEylul + ";" + AyYagEkim + ";" + AyYagKasim + ";" + AyYagAralik;
+            tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+            tpSonuc.PerformStep();
             var combine2 = Combine(layerNames2, "CombineYag");
-            Combine(combine1 + ";" + combine2, "FinalCombined");
+            tpSonuc.CustomText = "Siniflandirma_Koppen oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var combineLayer = Combine(combine1 + ";" + combine2, "Siniflandirma_Koppen");
+            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Siniflandirma_Koppen");
+            JoinField(vat, "CombineSic", combine1, "Value");
+            JoinField(vat, "CombineYag", combine2, "Value");
+            tpSonuc.CustomText = "Veriler ekleniyor...";
+            tpSonuc.PerformStep();
             FindIklimForValues();
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
         }
-
+        private bool JoinField(object table, string inField, string joinTable, string joinField)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
+                join.in_data = table;
+                join.in_field = inField;
+                join.join_table = joinTable;
+                join.join_field = joinField;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(join, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         private void FindIklimForValues()
         {
-            ITable vatRaster = BuildRasterAttributeTable("FinalCombined");
+            ITable vatRaster = BuildRasterAttributeTable("Siniflandirma_Koppen");
             ITable vatYag = BuildRasterAttributeTable("CombineYag");
             ITable vatSic = BuildRasterAttributeTable("CombineSic");
             AddField(vatRaster, "IKLIMTURU", "TEXT");

@@ -209,10 +209,19 @@ namespace Iklim
                 control.CheckForm();
             }
 
+            tpSonuc.Visible = true;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+            tpSonuc.Maximum = 6;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
+
+
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
             var layerName = Path.GetFileNameWithoutExtension(clipLayer);
             IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
-            
+            tpSonuc.CustomText = "Katman kopyalanıyor...";
+            tpSonuc.PerformStep();
             var copiedfclass = CopyFeatureClass(clipClass);
 
             IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
@@ -266,16 +275,22 @@ namespace Iklim
                 feature.Store();
             }
 
+            tpSonuc.CustomText = "IDW katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+
             var idwLayer = AppSingleton.Instance().IDW(fclass, "IDMG","IDW");
-            var intLayer = Int(idwLayer, "GOTTMANN");
-            var table = AppSingleton.Instance().BuildRasterAttributeTable("GOTTMANN");
+            tpSonuc.CustomText = "Siniflandirma_DeMartonneGottmann katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var intLayer = Int(idwLayer, "Siniflandirma_DeMartonneGottmann");
+            var table = AppSingleton.Instance().BuildRasterAttributeTable("Siniflandirma_DeMartonneGottmann");
             AppSingleton.Instance().AddField(table, "IKLIMTIPI", "TEXT");
             int idmField = table.FindField("VALUE");
             int ozellikField = table.FindField("IKLIMTIPI");
             IQueryFilter queryFilter2 = new QueryFilterClass();
             ICursor updateCursor2 = table.Search(queryFilter, false);
             IRow row = null;
-
+            tpSonuc.CustomText = "Veriler ekleniyor...";
+            tpSonuc.PerformStep();
             while ((row = updateCursor2.NextRow()) != null)
             {
                 string ozellik = string.Empty;
@@ -315,6 +330,9 @@ namespace Iklim
                 row.set_Value(ozellikField, ozellik);
                 row.Store();
             }
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
         }
 
         public string Int(string layerName, string outName)

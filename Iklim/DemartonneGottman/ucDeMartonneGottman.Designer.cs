@@ -31,9 +31,14 @@
             this.grpbxInfo = new System.Windows.Forms.GroupBox();
             this.lblInfo1 = new System.Windows.Forms.Label();
             this.grpbxInput = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnOk = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.cmbInputBorder = new System.Windows.Forms.ComboBox();
+            this.cmbYillikTopYag = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cmbYillikOrtSic = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.cmbInputLayer = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -82,14 +87,10 @@
             this.cmbAylikSicMart = new System.Windows.Forms.ComboBox();
             this.cmbAylikSicSubat = new System.Windows.Forms.ComboBox();
             this.cmbAylikSicOcak = new System.Windows.Forms.ComboBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.cmbInputBorder = new System.Windows.Forms.ComboBox();
-            this.cmbYillikTopYag = new System.Windows.Forms.ComboBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.cmbYillikOrtSic = new System.Windows.Forms.ComboBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.cmbInputLayer = new System.Windows.Forms.ComboBox();
+            this.btnOk = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tpSonuc = new Iklim.TextProgressBar();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.SuspendLayout();
@@ -118,6 +119,7 @@
             // 
             // grpbxInput
             // 
+            this.grpbxInput.Controls.Add(this.tpSonuc);
             this.grpbxInput.Controls.Add(this.label12);
             this.grpbxInput.Controls.Add(this.label11);
             this.grpbxInput.Controls.Add(this.cmbInputBorder);
@@ -185,36 +187,82 @@
             this.grpbxInput.TabStop = false;
             this.grpbxInput.Text = "Girdi Veri Seti Seçilmesi";
             // 
-            // label2
+            // label12
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(353, 95);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(120, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Aylık Ortalama Sıcaklık :";
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(378, 32);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(85, 13);
+            this.label12.TabIndex = 108;
+            this.label12.Text = "Proje Alanı Sınırı:";
             // 
-            // label1
+            // label11
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(6, 95);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Aylık Toplam Yağış :";
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(378, 59);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(98, 13);
+            this.label11.TabIndex = 109;
+            this.label11.Text = "Yıllık Toplam Yağış:";
             // 
-            // btnOk
+            // cmbInputBorder
             // 
-            this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(581, 299);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 53;
-            this.btnOk.Text = "Çalıştır";
-            this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            this.cmbInputBorder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbInputBorder.FormattingEnabled = true;
+            this.cmbInputBorder.Location = new System.Drawing.Point(482, 29);
+            this.cmbInputBorder.Name = "cmbInputBorder";
+            this.cmbInputBorder.Size = new System.Drawing.Size(173, 21);
+            this.cmbInputBorder.TabIndex = 106;
+            // 
+            // cmbYillikTopYag
+            // 
+            this.cmbYillikTopYag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbYillikTopYag.FormattingEnabled = true;
+            this.cmbYillikTopYag.Location = new System.Drawing.Point(482, 56);
+            this.cmbYillikTopYag.Name = "cmbYillikTopYag";
+            this.cmbYillikTopYag.Size = new System.Drawing.Size(173, 21);
+            this.cmbYillikTopYag.TabIndex = 107;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(3, 59);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(116, 13);
+            this.label13.TabIndex = 105;
+            this.label13.Text = "Yıllık Ortalama Sıcaklık:";
+            // 
+            // cmbYillikOrtSic
+            // 
+            this.cmbYillikOrtSic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbYillikOrtSic.FormattingEnabled = true;
+            this.cmbYillikOrtSic.Location = new System.Drawing.Point(135, 56);
+            this.cmbYillikOrtSic.Name = "cmbYillikOrtSic";
+            this.cmbYillikOrtSic.Size = new System.Drawing.Size(173, 21);
+            this.cmbYillikOrtSic.TabIndex = 104;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(3, 32);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(126, 13);
+            this.label14.TabIndex = 103;
+            this.label14.Text = "Meteoroloji Veri Katmanı :";
+            // 
+            // cmbInputLayer
+            // 
+            this.cmbInputLayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbInputLayer.FormattingEnabled = true;
+            this.cmbInputLayer.Location = new System.Drawing.Point(135, 29);
+            this.cmbInputLayer.Name = "cmbInputLayer";
+            this.cmbInputLayer.Size = new System.Drawing.Size(173, 21);
+            this.cmbInputLayer.TabIndex = 102;
+            this.cmbInputLayer.SelectedIndexChanged += new System.EventHandler(this.cmbInputLayer_SelectedIndexChanged);
             // 
             // label19
             // 
@@ -672,82 +720,49 @@
             this.cmbAylikSicOcak.Size = new System.Drawing.Size(89, 21);
             this.cmbAylikSicOcak.TabIndex = 54;
             // 
-            // label12
+            // btnOk
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(378, 32);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(85, 13);
-            this.label12.TabIndex = 108;
-            this.label12.Text = "Proje Alanı Sınırı:";
+            this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOk.Location = new System.Drawing.Point(581, 299);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.TabIndex = 53;
+            this.btnOk.Text = "Çalıştır";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // label11
+            // label2
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(378, 59);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(98, 13);
-            this.label11.TabIndex = 109;
-            this.label11.Text = "Yıllık Toplam Yağış:";
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(353, 95);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(120, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Aylık Ortalama Sıcaklık :";
             // 
-            // cmbInputBorder
+            // label1
             // 
-            this.cmbInputBorder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbInputBorder.FormattingEnabled = true;
-            this.cmbInputBorder.Location = new System.Drawing.Point(482, 29);
-            this.cmbInputBorder.Name = "cmbInputBorder";
-            this.cmbInputBorder.Size = new System.Drawing.Size(173, 21);
-            this.cmbInputBorder.TabIndex = 106;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(6, 95);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(102, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Aylık Toplam Yağış :";
             // 
-            // cmbYillikTopYag
+            // tpSonuc
             // 
-            this.cmbYillikTopYag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbYillikTopYag.FormattingEnabled = true;
-            this.cmbYillikTopYag.Location = new System.Drawing.Point(482, 56);
-            this.cmbYillikTopYag.Name = "cmbYillikTopYag";
-            this.cmbYillikTopYag.Size = new System.Drawing.Size(173, 21);
-            this.cmbYillikTopYag.TabIndex = 107;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(3, 59);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(116, 13);
-            this.label13.TabIndex = 105;
-            this.label13.Text = "Yıllık Ortalama Sıcaklık:";
-            // 
-            // cmbYillikOrtSic
-            // 
-            this.cmbYillikOrtSic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbYillikOrtSic.FormattingEnabled = true;
-            this.cmbYillikOrtSic.Location = new System.Drawing.Point(135, 56);
-            this.cmbYillikOrtSic.Name = "cmbYillikOrtSic";
-            this.cmbYillikOrtSic.Size = new System.Drawing.Size(173, 21);
-            this.cmbYillikOrtSic.TabIndex = 104;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(3, 32);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(126, 13);
-            this.label14.TabIndex = 103;
-            this.label14.Text = "Meteoroloji Veri Katmanı :";
-            // 
-            // cmbInputLayer
-            // 
-            this.cmbInputLayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbInputLayer.FormattingEnabled = true;
-            this.cmbInputLayer.Location = new System.Drawing.Point(135, 29);
-            this.cmbInputLayer.Name = "cmbInputLayer";
-            this.cmbInputLayer.Size = new System.Drawing.Size(173, 21);
-            this.cmbInputLayer.TabIndex = 102;
-            this.cmbInputLayer.SelectedIndexChanged += new System.EventHandler(this.cmbInputLayer_SelectedIndexChanged);
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(112, 299);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 110;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
             // 
             // ucDeMartonneGottman
             // 
@@ -828,5 +843,6 @@
         private System.Windows.Forms.ComboBox cmbYillikOrtSic;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox cmbInputLayer;
+        private TextProgressBar tpSonuc;
     }
 }

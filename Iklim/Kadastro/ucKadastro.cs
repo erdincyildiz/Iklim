@@ -53,12 +53,13 @@ namespace Iklim
             tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
             tpSonuc.Step = 1;
             tpSonuc.PerformStep();
-            var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimEkoloji.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
+            var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimEkoloji.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer),"RC_IKLIM");
             tpSonuc.CustomText = "Poligona dönüştürülüyor...";
             tpSonuc.Step = 1;
             tpSonuc.PerformStep();
 
             var fClass = RasterToPolygon(iklimClipLayer);
+             JoinField(fClass, "gridcode", iklimClipLayer, "Value");
             tpSonuc.CustomText = "Kadastro Katmanı kesiliyor...";
             tpSonuc.Step = 1;
             tpSonuc.PerformStep();
@@ -107,6 +108,26 @@ namespace Iklim
             return intersect.out_feature_class.ToString();
         }
 
+        private bool JoinField(object table, string inField, string joinTable, string joinField)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
+                join.in_data = table;
+                join.in_field = inField;
+                join.join_table = joinTable;
+                join.join_field = joinField;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(join, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         public void Init()
         {

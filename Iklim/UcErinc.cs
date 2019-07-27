@@ -217,14 +217,27 @@ namespace Iklim
                 control.Load();
                 control.CheckForm();
             }
+            tpSonuc.Visible = true;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+            tpSonuc.Maximum = 19;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbCalismaAlani.SelectedItem as LayerObject).layer, (cmbVeriSeti.SelectedItem as LayerObject).layer);
-
+            tpSonuc.CustomText = "Yağış katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var yagisLayer = AppSingleton.Instance().IDW(clipLayer, cmbOrtYag.SelectedItem.ToString(),"yagisLayer");
+            tpSonuc.CustomText = "Sıcaklık katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var sicaklikLayer = AppSingleton.Instance().IDW(clipLayer, cmbOrtSic.SelectedItem.ToString(),"sicaklikLayer");
+            tpSonuc.CustomText = "Siniflandirma_Erinc katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var sonucRaster = Divide(yagisLayer, sicaklikLayer);
-            Int(sonucRaster, "Final");
-            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Final");
+            Int(sonucRaster, "Siniflandirma_Erinc");
+            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Siniflandirma_Erinc");
 
+            tpSonuc.CustomText = "Veriler ekleniyor...";
+            tpSonuc.PerformStep();
             AppSingleton.Instance().AddField(vat, "IKLIMTIPI", "TEXT");
             IQueryFilter queryFilter = new QueryFilterClass();
             ICursor updateCursor = vat.Search(queryFilter, false);
@@ -262,6 +275,9 @@ namespace Iklim
                 feature.set_Value(ozellikField, ozellik);
                 feature.Store();
             }
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
         }
     }
 }

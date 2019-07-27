@@ -1,6 +1,6 @@
 ﻿namespace Iklim
 {
-    partial class ThornwaiteForm
+    partial class DeMArtonnGotmannFormSablon
     {
         /// <summary>
         /// Required designer variable.
@@ -28,36 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ucThornWaite = new Iklim.ucThornWaite();
+            this.ucDeMartonneGottmanSablon = new Iklim.ucDeMartonneGottmanSablon();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // ucThornWaite
+            // ucDeMartonneGottmanSablon
             // 
-            this.ucThornWaite.Location = new System.Drawing.Point(12, 0);
-            this.ucThornWaite.Name = "ucThornWaite";
-            this.ucThornWaite.Size = new System.Drawing.Size(694, 412);
-            this.ucThornWaite.TabIndex = 0;
+            this.ucDeMartonneGottmanSablon.Location = new System.Drawing.Point(12, 20);
+            this.ucDeMartonneGottmanSablon.Name = "ucDeMartonneGottmanSablon";
+            this.ucDeMartonneGottmanSablon.Size = new System.Drawing.Size(694, 412);
+            this.ucDeMartonneGottmanSablon.TabIndex = 0;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 399);
+            this.label2.Location = new System.Drawing.Point(12, 419);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(144, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Tuğba MEMİŞOĞLU @2019";
             // 
-            // ThornwaiteForm
+            // DeMArtonnGotmannFormSablon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 424);
+            this.ClientSize = new System.Drawing.Size(725, 444);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.ucThornWaite);
-            this.Name = "ThornwaiteForm";
-            this.Text = "Thornwaite Yöntemi İle İklim Sınırlarının Belirlenmesi";
+            this.Controls.Add(this.ucDeMartonneGottmanSablon);
+            this.Name = "DeMArtonnGotmannFormSablon";
+            this.Text = "De Martonne - Gottman Yöntemi İle İklim Sınırlarının Belirlenmesi";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -65,7 +65,7 @@
 
         #endregion
 
-        private ucThornWaite ucThornWaite;
+        private ucDeMartonneGottmanSablon ucDeMartonneGottmanSablon;
         private System.Windows.Forms.Label label2;
     }
 }

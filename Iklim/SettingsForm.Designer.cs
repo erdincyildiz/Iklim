@@ -30,6 +30,7 @@
         {
             this.btnSaveSettings = new System.Windows.Forms.Button();
             this.settingsControl1 = new Iklim.SettingsControl();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnSaveSettings
@@ -49,11 +50,22 @@
             this.settingsControl1.Size = new System.Drawing.Size(676, 458);
             this.settingsControl1.TabIndex = 2;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 477);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Tuğba MEMİŞOĞLU @2019";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(693, 502);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.settingsControl1);
             this.Controls.Add(this.btnSaveSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -61,11 +73,13 @@
             this.Text = "Ayarlar";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.Button btnSaveSettings;
         private SettingsControl settingsControl1;
+        private System.Windows.Forms.Label label2;
     }
 }

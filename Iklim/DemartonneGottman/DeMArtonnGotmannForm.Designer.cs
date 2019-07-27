@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.ucDeMartonneGottman = new Iklim.ucDeMartonneGottman();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ucDeMartonneGottman
@@ -38,20 +39,33 @@
             this.ucDeMartonneGottman.Size = new System.Drawing.Size(694, 412);
             this.ucDeMartonneGottman.TabIndex = 0;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 419);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Tuğba MEMİŞOĞLU @2019";
+            // 
             // DeMArtonnGotmannForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(725, 444);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.ucDeMartonneGottman);
             this.Name = "DeMArtonnGotmannForm";
-            this.Text = "DeMArtonnGotmannForm";
+            this.Text = "De Martonne - Gottman Yöntemi İle İklim Sınırlarının Belirlenmesi";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private ucDeMartonneGottman ucDeMartonneGottman;
+        private System.Windows.Forms.Label label2;
     }
 }

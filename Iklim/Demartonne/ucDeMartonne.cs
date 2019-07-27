@@ -183,10 +183,10 @@ namespace Iklim
                 var P = Int(IDWP, "P");
                 tpSonuc.CustomText = "IDM Katmanı oluşturuluyor...";
                 tpSonuc.PerformStep();
-                var idm = RasterCalculatorAylik(P, T, "IDM");
+                var idm = RasterCalculatorAylik(P, T, "Siniflandirma_DeMArtonne");
                 tpSonuc.CustomText = "Veriler ekleniyor...";
                 tpSonuc.PerformStep();
-                ITable vatAylik = BuildRasterAttributeTable("IDM");
+                ITable vatAylik = BuildRasterAttributeTable("Siniflandirma_DeMartonne");
                 AddField(vatAylik, "OZELLIK", "TEXT");
                 IQueryFilter queryFilter = new QueryFilterClass();
                 ICursor updateCursor = vatAylik.Search(queryFilter, false);

@@ -71,7 +71,6 @@ namespace Iklim
                 FillCmboboboxWithFieldList(cmbS, fieldList);
                 FillCmboboboxWithFieldList(cmbY, fieldList);
                 FillCmboboboxWithFieldList(cmbGs, fieldList);
-                FillCmboboboxWithFieldList(cmbNp, fieldList);
             }
         }
 
@@ -84,11 +83,11 @@ namespace Iklim
         }
 
         private void CalculateNpYillik(string layerName) {
-            IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
+            IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
 
-            var copiedfclass = CopyFeatureClass(clipClass);
+            //var copiedfclass = CopyFeatureClass(clipClass);
 
-            IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
+            //IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
 
             IQueryFilter queryFilter = new QueryFilterClass();
 
@@ -96,62 +95,126 @@ namespace Iklim
 
             IFeatureCursor updateCursor = fclass.Search(queryFilter, false);
             IFeature feature = null;
-
+            var npField = fclass.Fields.FindField("npYillik");
             while ((feature = updateCursor.NextFeature()) != null)
             {
                 var counter = 0;
-                var ocaTmp = feature.get_Value(feature.Fields.FindField("ocaTmp"));
-                var subTmp = feature.get_Value(feature.Fields.FindField("subTmp"));
-                var marTmp = feature.get_Value(feature.Fields.FindField("marTmp"));
-                var nisTmp = feature.get_Value(feature.Fields.FindField("nisTmp"));
-                var mayTmp = feature.get_Value(feature.Fields.FindField("mayTmp"));
-                var hazTmp = feature.get_Value(feature.Fields.FindField("hazTmp"));
-                var temTmp = feature.get_Value(feature.Fields.FindField("temTmp"));
-                var aguTmp = feature.get_Value(feature.Fields.FindField("aguTmp"));
-                var eylTmp = feature.get_Value(feature.Fields.FindField("eylTmp"));
-                var ekiTmp = feature.get_Value(feature.Fields.FindField("ekiTmp"));
-                var kasTmp = feature.get_Value(feature.Fields.FindField("kasTmp"));
-                var araTmp = feature.get_Value(feature.Fields.FindField("araTmp"));
+                var ocaTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ocaTmp")));
+                var subTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("subTmp")));
+                var marTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("marTmp")));
+                var nisTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("nisTmp")));
+                var mayTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("mayTmp")));
+                var hazTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("hazTmp")));
+                var temTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("temTmp")));
+                var aguTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("aguTmp")));
+                var eylTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("eylTmp")));
+                var ekiTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ekiTmp")));
+                var kasTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("kasTmp")));
+                var araTmp = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("araTmp")));
                
 
-                var ocaRain = feature.get_Value(feature.Fields.FindField("ocaRain"));
-                var subRain = feature.get_Value(feature.Fields.FindField("subRain"));
-                var marRain = feature.get_Value(feature.Fields.FindField("marRain"));
-                var nisRain = feature.get_Value(feature.Fields.FindField("nisRain"));
-                var mayRain = feature.get_Value(feature.Fields.FindField("mayRain"));
-                var hazRain = feature.get_Value(feature.Fields.FindField("hazRain"));
-                var temRain = feature.get_Value(feature.Fields.FindField("temRain"));
-                var aguRain = feature.get_Value(feature.Fields.FindField("aguRain"));
-                var eylRain = feature.get_Value(feature.Fields.FindField("eylRain"));
-                var ekiRain = feature.get_Value(feature.Fields.FindField("ekiRain"));
-                var kasRain = feature.get_Value(feature.Fields.FindField("kasRain"));
-                var araRain = feature.get_Value(feature.Fields.FindField("araRain"));
+                var ocaRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ocaRain")));
+                var subRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("subRain")));
+                var marRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("marRain")));
+                var nisRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("nisRain")));
+                var mayRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("mayRain")));
+                var hazRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("hazRain")));
+                var temRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("temRain")));
+                var aguRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("aguRain")));
+                var eylRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("eylRain")));
+                var ekiRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ekiRain")));
+                var kasRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("kasRain")));
+                var araRain = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("araRain")));
 
-                var ocaNispNem = feature.get_Value(feature.Fields.FindField("ocaNispNem"));
-                var subNispNem = feature.get_Value(feature.Fields.FindField("subNispNem"));
-                var marNispNem = feature.get_Value(feature.Fields.FindField("marNispNem"));
-                var nisNispNem = feature.get_Value(feature.Fields.FindField("nisNispNem"));
-                var mayNispNem = feature.get_Value(feature.Fields.FindField("mayNispNem"));
-                var hazNispNem = feature.get_Value(feature.Fields.FindField("hazNispNem"));
-                var temNispNem = feature.get_Value(feature.Fields.FindField("temNispNem"));
-                var aguNispNem = feature.get_Value(feature.Fields.FindField("aguNispNem"));
-                var eylNispNem = feature.get_Value(feature.Fields.FindField("eylNispNem"));
-                var ekiNispNem = feature.get_Value(feature.Fields.FindField("ekiNispNem"));
-                var kasNispNem = feature.get_Value(feature.Fields.FindField("kasNispNem"));
-                var araNispNem = feature.get_Value(feature.Fields.FindField("araNispNem"));
+                var ocaNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ocaNispNem")));
+                var subNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("subNispNem")));
+                var marNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("marNispNem")));
+                var nisNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("nisNispNem")));
+                var mayNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("mayNispNem")));
+                var hazNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("hazNispNem")));
+                var temNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("temNispNem")));
+                var aguNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("aguNispNem")));
+                var eylNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("eylNispNem")));
+                var ekiNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ekiNispNem")));
+                var kasNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("kasNispNem")));
+                var araNispNem = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("araNispNem")));
 
-                var ocaguneSur = feature.get_Value(feature.Fields.FindField("ocaguneSur"));
-                var subguneSur = feature.get_Value(feature.Fields.FindField("subguneSur"));
-                var marguneSur = feature.get_Value(feature.Fields.FindField("marguneSur"));
-                var nisguneSur = feature.get_Value(feature.Fields.FindField("nisguneSur"));
-                var mayguneSur = feature.get_Value(feature.Fields.FindField("mayguneSur"));
-                var hazguneSur = feature.get_Value(feature.Fields.FindField("hazguneSur"));
-                var temguneSur = feature.get_Value(feature.Fields.FindField("temguneSur"));
-                var aguguneSur = feature.get_Value(feature.Fields.FindField("aguguneSur"));
-                var eylguneSur = feature.get_Value(feature.Fields.FindField("eylguneSur"));
-                var ekiguneSur = feature.get_Value(feature.Fields.FindField("ekiguneSur"));
-                var kasguneSur = feature.get_Value(feature.Fields.FindField("kasguneSur"));
-                var araguneSur = feature.get_Value(feature.Fields.FindField("araguneSur"));
+                var ocaguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ocaguneSur")));
+                var subguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("subguneSur")));
+                var marguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("marguneSur")));
+                var nisguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("nisguneSur")));
+                var mayguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("mayguneSur")));
+                var hazguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("hazguneSur")));
+                var temguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("temguneSur")));
+                var aguguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("aguguneSur")));
+                var eylguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("eylguneSur")));
+                var ekiguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("ekiguneSur")));
+                var kasguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("kasguneSur")));
+                var araguneSur = Convert.ToDouble(feature.get_Value(feature.Fields.FindField("araguneSur")));
+
+                var ocaNp = (ocaRain * ocaNispNem * 12) / ((ocaTmp*ocaguneSur) + 15);
+                if(ocaNp>0.4)
+                {
+                    counter++;
+                }
+                var subNp = (subRain * subNispNem * 12) / ((subTmp * subguneSur) + 15);
+                if (subNp > 0.4)
+                {
+                    counter++;
+                }
+                var marNp = (marRain * marNispNem * 12) / ((marTmp * marguneSur) + 15);
+                if (marNp > 0.4)
+                {
+                    counter++;
+                }
+                var nisNp = (nisRain * nisNispNem * 12) / ((nisTmp * nisguneSur) + 15);
+                if (nisNp > 0.4)
+                {
+                    counter++;
+                }
+                var mayNp = (mayRain * mayNispNem * 12) / ((mayTmp * mayguneSur) + 15);
+                if (mayNp > 0.4)
+                {
+                    counter++;
+                }
+                var hazNp = (hazRain * hazNispNem * 12) / ((hazTmp * hazguneSur) + 15);
+                if (hazNp > 0.4)
+                {
+                    counter++;
+                }
+                var temNp = (temRain * temNispNem * 12) / ((temTmp * temguneSur) + 15);
+                if (temNp > 0.4)
+                {
+                    counter++;
+                }
+                var aguNp = (aguRain * aguNispNem * 12) / ((aguTmp * aguguneSur) + 15);
+                if (aguNp > 0.4)
+                {
+                    counter++;
+                }
+                var eylNp = (eylRain * eylNispNem * 12) / ((eylTmp * eylguneSur) + 15);
+                if (eylNp > 0.4)
+                {
+                    counter++;
+                }
+                var ekiNp = (ekiRain * ekiNispNem * 12) / ((ekiTmp * ekiguneSur) + 15);
+                if (ekiNp > 0.4)
+                {
+                    counter++;
+                }
+                var kasNp = (kasRain * kasNispNem * 12) / ((kasTmp * kasguneSur) + 15);
+                if (kasNp > 0.4)
+                {
+                    counter++;
+                }
+                var araNp = (araRain * araNispNem * 12) / ((araTmp * araguneSur) + 15);
+                if (araNp > 0.4)
+                {
+                    counter++;
+                }
+                double val = Convert.ToDouble(counter) / Convert.ToDouble(12);
+                feature.set_Value(npField, val);
+                feature.Store();
             }
         }
 
@@ -198,12 +261,6 @@ namespace Iklim
                 return;
             }
 
-            if (cmbNp.SelectedIndex < 0)
-            {
-                MessageBox.Show("Np değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
             if (cmbY.SelectedIndex < 0)
             {
                 MessageBox.Show("Y değeri belirlenmeden işlem yapılamaz.");
@@ -224,7 +281,7 @@ namespace Iklim
                 control.CheckForm();
             }
 
-            tpSonuc.Visible = false;
+            tpSonuc.Visible = true;
             tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
             tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
             tpSonuc.Maximum = 13;
@@ -250,7 +307,10 @@ namespace Iklim
             nN = AppSingleton.Instance().IDW(clipLayer, cmbNn.SelectedItem.ToString(), "nN");
             tpSonuc.CustomText = "nP Katmanı oluşturuluyor...";
               tpSonuc.PerformStep();
-            nP = AppSingleton.Instance().IDW(clipLayer, cmbNp.SelectedItem.ToString(), "nP");
+            if (rbYillik.Checked)
+            {
+                nP = AppSingleton.Instance().IDW(clipLayer, "npYillik", "npYillik");
+            }
             tpSonuc.CustomText = "Y Katmanı oluşturuluyor...";
               tpSonuc.PerformStep();
             Y = AppSingleton.Instance().IDW(clipLayer, cmbY.SelectedItem.ToString(), "Y");
@@ -300,7 +360,7 @@ namespace Iklim
             IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
                 (factoryType);
             IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
-            IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset("Combined");
+            IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset("Siniflandirma_Aydeniz");
             IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
 
             ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
@@ -374,7 +434,7 @@ namespace Iklim
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
                 ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
                 combine.in_rasters = layerNames;
-                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Combined";
+                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Siniflandirma_Aydeniz";
                 gp.AddOutputsToMap = true;
                 gp.OverwriteOutput = true;
                 gp.Execute(combine, null);
@@ -437,7 +497,14 @@ namespace Iklim
             try
             {
                 ESRI.ArcGIS.SpatialAnalystTools.RasterCalculator rasterCalculator= new ESRI.ArcGIS.SpatialAnalystTools.RasterCalculator();
-                rasterCalculator.expression = "('" + Y + "' * '" + nN + "' * '" + nP + "') / ('" + S + "' * '" + gS +  "')" + " + " + 15;
+                if (nP == "12")
+                {
+                     rasterCalculator.expression = "('" + Y + "' * '" + nN + "' * 12) / ('" + S + "' * '" + gS + "' + 15 )" ;
+                }
+                else
+                {
+                    rasterCalculator.expression = "('" + Y + "' * '" + nN + "' * '" + nP + "') / ('" + S + "' * '" + gS + "' + 15)";
+                }
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
                 rasterCalculator.output_raster = AppSingleton.Instance().WorkspacePath + "\\nks";
                 gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;

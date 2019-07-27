@@ -15,7 +15,7 @@ namespace Iklim
         public KoppenFormSablon()
         {
             InitializeComponent();
-            ucKoppen.Init();
+            ucKoppenSablon.Init();
         }
     }
 }

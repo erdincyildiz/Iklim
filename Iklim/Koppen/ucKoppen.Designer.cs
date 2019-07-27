@@ -91,6 +91,7 @@
             this.cmbYillikOrtSic = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbInputLayer = new System.Windows.Forms.ComboBox();
+            this.tpSonuc = new Iklim.TextProgressBar();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.SuspendLayout();
@@ -117,6 +118,7 @@
             // 
             // grpbxInput
             // 
+            this.grpbxInput.Controls.Add(this.tpSonuc);
             this.grpbxInput.Controls.Add(this.btnOk);
             this.grpbxInput.Controls.Add(this.label19);
             this.grpbxInput.Controls.Add(this.label20);
@@ -748,6 +750,19 @@
             this.cmbInputLayer.TabIndex = 0;
             this.cmbInputLayer.SelectedIndexChanged += new System.EventHandler(this.cmbInputLayer_SelectedIndexChanged);
             // 
+            // tpSonuc
+            // 
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(47, 336);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 40;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
+            // 
             // ucKoppen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -827,5 +842,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbInputLayer;
         private System.Windows.Forms.Button btnOk;
+        private TextProgressBar tpSonuc;
     }
 }

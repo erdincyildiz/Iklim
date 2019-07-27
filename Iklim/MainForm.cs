@@ -52,5 +52,17 @@ namespace Iklim
             DeMArtonnGotmannForm demartonForm = new DeMArtonnGotmannForm();
             demartonForm.ShowDialog();
         }
+
+        private void btnKoppenSablon_Click(object sender, EventArgs e)
+        {
+            KoppenFormSablon sablonKoppen = new KoppenFormSablon();
+            sablonKoppen.ShowDialog();
+        }
+
+        private void btnDMGSablon_Click(object sender, EventArgs e)
+        {
+            DeMArtonnGotmannFormSablon demartonForm = new DeMArtonnGotmannFormSablon();
+            demartonForm.ShowDialog();
+        }
     }
 }

@@ -83,6 +83,12 @@ namespace Iklim
                 return;
             }
 
+            if (cmbUygulamaKatmani.SelectedIndex < 0)
+            {
+                MessageBox.Show("Öncelikli katmanı belirleyiniz.");
+                return;
+            }
+
             AppSingleton.Instance().CreateWorkspacePath();
             if (AppSingleton.Instance().SettingsControl == null)
             {
@@ -91,35 +97,71 @@ namespace Iklim
                 control.CheckForm();
             }
 
-            if (cmbUygulamaKatmani.SelectedIndex < 0)
-            {
-                MessageBox.Show("Öncelikli katmanı belirleyiniz.");
-                return;
-            }
+           
+            tpSonuc.Visible = true;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+            tpSonuc.Maximum = 19;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
 
             var clipLayer = AppSingleton.Instance().ClipLayers((cmbProjectArea.SelectedItem as LayerObject).layer, (cmbUygulamaKatmani.SelectedItem as LayerObject).layer);
 
+            tpSonuc.CustomText = "s katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var s = AppSingleton.Instance().IDW(clipLayer, cmbYillikSuFazlasi.SelectedItem.ToString(), "s");
+            tpSonuc.CustomText = "d katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var d = AppSingleton.Instance().IDW(clipLayer, cmbYillikSuEksigi.SelectedItem.ToString(), "d");
+            tpSonuc.CustomText = "etp katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var etp = AppSingleton.Instance().IDW(clipLayer, cmbETP.SelectedItem.ToString(), "etp");
+            tpSonuc.CustomText = "sei katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var petp = AppSingleton.Instance().IDW(clipLayer, cmbPETP.SelectedItem.ToString(), "sei");
+            tpSonuc.CustomText = "aPetAgu katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var aPetAgu = AppSingleton.Instance().IDW(clipLayer, cmbPETPAgustos.SelectedItem.ToString(), "aPetAgu");
+            tpSonuc.CustomText = "aPetTem katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var aPetTem = AppSingleton.Instance().IDW(clipLayer, cmbPETPTemmuz.SelectedItem.ToString(), "aPetTem");
+            tpSonuc.CustomText = "aPetHaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var aPetHaz = AppSingleton.Instance().IDW(clipLayer, cmbPETPHaziran.SelectedItem.ToString(), "aPetHaz");
+            tpSonuc.CustomText = "suEksYaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var suEksYaz = AppSingleton.Instance().IDW(clipLayer, cmbSuEksigiYaz.SelectedItem.ToString(), "suEksYaz");
+            tpSonuc.CustomText = "suFazYaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var suFazYaz = AppSingleton.Instance().IDW(clipLayer, cmbSuFazlasiYaz.SelectedItem.ToString(), "suFazYaz");
+            tpSonuc.CustomText = "suEksKis katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var suEksKis = AppSingleton.Instance().IDW(clipLayer, cmbSuEksigiKis.SelectedItem.ToString(), "suEksKis");
+            tpSonuc.CustomText = "suFazKis katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var suFazKis = AppSingleton.Instance().IDW(clipLayer, cmbSuFazlasiKis.SelectedItem.ToString(), "suFazKis");
 
+            tpSonuc.CustomText = "yei katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var yei = RasterCalculatorYei(s, d, etp, "yei");
             var sei = petp;
+            tpSonuc.CustomText = "ki katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var ki = RasterCalculatorKi(d, etp, "ki");
+            tpSonuc.CustomText = "ni katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var ni = RasterCalculatorKi(s, etp, "ni");
+            tpSonuc.CustomText = "etp3 katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
             var etp3YazOrani = RasterCalculatorEtp3(aPetHaz, aPetTem, aPetAgu, petp, "etp3");
-
+            tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+            tpSonuc.PerformStep();
             string combine = Combine(yei + ";" + sei + ";" + ki + ";" + ni + ";" + etp3YazOrani + ";" + suEksYaz+ ";" + suEksKis + ";" + suFazYaz + ";" + suFazKis);
 
-            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Combined");
+            tpSonuc.CustomText = "Veriler ekleniyor...";
+            tpSonuc.PerformStep();
+
+            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Siniflandirma_Thornwaite");
             var yeiField = vat.Fields.FindField("yei");
             var seiField = vat.Fields.FindField("sei");
             var kiField = vat.Fields.FindField("ki");
@@ -174,6 +216,9 @@ namespace Iklim
                 feature.set_Value(niHarfField, niHarf);
                 feature.Store();
             }
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
         }
 
         private string CalculateKiHarf(int ki,double suEksigiYaz,double suEksigiKis)
@@ -386,7 +431,7 @@ namespace Iklim
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
                 ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
                 combine.in_rasters = layerNames;
-                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Combined";
+                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Siniflandirma_Thornwaite";
                 gp.AddOutputsToMap = true;
                 gp.OverwriteOutput = true;
                 gp.Execute(combine, null);

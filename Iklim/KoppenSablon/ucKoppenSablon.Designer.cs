@@ -34,13 +34,10 @@
             this.grpbxInput = new System.Windows.Forms.GroupBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.cmbInputBorder = new System.Windows.Forms.ComboBox();
-            this.cmbYillikTopYag = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbYillikOrtSic = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbInputLayer = new System.Windows.Forms.ComboBox();
+            this.tpSonuc = new Iklim.TextProgressBar();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.SuspendLayout();
@@ -67,13 +64,10 @@
             // 
             // grpbxInput
             // 
+            this.grpbxInput.Controls.Add(this.tpSonuc);
             this.grpbxInput.Controls.Add(this.btnOk);
             this.grpbxInput.Controls.Add(this.label12);
-            this.grpbxInput.Controls.Add(this.label11);
             this.grpbxInput.Controls.Add(this.cmbInputBorder);
-            this.grpbxInput.Controls.Add(this.cmbYillikTopYag);
-            this.grpbxInput.Controls.Add(this.label2);
-            this.grpbxInput.Controls.Add(this.cmbYillikOrtSic);
             this.grpbxInput.Controls.Add(this.label1);
             this.grpbxInput.Controls.Add(this.cmbInputLayer);
             this.grpbxInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -105,16 +99,6 @@
             this.label12.TabIndex = 5;
             this.label12.Text = "Proje Alanı Sınırı:";
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(381, 53);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(98, 13);
-            this.label11.TabIndex = 5;
-            this.label11.Text = "Yıllık Toplam Yağış:";
-            // 
             // cmbInputBorder
             // 
             this.cmbInputBorder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -123,34 +107,6 @@
             this.cmbInputBorder.Name = "cmbInputBorder";
             this.cmbInputBorder.Size = new System.Drawing.Size(173, 21);
             this.cmbInputBorder.TabIndex = 4;
-            // 
-            // cmbYillikTopYag
-            // 
-            this.cmbYillikTopYag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbYillikTopYag.FormattingEnabled = true;
-            this.cmbYillikTopYag.Location = new System.Drawing.Point(485, 50);
-            this.cmbYillikTopYag.Name = "cmbYillikTopYag";
-            this.cmbYillikTopYag.Size = new System.Drawing.Size(173, 21);
-            this.cmbYillikTopYag.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 53);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Yıllık Ortalama Sıcaklık:";
-            // 
-            // cmbYillikOrtSic
-            // 
-            this.cmbYillikOrtSic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbYillikOrtSic.FormattingEnabled = true;
-            this.cmbYillikOrtSic.Location = new System.Drawing.Point(138, 50);
-            this.cmbYillikOrtSic.Name = "cmbYillikOrtSic";
-            this.cmbYillikOrtSic.Size = new System.Drawing.Size(173, 21);
-            this.cmbYillikOrtSic.TabIndex = 2;
             // 
             // label1
             // 
@@ -171,6 +127,19 @@
             this.cmbInputLayer.Size = new System.Drawing.Size(173, 21);
             this.cmbInputLayer.TabIndex = 0;
             this.cmbInputLayer.SelectedIndexChanged += new System.EventHandler(this.cmbInputLayer_SelectedIndexChanged);
+            // 
+            // tpSonuc
+            // 
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(58, 98);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 41;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
             // 
             // ucKoppenSablon
             // 
@@ -193,13 +162,10 @@
         private System.Windows.Forms.Label lblInfo1;
         private System.Windows.Forms.GroupBox grpbxInput;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox cmbInputBorder;
-        private System.Windows.Forms.ComboBox cmbYillikTopYag;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmbYillikOrtSic;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbInputLayer;
         private System.Windows.Forms.Button btnOk;
+        private TextProgressBar tpSonuc;
     }
 }

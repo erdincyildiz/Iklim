@@ -1,6 +1,6 @@
 ﻿namespace Iklim
 {
-    partial class ThornwaiteForm
+    partial class KoppenFormSablon
     {
         /// <summary>
         /// Required designer variable.
@@ -28,36 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ucThornWaite = new Iklim.ucThornWaite();
+            this.ucKoppenSablon = new Iklim.ucKoppenSablon();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // ucThornWaite
+            // ucKoppenSablon
             // 
-            this.ucThornWaite.Location = new System.Drawing.Point(12, 0);
-            this.ucThornWaite.Name = "ucThornWaite";
-            this.ucThornWaite.Size = new System.Drawing.Size(694, 412);
-            this.ucThornWaite.TabIndex = 0;
+            this.ucKoppenSablon.Location = new System.Drawing.Point(-1, 9);
+            this.ucKoppenSablon.Name = "ucKoppenSablon";
+            this.ucKoppenSablon.Size = new System.Drawing.Size(698, 215);
+            this.ucKoppenSablon.TabIndex = 0;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 399);
+            this.label2.Location = new System.Drawing.Point(12, 207);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(144, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Tuğba MEMİŞOĞLU @2019";
             // 
-            // ThornwaiteForm
+            // KoppenFormSablon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 424);
+            this.ClientSize = new System.Drawing.Size(701, 229);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.ucThornWaite);
-            this.Name = "ThornwaiteForm";
-            this.Text = "Thornwaite Yöntemi İle İklim Sınırlarının Belirlenmesi";
+            this.Controls.Add(this.ucKoppenSablon);
+            this.Name = "KoppenFormSablon";
+            this.Text = "Köppen Yöntemi İle İklim Sınırlarının Belirlenmesi";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -65,7 +65,7 @@
 
         #endregion
 
-        private ucThornWaite ucThornWaite;
+        private ucKoppenSablon ucKoppenSablon;
         private System.Windows.Forms.Label label2;
     }
 }

@@ -45,6 +45,7 @@
             this.lblInfo2 = new System.Windows.Forms.Label();
             this.lblInfo1 = new System.Windows.Forms.Label();
             this.grpbxInputErinc = new System.Windows.Forms.GroupBox();
+            this.tpSonuc = new Iklim.TextProgressBar();
             this.grpbxInfoErinc.SuspendLayout();
             this.grpbxInputErinc.SuspendLayout();
             this.SuspendLayout();
@@ -232,10 +233,24 @@
             this.grpbxInputErinc.TabStop = false;
             this.grpbxInputErinc.Text = "Girdi Veri Seti Seçilmesi";
             // 
+            // tpSonuc
+            // 
+            this.tpSonuc.CustomText = "";
+            this.tpSonuc.Location = new System.Drawing.Point(136, 365);
+            this.tpSonuc.Name = "tpSonuc";
+            this.tpSonuc.ProgressColor = System.Drawing.Color.LightGreen;
+            this.tpSonuc.Size = new System.Drawing.Size(408, 23);
+            this.tpSonuc.TabIndex = 43;
+            this.tpSonuc.TextColor = System.Drawing.Color.Black;
+            this.tpSonuc.TextFont = new System.Drawing.Font("Times New Roman", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.tpSonuc.Visible = false;
+            this.tpSonuc.VisualMode = Iklim.ProgressBarDisplayMode.CurrProgress;
+            // 
             // UcErinc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tpSonuc);
             this.Controls.Add(this.grpbxInputErinc);
             this.Controls.Add(this.grpbxInfoErinc);
             this.Controls.Add(this.btnOk);
@@ -267,5 +282,6 @@
         private System.Windows.Forms.Label lblInfo2;
         private System.Windows.Forms.Label lblInfo1;
         private System.Windows.Forms.GroupBox grpbxInputErinc;
+        private TextProgressBar tpSonuc;
     }
 }

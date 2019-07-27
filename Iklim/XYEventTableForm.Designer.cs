@@ -42,6 +42,7 @@
             this.grpbxInfo = new System.Windows.Forms.GroupBox();
             this.grpbxInput = new System.Windows.Forms.GroupBox();
             this.grpbxParameters = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.grpbxInfo.SuspendLayout();
             this.grpbxInput.SuspendLayout();
             this.grpbxParameters.SuspendLayout();
@@ -183,11 +184,22 @@
             this.grpbxParameters.TabStop = false;
             this.grpbxParameters.Text = "Parametrelerin Belirlenmesi";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 289);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(144, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Tuğba MEMİŞOĞLU @2019";
+            // 
             // XYEventTableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 311);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.grpbxParameters);
             this.Controls.Add(this.grpbxInput);
             this.Controls.Add(this.grpbxInfo);
@@ -201,6 +213,7 @@
             this.grpbxParameters.ResumeLayout(false);
             this.grpbxParameters.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -219,5 +232,6 @@
         private System.Windows.Forms.GroupBox grpbxInfo;
         private System.Windows.Forms.GroupBox grpbxInput;
         private System.Windows.Forms.GroupBox grpbxParameters;
+        private System.Windows.Forms.Label label3;
     }
 }

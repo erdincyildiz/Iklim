@@ -1,237 +1,33 @@
-﻿using System;
+﻿using ESRI.ArcGIS.ArcMapUI;
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.ArcMapUI;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.DataSourcesRaster;
-using ESRI.ArcGIS.Geometry;
 
 namespace Iklim
 {
     public class btnEkoloji : ESRI.ArcGIS.Desktop.AddIns.Button
     {
+        public BufferKatmanSec bufferKatmanSec;
+
+        public EmptyControl emptyControl;
+
+        public EnterpolasyonKatmanSec enterpolasyonKatmanSec;
+
+        public LastControl lastControl;
+
+        public PolygonSec poligonSec;
+
+        public List<string> reclassList;
+
         public btnEkoloji()
         {
-           
-        }
-        public BufferKatmanSec bufferKatmanSec;
-        public EnterpolasyonKatmanSec enterpolasyonKatmanSec;
-        public PolygonSec poligonSec;
-        public EmptyControl emptyControl;
-        public List<string> reclassList;
-        public LastControl lastControl;
-        private void RunProgram()
-        {
-            ArcMap.Application.CurrentTool = null;
-            IMxDocument mxDocument = ArcMap.Document;
-            reclassList = new List<string>();
-            WizardHost host = new WizardHost();
-            AppSingleton.Instance().PolyItemCount = 1000;
-            AppSingleton.Instance().EnterpoleItemCount = 500;
-            AppSingleton.Instance().BufferItemCount = 300;
-            host.ShowFirstButton = false;
-            host.ShowLastButton = false;
-            host.WizardCompleted += new WizardHost.WizardCompletedEventHandler(host_WizardCompleted);
-            KatmanSec katmanSec = new KatmanSec();
-
-            katmanSec.InitForm(mxDocument);
-            host.WizardPages.Add(1, katmanSec);
-            katmanSec.layersUpdated += new KatmanSec.LayersUpdated(layersUpdated);
-            enterpolasyonKatmanSec = new EnterpolasyonKatmanSec();
-            enterpolasyonKatmanSec.layersUpdated += new EnterpolasyonKatmanSec.BufferLayersUpdated(bufferlayersUpdated);
-
-            poligonSec = new PolygonSec();
-            //emptyControl = new EmptyControl();
-            bufferKatmanSec = new BufferKatmanSec();
-            bufferKatmanSec.layersUpdated += new BufferKatmanSec.LayersUpdated(polylayersUpdated);
-
-
-            lastControl = new LastControl();
-            //host.WizardPages.Add(2, enterpolasyonKatmanSec);
-            //host.WizardPages.Add(3, bufferKatmanSec);
-            host.WizardPages.Add(2, poligonSec);
-            //host.WizardPages.Add(10000, emptyControl);
-            host.WizardPages.Add(50001, lastControl);
-            AppSingleton.Instance().wizardHost = host;
-            host.LoadWizard();
-            host.ShowDialog();
         }
 
-        protected override void OnClick()
-        {
-            AppSingleton.Instance().CreateWorkspacePath();
-            RunProgram();
-        }
-
-        protected override void OnUpdate()
-        {
-            Enabled = ArcMap.Application != null;
-        }
-
-        void layersUpdated()
-        {
-
-            if (AppSingleton.Instance().PolygonLayerList.Count > 0)
-            {
-
-                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(2)))
-                {
-                    poligonSec = new PolygonSec();
-                    AppSingleton.Instance().wizardHost.WizardPages.Add(2, poligonSec);
-                }
-            }
-            else
-            {
-                AppSingleton.Instance().wizardHost.WizardPages.Remove(2);
-            }
-            poligonSec.InitForm();
-
-        }
-        void bufferlayersUpdated()
-        {
-
-
-            if (AppSingleton.Instance().BufferLayerList.Count > 0 || AppSingleton.Instance().PolygonLayerList.Count > 0)
-            {
-
-
-                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(3)))
-                {
-                    bufferKatmanSec = new BufferKatmanSec();
-                    //AppSingleton.Instance().wizardHost.WizardPages.Add(3, bufferKatmanSec);
-                }
-            }
-            else
-            {
-                //AppSingleton.Instance().wizardHost.WizardPages.Remove(3);
-            }
-            //bufferKatmanSec.InitForm();
-        }
-
-        void polylayersUpdated()
-        {
-            if (AppSingleton.Instance().PolygonLayerList.Count > 0)
-            {
-
-                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(4)))
-                {
-                    poligonSec = new PolygonSec();
-                    AppSingleton.Instance().wizardHost.WizardPages.Add(4, poligonSec);
-                }
-            }
-            else
-            {
-                AppSingleton.Instance().wizardHost.WizardPages.Remove(4);
-            }
-            poligonSec.InitForm();
-        }
-
-        private bool ClipLayers(ILayer selectedLayer)
-        {
-            try
-            {
-                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.AnalysisTools.Clip clip = new ESRI.ArcGIS.AnalysisTools.Clip();
-                clip.in_features = selectedLayer;
-                clip.clip_features = AppSingleton.Instance().SinirLayer;
-                clip.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name;
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(clip, null);
-                //return clip.out_feature_class.ToString();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        private string SetFieldToValue(ITable vat, string fieldName)
-        {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            ICursor updateCursor = vat.Search(queryFilter, false);
-            IRow feature = null;
-            string returnStr = "";
-            try
-            {
-                while ((feature = updateCursor.NextRow()) != null)
-                {
-                    int valueIndex = feature.Fields.FindField("Value");
-                    int fieldIndex = feature.Fields.FindField(fieldName);
-                    string fieldValue = (feature.get_Value(fieldIndex).ToString());
-                    string valueValue = (feature.get_Value(valueIndex).ToString());
-                    if (returnStr == "")
-                    {
-                        returnStr = valueValue + " " + fieldValue;
-                    }
-                    else
-                    {
-                        returnStr = returnStr + ";" + valueValue + " " + fieldValue;
-                    }
-
-                }
-                return returnStr;
-            }
-            catch (COMException comExc)
-            {
-                return "";
-                // Handle any errors that might occur on NextFeature().
-            }
-        }
-        private bool CreateTin(ILayer selectedLayer, EnterpoleGrid grid)
-        {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.Analyst3DTools.CreateTin createTin = new ESRI.ArcGIS.Analyst3DTools.CreateTin();
-                createTin.out_tin = AppSingleton.Instance().Path + "\\TIN_" + selectedLayer.Name;//RingBuffered_
-                //erdinç
-                createTin.in_features = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name + " " + grid.FieldName + " hardline <None>";// 10.1 Hard_Line ; 10.0 hardline
-                createTin.constrained_delaunay = "DELAUNAY";
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(createTin, null);
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        private bool TinToRaster(ILayer selectedLayer)
-        {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.Analyst3DTools.TinRaster tinToRaster = new ESRI.ArcGIS.Analyst3DTools.TinRaster();
-                tinToRaster.in_tin = AppSingleton.Instance().WorkspacePath + "\\TIN_" + selectedLayer.Name;
-                tinToRaster.out_raster = AppSingleton.Instance().WorkspacePath + "\\TinRaster_" + selectedLayer.Name;
-                tinToRaster.method = AppSingleton.Instance().TinRasterMethod;
-                tinToRaster.data_type = AppSingleton.Instance().TinRasterDataType;
-                tinToRaster.sample_distance = "CELLSIZE " + AppSingleton.Instance().CellSize;
-                tinToRaster.z_factor = 1;
-                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
-                IEnvelope env = fLayer.AreaOfInterest.Envelope;
-                gp.SetEnvironmentValue("Extent", env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString());
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(tinToRaster, null);
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
         public double FindMaxValue(List<double> list)
         {
             try
@@ -252,11 +48,110 @@ namespace Iklim
             }
             catch (Exception ex)
             {
-
                 return -1;
             }
-
         }
+
+        public double FindMinValue(List<double> list)
+        {
+            try
+            {
+                if (list.Count == 0)
+                {
+                    throw new InvalidOperationException("Empty list");
+                }
+                double minValue = double.MaxValue;
+                foreach (double type in list)
+                {
+                    if (type < minValue)
+                    {
+                        minValue = type;
+                    }
+                }
+                return minValue;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        public FieldGrid GetBufferGrid(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().BufferDict)
+                {
+                    if (item.Key == layerName)
+                    {
+                        return item.Value;
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public EnterpoleGrid GetEnterpoleGrid(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().EnterpoleGridDict)
+                {
+                    if (item.Key == layerName)
+                    {
+                        return item.Value;
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public FieldLayerObject GetFieldLayerObject(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().ReclassList)
+                {
+                    if (item.LayerObject.Name == layerName)
+                    {
+                        return item;
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public FieldGrid GetPolygonGrid(string layerName)
+        {
+            try
+            {
+                foreach (var item in AppSingleton.Instance().PolyGridDict)
+                {
+                    if (item.Key == layerName)
+                    {
+                        return item.Value;
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public List<double> GetUniques(ITable table, string fldName)
         {
             int idx = table.Fields.FindField(fldName);
@@ -285,17 +180,14 @@ namespace Iklim
                         {
                             myList.Add(key);
                         }
-
                     }
                     catch (Exception ex)
                     {
-
                     }
                     finally
                     {
                         Marshal.ReleaseComObject(row);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -310,305 +202,18 @@ namespace Iklim
 
             return myList;
         }
-        public double FindMinValue(List<double> list)
-        {
-            try
-            {
-                if (list.Count == 0)
-                {
-                    throw new InvalidOperationException("Empty list");
-                }
-                double minValue = double.MaxValue;
-                foreach (double type in list)
-                {
-                    if (type < minValue)
-                    {
-                        minValue = type;
-                    }
-                }
-                return minValue;
-            }
-            catch (Exception ex)
-            {
 
-                return -1;
-            }
+        protected override void OnClick()
+        {
+            AppSingleton.Instance().CreateWorkspacePath();
+            RunProgram();
         }
 
-        private bool SetFirstNormal(ITable vat, double max)
+        protected override void OnUpdate()
         {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            ICursor updateCursor = vat.Search(queryFilter, false);
-            IRow feature = null;
-            try
-            {
-                while ((feature = updateCursor.NextRow()) != null)
-                {
-                    int normalIndex = feature.Fields.FindField("Normal");
-                    int valueIndex = feature.Fields.FindField("Value");
-                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
-                    double value = localValue / max;
-                    feature.set_Value(normalIndex, value);
-                    feature.Store();
-                }
-                return true;
-            }
-            catch (COMException comExc)
-            {
-                return false;
-                // Handle any errors that might occur on NextFeature().
-            }
-        }
-        private bool SetSecondNormal(ITable vat, double max)
-        {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            ICursor updateCursor = vat.Search(queryFilter, false);
-            IRow feature = null;
-            try
-            {
-                while ((feature = updateCursor.NextRow()) != null)
-                {
-                    int normalIndex = feature.Fields.FindField("Normal");
-                    int valueIndex = feature.Fields.FindField("Value");
-                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
-                    double value = 1 - (localValue / max);
-                    feature.set_Value(normalIndex, value);
-                    feature.Store();
-                }
-                return true;
-            }
-            catch (COMException comExc)
-            {
-                return false;
-                // Handle any errors that might occur on NextFeature().
-            }
-        }
-        private bool SetThirdNormal(ITable vat, double max, double min)
-        {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            ICursor updateCursor = vat.Search(queryFilter, false);
-            IRow feature = null;
-            try
-            {
-                while ((feature = updateCursor.NextRow()) != null)
-                {
-                    int normalIndex = feature.Fields.FindField("Normal");
-                    int valueIndex = feature.Fields.FindField("Value");
-                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
-                    double value = ((localValue - min) / (max - min));
-                    feature.set_Value(normalIndex, value);
-                    feature.Store();
-                }
-                return true;
-            }
-            catch (COMException comExc)
-            {
-                return false;
-                // Handle any errors that might occur on NextFeature().
-            }
-        }
-        private bool SetFourthNormal(ITable vat, double max, double min)
-        {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            ICursor updateCursor = vat.Search(queryFilter, false);
-            IRow feature = null;
-            try
-            {
-                while ((feature = updateCursor.NextRow()) != null)
-                {
-                    int normalIndex = feature.Fields.FindField("Normal");
-                    int valueIndex = feature.Fields.FindField("Value");
-                    double localValue = Convert.ToDouble(feature.get_Value(valueIndex).ToString());
-                    double value = ((max - localValue) / (max - min));
-                    feature.set_Value(normalIndex, value);
-                    feature.Store();
-                }
-                return true;
-            }
-            catch (COMException comExc)
-            {
-                return false;
-                // Handle any errors that might occur on NextFeature().
-            }
-        }
-        public FieldGrid GetBufferGrid(string layerName)
-        {
-            try
-            {
-                foreach (var item in AppSingleton.Instance().BufferDict)
-                {
-                    if (item.Key == layerName)
-                    {
-                        return item.Value;
-
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-
-                return null;
-            }
-
+            Enabled = ArcMap.Application != null;
         }
 
-        public FieldLayerObject GetFieldLayerObject(string layerName)
-        {
-            try
-            {
-                foreach (var item in AppSingleton.Instance().ReclassList)
-                {
-                    if (item.LayerObject.Name  == layerName)
-                    {
-                        return item;
-
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return null;
-
-            }
-
-        }
-
-        public FieldGrid GetPolygonGrid(string layerName)
-        {
-            try
-            {
-                foreach (var item in AppSingleton.Instance().PolyGridDict)
-                {
-                    if (item.Key == layerName)
-                    {
-                        return item.Value;
-
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return null;
-
-            }
-
-        }
-        private bool Reclassify(ILayer selectedLayer, string FieldName, string reclassMap, string inputType, string outputType)
-        {
-            try
-            {
-
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.Analyst3DTools.Reclassify reclass = new ESRI.ArcGIS.Analyst3DTools.Reclassify();
-                reclass.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + inputType + selectedLayer.Name;//RingBuffered_
-                reclass.reclass_field = FieldName;//"Value";
-                reclass.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outputType + selectedLayer.Name;//Reclassified_
-                reclass.remap = reclassMap;// "50 1;50 100 2;100 150 3;NODATA 0";
-
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(reclass, null);
-                if (outputType == "Reclassified_")
-                {
-                    reclassList.Add(reclass.out_raster.ToString());
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        private bool Combine(string layerNames)
-        {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
-                combine.in_rasters = layerNames;
-                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Combined";               
-                gp.AddOutputsToMap = true;
-                gp.OverwriteOutput = true;
-                gp.Execute(combine, null);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        private bool JoinField(object table,string inField, string joinTable, string joinField, string fieldName)
-        {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
-                join.in_data = table;
-                join.in_field = inField;
-                join.join_table = joinTable;
-                join.join_field = joinField;
-                join.fields = fieldName;
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(join, null);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        public EnterpoleGrid GetEnterpoleGrid(string layerName)
-        {
-            try
-            {
-                foreach (var item in AppSingleton.Instance().EnterpoleGridDict)
-                {
-                    if (item.Key == layerName)
-                    {
-                        return item.Value;
-
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-
-                return null;
-            }
-
-        }
-        private bool Slope(ILayer selectedLayer)
-        {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.Analyst3DTools.Slope slope = new ESRI.ArcGIS.Analyst3DTools.Slope();
-                slope.in_raster = AppSingleton.Instance().WorkspacePath + "\\TinRaster_" + selectedLayer.Name;
-                slope.out_raster = AppSingleton.Instance().WorkspacePath + "\\Slope_" + selectedLayer.Name;
-                slope.output_measurement = "DEGREE";
-                slope.z_factor = 1;
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(slope, null);
-                return true;
-
-
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
         private bool AddField(ILayer selectedLayer, string fieldName, string type)
         {
             try
@@ -631,91 +236,28 @@ namespace Iklim
                 return false;
             }
         }
-        private bool RasterClipLayer(ILayer selectedLayer, string type)
+
+        private void bufferlayersUpdated()
         {
-            try
+            if (AppSingleton.Instance().BufferLayerList.Count > 0 || AppSingleton.Instance().PolygonLayerList.Count > 0)
             {
-                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle rastClip = new ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle();
-                rastClip.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_" + type;//Kriging
-                rastClip.extraction_area = "INSIDE";
-                rastClip.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + type + "Clip_" + selectedLayer.Name;
-
-                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
-                IEnvelope env = fLayer.AreaOfInterest.Envelope;
-                //<<<<<<< .mine
-                //string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
-                // rastClip.clipping_geometry = geo;
-                //=======
-                string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
-                rastClip.rectangle = geo;
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(rastClip, null);
-                return true;
-                //return clip.out_feature_class.ToString();
+                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(3)))
+                {
+                    bufferKatmanSec = new BufferKatmanSec();
+                    //AppSingleton.Instance().wizardHost.WizardPages.Add(3, bufferKatmanSec);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return false;
+                //AppSingleton.Instance().wizardHost.WizardPages.Remove(3);
             }
+            //bufferKatmanSec.InitForm();
         }
-        private bool Kriging(ILayer selectedLayer, string FieldName)
-        {
-            try
-            {
-                ESRI.ArcGIS.SpatialAnalystTools.Kriging kriging = new ESRI.ArcGIS.SpatialAnalystTools.Kriging();
-                kriging.cell_size = AppSingleton.Instance().CellSize;
-                kriging.out_surface_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_Kriging";
-                kriging.in_point_features = selectedLayer;
-                kriging.z_field = FieldName;
-                kriging.semiVariogram_props = AppSingleton.Instance().KrigingSemiVariogram;
-                kriging.search_radius = AppSingleton.Instance().KrigingYaricap;
 
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(kriging, null);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-
-            }
-        }
-        private bool IDW(ILayer selectedLayer, string FieldName)
-        {
-            try
-            {
-                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
-                idw.cell_size = AppSingleton.Instance().CellSize;
-                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_IDW";
-                idw.in_point_features = selectedLayer;
-                idw.z_field = FieldName;
-                idw.power = 3;
-                idw.search_radius = AppSingleton.Instance().IDWYaricap;
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(idw, null);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-
-            }
-        }
         private bool CalculateField(ILayer selectedLayer)
         {
             try
             {
-
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
                 ESRI.ArcGIS.DataManagementTools.CalculateField calculateField = new ESRI.ArcGIS.DataManagementTools.CalculateField();
                 calculateField.in_table = AppSingleton.Instance().WorkspacePath + "\\RingBuffered_" + selectedLayer.Name;
@@ -730,68 +272,77 @@ namespace Iklim
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
-        private bool PolygonToRaster(ILayer selectedLayer, string inputType, string valueField, string priorityField)
+
+        private bool ClipLayers(ILayer selectedLayer)
         {
             try
             {
+                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.ConversionTools.PolygonToRaster polygonToRaster = new ESRI.ArcGIS.ConversionTools.PolygonToRaster();
-                polygonToRaster.in_features = selectedLayer;
-                polygonToRaster.value_field = valueField;//"distance";
-                polygonToRaster.out_rasterdataset = AppSingleton.Instance().WorkspacePath + "\\Poly_Raster_" + selectedLayer.Name;
-                polygonToRaster.cell_assignment = "MAXIMUM_AREA";
-                polygonToRaster.cellsize = AppSingleton.Instance().CellSize;
-                if (priorityField != "")
-                {
-                    polygonToRaster.priority_field = priorityField; //"priority";
-                }
-                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
-                IEnvelope env = fLayer.AreaOfInterest.Envelope;
-                gp.SetEnvironmentValue("Extent", env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString());
+                ESRI.ArcGIS.AnalysisTools.Clip clip = new ESRI.ArcGIS.AnalysisTools.Clip();
+                clip.in_features = selectedLayer;
+                clip.clip_features = AppSingleton.Instance().SinirLayer;
+                clip.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name;
                 gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
                 gp.OverwriteOutput = true;
-                gp.Execute(polygonToRaster, null);
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                return false;
-
-            }
-        }
-        private bool RingBuffer(ILayer selectedLayer, string distances)
-        {
-            try
-            {
-
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer ringBuffer = new ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer();
-                ringBuffer.Input_Features = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name;
-                ringBuffer.Output_Feature_class = AppSingleton.Instance().WorkspacePath + "\\RingBuffered_" + selectedLayer.Name;
-                ringBuffer.Distances = distances;//"50;100;150";
-                ringBuffer.Buffer_Unit = "Meters";
-                ringBuffer.Dissolve_Option = "NONE";
-
-
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(ringBuffer, null);
+                gp.Execute(clip, null);
+                //return clip.out_feature_class.ToString();
                 return true;
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
 
-        void host_WizardCompleted()
+        private bool Combine(string layerNames)
         {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
+                combine.in_rasters = layerNames;
+                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + "Ekolojik_Sit_Alani";
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(combine, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool CreateTin(ILayer selectedLayer, EnterpoleGrid grid)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.CreateTin createTin = new ESRI.ArcGIS.Analyst3DTools.CreateTin();
+                createTin.out_tin = AppSingleton.Instance().Path + "\\TIN_" + selectedLayer.Name;//RingBuffered_
+                //erdinç
+                createTin.in_features = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name + " " + grid.FieldName + " hardline <None>";// 10.1 Hard_Line ; 10.0 hardline
+                createTin.constrained_delaunay = "DELAUNAY";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(createTin, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void host_WizardCompleted()
+        {
+            AppSingleton.Instance().CreateWorkspacePath();
+
             if (AppSingleton.Instance().SettingsControl == null)
             {
                 SettingsControl control = new SettingsControl();
@@ -809,7 +360,6 @@ namespace Iklim
                 }
             }
             lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-            
 
             foreach (var item in AppSingleton.Instance().PolygonLayerList)
             {
@@ -834,9 +384,9 @@ namespace Iklim
                     var key = pair.Key;
                     if (key.Contains(" "))
                     {
-                        key  = "'" + key + "'";
+                        key = "'" + key + "'";
                     }
-                        if (reclassifyList == "")
+                    if (reclassifyList == "")
                     {
                         reclassifyList = key + " " + pair.Value + ";";
                     }
@@ -844,7 +394,6 @@ namespace Iklim
                     {
                         reclassifyList = reclassifyList + key + " " + pair.Value + ";";
                     }
-
                 }
                 reclassifyList = reclassifyList + "NODATA " + AppSingleton.Instance().NodataValue;
 
@@ -858,9 +407,7 @@ namespace Iklim
                 IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
                     (factoryType);
 
-
                 IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
-
 
                 //IRasterWorkspace rasterWorkspace = AppSingleton.Instance().PersonalWorkspace as IRasterWorkspace;
                 IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset("Poly_Raster_" + item.layer.Name);
@@ -879,10 +426,10 @@ namespace Iklim
                         check = true;
                 }
 
-                if(!check)
+                if (!check)
                 {
                     lastControl.SetRichTextBoxLabel("Eksik kolonlar ekleniyor...");
-                    if (!JoinField(vat, "Value", item.layer.Name,fieldLayerObject.FieldName,fieldLayerObject.FieldName))
+                    if (!JoinField(vat, "Value", item.layer.Name, fieldLayerObject.FieldName, fieldLayerObject.FieldName))
                     {
                         MessageBox.Show("Hata Kodu :5614 . Lütfen yöneticiniz ile görüşünüz.");
                         return;
@@ -939,13 +486,12 @@ namespace Iklim
                     }
                 }
 
-
                 lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
             }
             string rasterString = string.Empty;
             foreach (var item in reclassList)
             {
-                if(rasterString == string.Empty)
+                if (rasterString == string.Empty)
                 {
                     rasterString = item;
                 }
@@ -965,7 +511,7 @@ namespace Iklim
                     rasterString = rasterString + ";" + item.Name;
                 }
             }
-             lastControl.SetRichTextBoxLabel("Tüm raster katmanlar birleştiriliyor...");
+            lastControl.SetRichTextBoxLabel("Tüm raster katmanlar birleştiriliyor...");
             if (!Combine(rasterString))
             {
                 MessageBox.Show("Hata Kodu :2639. Lütfen yöneticiniz ile görüşünüz.");
@@ -980,12 +526,10 @@ namespace Iklim
             IWorkspaceFactory workspaceFactory2 = (IWorkspaceFactory)Activator.CreateInstance
                 (factoryType2);
 
-
             IRasterWorkspaceEx rasterWorkspaceEx2 = workspaceFactory2.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
 
-
             //IRasterWorkspace rasterWorkspace = PersonalWorkspace as IRasterWorkspace;
-            IRasterDataset rasterDataset2 = rasterWorkspaceEx2.OpenRasterDataset("Combined");
+            IRasterDataset rasterDataset2 = rasterWorkspaceEx2.OpenRasterDataset("Ekolojik_Sit_Alani");
             IRasterDatasetEdit2 raster2 = (IRasterDatasetEdit2)rasterDataset2;
 
             ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset2 = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset2;
@@ -1001,7 +545,7 @@ namespace Iklim
                     fieldList.Add(field.Name);
             }
 
-             lastControl.SetRichTextBoxLabel("Final katmanında eksik kolonlar tanımlanıyor...");
+            lastControl.SetRichTextBoxLabel("Final katmanında eksik kolonlar tanımlanıyor...");
 
             for (int i = 0; i < AppSingleton.Instance().PolygonLayerList.Count; i++)
             {
@@ -1013,75 +557,364 @@ namespace Iklim
                     MessageBox.Show("Hata Kodu :5614 . Lütfen yöneticiniz ile görüşünüz.");
                     return;
                 }
-            }          
+            }
 
-                //foreach (var item in reclassList)
-                //{
-                //    IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
+            //foreach (var item in reclassList)
+            //{
+            //    IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
 
-                //    Type factoryType = Type.GetTypeFromProgID(
-                //    "esriDataSourcesGDB.AccessWorkspaceFactory");
-                //    string guid = Guid.NewGuid().ToString();
-                //    IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
-                //        (factoryType);
+            //    Type factoryType = Type.GetTypeFromProgID(
+            //    "esriDataSourcesGDB.AccessWorkspaceFactory");
+            //    string guid = Guid.NewGuid().ToString();
+            //    IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
+            //        (factoryType);
 
+            //    IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
 
-                //    IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
+            //    //IRasterWorkspace rasterWorkspace = AppSingleton.Instance().PersonalWorkspace as IRasterWorkspace;
+            //    IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(item);
+            //    IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
 
+            //    ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
+            //    raster.BuildAttributeTable();
+            //    ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
+            //    //IFeatureClass fclass= (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
+            //    List<double> valueList = GetUniques(vat as ITable, "Value");
+            //    double max = FindMaxValue(valueList);
+            //    double min = FindMinValue(valueList);
+            //    IFeatureLayer fLayer = new FeatureLayerClass();
+            //    fLayer.Name = item;
+            //    fLayer.FeatureClass = fclass;
+            //    lastControl.SetRichTextBoxLabel("Öznitelik ekleniyor...");
+            //    AddField(fLayer, "Normal", "");
+            //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            //    lastControl.SetRichTextBoxLabel("Normalleştirme işlemi yapılıyor...");
+            //    foreach (var myLayer in AppSingleton.Instance().AllLayersDict)
+            //    {
+            //        string layerName = myLayer.Key;
+            //        if ("Reclassified_" + layerName == item)
+            //        {
+            //            LayerType lType = myLayer.Value;
+            //            switch (lType.Metod)
+            //            {
+            //                case "x/Maks":
+            //                    SetFirstNormal(vat, max);
+            //                    break;
+            //                case "1-(x/Maks)":
+            //                    SetSecondNormal(vat, max);
+            //                    break;
+            //                case "(x-Min)/(Maks-Min)":
+            //                    SetThirdNormal(vat, max, min);
+            //                    break;
+            //                case "(Maks-x)/(Maks-Min)":
+            //                    SetFourthNormal(vat, max, min);
+            //                    break;
+            //                default:
+            //                    Console.WriteLine("Invalid selection. Please select 1, 2, or 3.");
+            //                    break;
+            //            }
 
-                //    //IRasterWorkspace rasterWorkspace = AppSingleton.Instance().PersonalWorkspace as IRasterWorkspace;
-                //    IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(item);
-                //    IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
+            //        }
 
-                //    ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
-                //    raster.BuildAttributeTable();
-                //    ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
-                //    //IFeatureClass fclass= (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(item);
-                //    List<double> valueList = GetUniques(vat as ITable, "Value");
-                //    double max = FindMaxValue(valueList);
-                //    double min = FindMinValue(valueList);
-                //    IFeatureLayer fLayer = new FeatureLayerClass();
-                //    fLayer.Name = item;
-                //    fLayer.FeatureClass = fclass;
-                //    lastControl.SetRichTextBoxLabel("Öznitelik ekleniyor...");
-                //    AddField(fLayer, "Normal", "");
-                //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-                //    lastControl.SetRichTextBoxLabel("Normalleştirme işlemi yapılıyor...");
-                //    foreach (var myLayer in AppSingleton.Instance().AllLayersDict)
-                //    {
-                //        string layerName = myLayer.Key;
-                //        if ("Reclassified_" + layerName == item)
-                //        {
-                //            LayerType lType = myLayer.Value;
-                //            switch (lType.Metod)
-                //            {
-                //                case "x/Maks":
-                //                    SetFirstNormal(vat, max);
-                //                    break;
-                //                case "1-(x/Maks)":
-                //                    SetSecondNormal(vat, max);
-                //                    break;
-                //                case "(x-Min)/(Maks-Min)":
-                //                    SetThirdNormal(vat, max, min);
-                //                    break;
-                //                case "(Maks-x)/(Maks-Min)":
-                //                    SetFourthNormal(vat, max, min);
-                //                    break;
-                //                default:
-                //                    Console.WriteLine("Invalid selection. Please select 1, 2, or 3.");
-                //                    break;
-                //            }
+            //    }
+            //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            //}
 
-                //        }
-
-                //    }
-                //    lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
-                //}
-
-                lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
+            lastControl.SetRichTextBoxLabel("İşlem tamamlandı...");
             //this.Dispose();
             //MessageBox.Show("Done!"); //obviously you'd do something else in a real app...
         }
+
+        private bool IDW(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
+                idw.cell_size = AppSingleton.Instance().CellSize;
+                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_IDW";
+                idw.in_point_features = selectedLayer;
+                idw.z_field = FieldName;
+                idw.power = 3;
+                idw.search_radius = AppSingleton.Instance().IDWYaricap;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(idw, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool JoinField(object table, string inField, string joinTable, string joinField, string fieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
+                join.in_data = table;
+                join.in_field = inField;
+                join.join_table = joinTable;
+                join.join_field = joinField;
+                join.fields = fieldName;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(join, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool Kriging(ILayer selectedLayer, string FieldName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Kriging kriging = new ESRI.ArcGIS.SpatialAnalystTools.Kriging();
+                kriging.cell_size = AppSingleton.Instance().CellSize;
+                kriging.out_surface_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_Kriging";
+                kriging.in_point_features = selectedLayer;
+                kriging.z_field = FieldName;
+                kriging.semiVariogram_props = AppSingleton.Instance().KrigingSemiVariogram;
+                kriging.search_radius = AppSingleton.Instance().KrigingYaricap;
+
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(kriging, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void layersUpdated()
+        {
+            if (AppSingleton.Instance().PolygonLayerList.Count > 0)
+            {
+                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(2)))
+                {
+                    poligonSec = new PolygonSec();
+                    AppSingleton.Instance().wizardHost.WizardPages.Add(2, poligonSec);
+                }
+            }
+            else
+            {
+                AppSingleton.Instance().wizardHost.WizardPages.Remove(2);
+            }
+            poligonSec.InitForm();
+        }
+
+        private bool PolygonToRaster(ILayer selectedLayer, string inputType, string valueField, string priorityField)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.ConversionTools.PolygonToRaster polygonToRaster = new ESRI.ArcGIS.ConversionTools.PolygonToRaster();
+                polygonToRaster.in_features = selectedLayer;
+                polygonToRaster.value_field = valueField;//"distance";
+                polygonToRaster.out_rasterdataset = AppSingleton.Instance().WorkspacePath + "\\Poly_Raster_" + selectedLayer.Name;
+                polygonToRaster.cell_assignment = "MAXIMUM_AREA";
+                polygonToRaster.cellsize = AppSingleton.Instance().CellSize;
+                if (priorityField != "")
+                {
+                    polygonToRaster.priority_field = priorityField; //"priority";
+                }
+                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
+                IEnvelope env = fLayer.AreaOfInterest.Envelope;
+                gp.SetEnvironmentValue("Extent", env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString());
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(polygonToRaster, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void polylayersUpdated()
+        {
+            if (AppSingleton.Instance().PolygonLayerList.Count > 0)
+            {
+                if (!(AppSingleton.Instance().wizardHost.WizardPages.ContainsKey(4)))
+                {
+                    poligonSec = new PolygonSec();
+                    AppSingleton.Instance().wizardHost.WizardPages.Add(4, poligonSec);
+                }
+            }
+            else
+            {
+                AppSingleton.Instance().wizardHost.WizardPages.Remove(4);
+            }
+            poligonSec.InitForm();
+        }
+
+        private bool RasterClipLayer(ILayer selectedLayer, string type)
+        {
+            try
+            {
+                IFeatureWorkspace fWorkspace = AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle rastClip = new ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle();
+                rastClip.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + selectedLayer.Name + "_" + type;//Kriging
+                rastClip.extraction_area = "INSIDE";
+                rastClip.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + type + "Clip_" + selectedLayer.Name;
+
+                IFeatureLayer fLayer = AppSingleton.Instance().SinirLayer as IFeatureLayer;
+                IEnvelope env = fLayer.AreaOfInterest.Envelope;
+                //<<<<<<< .mine
+                //string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
+                // rastClip.clipping_geometry = geo;
+                //=======
+                string geo = env.XMin.ToString() + " " + env.YMin.ToString() + " " + env.XMax.ToString() + " " + env.YMax.ToString();
+                rastClip.rectangle = geo;
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(rastClip, null);
+                return true;
+                //return clip.out_feature_class.ToString();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool Reclassify(ILayer selectedLayer, string FieldName, string reclassMap, string inputType, string outputType)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.Analyst3DTools.Reclassify reclass = new ESRI.ArcGIS.Analyst3DTools.Reclassify();
+                reclass.in_raster = AppSingleton.Instance().WorkspacePath + "\\" + inputType + selectedLayer.Name;//RingBuffered_
+                reclass.reclass_field = FieldName;//"Value";
+                reclass.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outputType + selectedLayer.Name;//Reclassified_
+                reclass.remap = reclassMap;// "50 1;50 100 2;100 150 3;NODATA 0";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(reclass, null);
+                if (outputType == "Reclassified_")
+                {
+                    reclassList.Add(reclass.out_raster.ToString());
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool RingBuffer(ILayer selectedLayer, string distances)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer ringBuffer = new ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer();
+                ringBuffer.Input_Features = AppSingleton.Instance().WorkspacePath + "\\Clip_" + selectedLayer.Name;
+                ringBuffer.Output_Feature_class = AppSingleton.Instance().WorkspacePath + "\\RingBuffered_" + selectedLayer.Name;
+                ringBuffer.Distances = distances;//"50;100;150";
+                ringBuffer.Buffer_Unit = "Meters";
+                ringBuffer.Dissolve_Option = "NONE";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(ringBuffer, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void RunProgram()
+        {
+            ArcMap.Application.CurrentTool = null;
+            IMxDocument mxDocument = ArcMap.Document;
+            reclassList = new List<string>();
+            WizardHost host = new WizardHost();
+            AppSingleton.Instance().PolyItemCount = 1000;
+            AppSingleton.Instance().EnterpoleItemCount = 500;
+            AppSingleton.Instance().BufferItemCount = 300;
+            host.ShowFirstButton = false;
+            host.ShowLastButton = false;
+            host.WizardCompleted += new WizardHost.WizardCompletedEventHandler(host_WizardCompleted);
+            KatmanSec katmanSec = new KatmanSec();
+
+            katmanSec.InitForm(mxDocument);
+            host.WizardPages.Add(1, katmanSec);
+            katmanSec.layersUpdated += new KatmanSec.LayersUpdated(layersUpdated);
+            enterpolasyonKatmanSec = new EnterpolasyonKatmanSec();
+            enterpolasyonKatmanSec.layersUpdated += new EnterpolasyonKatmanSec.BufferLayersUpdated(bufferlayersUpdated);
+
+            poligonSec = new PolygonSec();
+            //emptyControl = new EmptyControl();
+            bufferKatmanSec = new BufferKatmanSec();
+            bufferKatmanSec.layersUpdated += new BufferKatmanSec.LayersUpdated(polylayersUpdated);
+
+            lastControl = new LastControl();
+            //host.WizardPages.Add(2, enterpolasyonKatmanSec);
+            //host.WizardPages.Add(3, bufferKatmanSec);
+            host.WizardPages.Add(2, poligonSec);
+            //host.WizardPages.Add(10000, emptyControl);
+            host.WizardPages.Add(50001, lastControl);
+            AppSingleton.Instance().wizardHost = host;
+            host.LoadWizard();
+            host.ShowDialog();
+        }
+
+        private string SetFieldToValue(ITable vat, string fieldName)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass();
+            ICursor updateCursor = vat.Search(queryFilter, false);
+            IRow feature = null;
+            string returnStr = "";
+            try
+            {
+                while ((feature = updateCursor.NextRow()) != null)
+                {
+                    int valueIndex = feature.Fields.FindField("Value");
+                    int fieldIndex = feature.Fields.FindField(fieldName);
+                    string fieldValue = (feature.get_Value(fieldIndex).ToString());
+                    string valueValue = (feature.get_Value(valueIndex).ToString());
+                    if (fieldValue.Contains(" "))
+                    {
+                        fieldValue = "'" + fieldValue + "'";
+                    }
+                    if (returnStr == "")
+                    {
+                        returnStr = valueValue + " " + fieldValue;
+                    }
+                    else
+                    {
+                        returnStr = returnStr + ";" + valueValue + " " + fieldValue;
+                    }
+
+                    if (fieldValue.Contains(" "))
+                    {
+                        fieldValue = "'" + fieldValue + "'";
+                    }
+                }
+                return returnStr;
+            }
+            catch (COMException comExc)
+            {
+                return "";
+                // Handle any errors that might occur on NextFeature().
+            }
+        }
     }
 }
-

@@ -44,14 +44,53 @@ namespace Iklim
                 control.Load();
                 control.CheckForm();
             }
-
-            var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimSiniri.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
-            var ekolojiClipLayer= AppSingleton.Instance().RasterClipLayer((cmbEkolojikSitAlani.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer));
-
+            tpSonuc.Visible = true;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "İklim Katmanı kesiliyor...";
+            tpSonuc.Maximum = 5;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
+            var iklimClipLayer = AppSingleton.Instance().RasterClipLayer((cmbIklimSiniri.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer),"RC_IKL" );
+             tpSonuc.CustomText = "Ekoloji Katmanı kesiliyor...";
+            tpSonuc.PerformStep();
+            var ekolojiClipLayer= AppSingleton.Instance().RasterClipLayer((cmbEkolojikSitAlani.SelectedItem as LayerObject).layer, ((cmbProjectArea.SelectedItem as LayerObject).layer as IFeatureLayer),"RC_EKO");
+            var vatIklim = AppSingleton.Instance().BuildRasterAttributeTable("RC_IKL");
+            var vatEko = AppSingleton.Instance().BuildRasterAttributeTable("RC_EKO");
+           
             var layerNames = iklimClipLayer+ ";" + ekolojiClipLayer;
-            AppSingleton.Instance().Combine(layerNames, "Combined");
+            tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+            tpSonuc.PerformStep();
+            AppSingleton.Instance().Combine(layerNames, "IKL_EKO" );
+            var vatIklEko = AppSingleton.Instance().BuildRasterAttributeTable("IKL_EKO");
+            tpSonuc.CustomText = "Eksik kolonlar ekleniyor...";
+            tpSonuc.PerformStep();
+            JoinField(vatIklEko, "RC_IKL", vatIklim, "Value");
+            JoinField(vatIklEko, "RC_EKO", vatEko, "Value");
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
         }
 
+        private bool JoinField(object table, string inField, object joinTable, string joinField)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
+                join.in_data = table;
+                join.in_field = inField;
+                join.join_table = joinTable;
+                join.join_field = joinField;
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(join, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public void Init()
         {
             ArcMap.Application.CurrentTool = null;

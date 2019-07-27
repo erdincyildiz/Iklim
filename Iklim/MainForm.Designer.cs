@@ -39,10 +39,14 @@
             this.lblInfo2 = new System.Windows.Forms.Label();
             this.lblInfo1 = new System.Windows.Forms.Label();
             this.grpbxInput = new System.Windows.Forms.GroupBox();
+            this.btnDMGSablon = new System.Windows.Forms.Button();
             this.btnKoppenSablon = new System.Windows.Forms.Button();
-            this.btnThornwaitheSablon = new System.Windows.Forms.Button();
+            this.grpbxAboutUs = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.grpbxInfo1.SuspendLayout();
             this.grpbxInput.SuspendLayout();
+            this.grpbxAboutUs.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnKoppen
@@ -92,7 +96,7 @@
             // btnAydeniz
             // 
             this.btnAydeniz.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAydeniz.Location = new System.Drawing.Point(353, 108);
+            this.btnAydeniz.Location = new System.Drawing.Point(503, 108);
             this.btnAydeniz.Name = "btnAydeniz";
             this.btnAydeniz.Size = new System.Drawing.Size(100, 50);
             this.btnAydeniz.TabIndex = 4;
@@ -118,7 +122,7 @@
             this.grpbxInfo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpbxInfo1.Location = new System.Drawing.Point(12, 12);
             this.grpbxInfo1.Name = "grpbxInfo1";
-            this.grpbxInfo1.Size = new System.Drawing.Size(654, 100);
+            this.grpbxInfo1.Size = new System.Drawing.Size(654, 86);
             this.grpbxInfo1.TabIndex = 6;
             this.grpbxInfo1.TabStop = false;
             this.grpbxInfo1.Text = "İklim Sınırlarının Tespit Edilmesi";
@@ -144,21 +148,32 @@
             // 
             // grpbxInput
             // 
-            this.grpbxInput.Controls.Add(this.btnThornwaitheSablon);
+            this.grpbxInput.Controls.Add(this.btnDMGSablon);
             this.grpbxInput.Controls.Add(this.btnKoppenSablon);
+            this.grpbxInput.Controls.Add(this.btnAydeniz);
             this.grpbxInput.Controls.Add(this.btnErinc);
             this.grpbxInput.Controls.Add(this.btnKoppen);
             this.grpbxInput.Controls.Add(this.btnKoppenGreiger);
-            this.grpbxInput.Controls.Add(this.btnAydeniz);
             this.grpbxInput.Controls.Add(this.btnTrewertha);
             this.grpbxInput.Controls.Add(this.btnThornwaithe);
             this.grpbxInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpbxInput.Location = new System.Drawing.Point(12, 118);
+            this.grpbxInput.Location = new System.Drawing.Point(12, 104);
             this.grpbxInput.Name = "grpbxInput";
             this.grpbxInput.Size = new System.Drawing.Size(654, 186);
             this.grpbxInput.TabIndex = 7;
             this.grpbxInput.TabStop = false;
             this.grpbxInput.Text = "İklim Sınırları Tespit Yöntemleri";
+            // 
+            // btnDMGSablon
+            // 
+            this.btnDMGSablon.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDMGSablon.Location = new System.Drawing.Point(353, 108);
+            this.btnDMGSablon.Name = "btnDMGSablon";
+            this.btnDMGSablon.Size = new System.Drawing.Size(100, 50);
+            this.btnDMGSablon.TabIndex = 7;
+            this.btnDMGSablon.Text = "De Martonne - Gottman Şablon";
+            this.btnDMGSablon.UseVisualStyleBackColor = true;
+            this.btnDMGSablon.Click += new System.EventHandler(this.btnDMGSablon_Click);
             // 
             // btnKoppenSablon
             // 
@@ -169,28 +184,53 @@
             this.btnKoppenSablon.TabIndex = 6;
             this.btnKoppenSablon.Text = "Köppen Şablon";
             this.btnKoppenSablon.UseVisualStyleBackColor = true;
+            this.btnKoppenSablon.Click += new System.EventHandler(this.btnKoppenSablon_Click);
             // 
-            // btnThornwaitheSablon
+            // grpbxAboutUs
             // 
-            this.btnThornwaitheSablon.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThornwaitheSablon.Location = new System.Drawing.Point(503, 108);
-            this.btnThornwaitheSablon.Name = "btnThornwaitheSablon";
-            this.btnThornwaitheSablon.Size = new System.Drawing.Size(100, 50);
-            this.btnThornwaitheSablon.TabIndex = 7;
-            this.btnThornwaitheSablon.Text = "Thornwaithe Şablon";
-            this.btnThornwaitheSablon.UseVisualStyleBackColor = true;
+            this.grpbxAboutUs.Controls.Add(this.label2);
+            this.grpbxAboutUs.Controls.Add(this.label1);
+            this.grpbxAboutUs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpbxAboutUs.Location = new System.Drawing.Point(12, 296);
+            this.grpbxAboutUs.Name = "grpbxAboutUs";
+            this.grpbxAboutUs.Size = new System.Drawing.Size(654, 65);
+            this.grpbxAboutUs.TabIndex = 8;
+            this.grpbxAboutUs.TabStop = false;
+            this.grpbxAboutUs.Text = "Uygulama Hakkında";
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(7, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(641, 46);
+            this.label1.TabIndex = 0;
+            this.label1.Text = resources.GetString("label1.Text");
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(504, 49);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Tuğba MEMİŞOĞLU @2019";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 373);
+            this.Controls.Add(this.grpbxAboutUs);
             this.Controls.Add(this.grpbxInput);
             this.Controls.Add(this.grpbxInfo1);
             this.Name = "MainForm";
-            this.Text = "İklim Sınırları Tespit Analizi v.4.0";
+            this.Text = "İklim Sınırları Tespit Analizi v.7";
             this.grpbxInfo1.ResumeLayout(false);
             this.grpbxInput.ResumeLayout(false);
+            this.grpbxAboutUs.ResumeLayout(false);
+            this.grpbxAboutUs.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -207,7 +247,10 @@
         private System.Windows.Forms.Label lblInfo2;
         private System.Windows.Forms.Label lblInfo1;
         private System.Windows.Forms.GroupBox grpbxInput;
-        private System.Windows.Forms.Button btnThornwaitheSablon;
+        private System.Windows.Forms.Button btnDMGSablon;
         private System.Windows.Forms.Button btnKoppenSablon;
+        private System.Windows.Forms.GroupBox grpbxAboutUs;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -233,7 +233,7 @@ namespace Iklim
             }
         }
 
-        public string RasterClipLayer(object selectedLayer,IFeatureLayer sinirLayer)
+        public string RasterClipLayer(object selectedLayer,IFeatureLayer sinirLayer,string outputName)
         {
             try
             {
@@ -242,7 +242,7 @@ namespace Iklim
                 ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle rastClip = new ESRI.ArcGIS.SpatialAnalystTools.ExtractByRectangle();
                 rastClip.in_raster = selectedLayer;//Kriging
                 rastClip.extraction_area = "INSIDE";
-                rastClip.out_raster = AppSingleton.Instance().WorkspacePath + "\\ClipRaster";
+                rastClip.out_raster = AppSingleton.Instance().WorkspacePath + "\\"+outputName;
 
                 IFeatureLayer fLayer = sinirLayer;
                 IEnvelope env = fLayer.AreaOfInterest.Envelope;

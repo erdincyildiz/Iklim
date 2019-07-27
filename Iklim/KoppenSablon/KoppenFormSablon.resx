@@ -117,10 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblInfo2.Text" xml:space="preserve">
-    <value>Bu arayüz üzerinde kullanıcı çalışmak istediği yöntemi seçmektedir. Yöntemin kullanacağı veri setinin hazır olması ve harita ekranında yüklü olması gerekmektedir. Kullanılmak istenen yöntem aşağıdaki listeden seçilir ve bir sonraki ekran üzerinden yöntem ile ilgili girdiler sağlanarak analiz gerçekleştirilir.</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>"Konuma özgü iklim sınırları ve ekolojik sit alanları esas alınarak yeşil mülkiyet haklarının çevresel sakınım kısıtı olarak tanımlandığı Coğrafi Bilgi Sistem arayüzünün geliştirilmesi" projesi kapsamında geliştirilmiştir. </value>
-  </data>
 </root>

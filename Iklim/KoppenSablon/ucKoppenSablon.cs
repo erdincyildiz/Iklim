@@ -16,6 +16,29 @@ namespace Iklim
             InitializeComponent();
         }
 
+        public string IDW(object fclass, string FieldName, string outLayerName)
+        {
+            try
+            {
+                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
+                idw.cell_size = AppSingleton.Instance().CellSize;
+                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outLayerName;
+                idw.in_point_features = fclass;
+                idw.z_field = FieldName;
+                idw.power = 3;
+                idw.search_radius = AppSingleton.Instance().IDWYaricap;
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(idw, null);
+                return idw.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         public void Init()
         {
             IMxDocument mxDocument = AppSingleton.Instance().MxDocument;
@@ -40,13 +63,171 @@ namespace Iklim
             UpdateComboboxWithLayers(cmbInputBorder, LayerObjectList);
         }
 
-        private void UpdateComboboxWithLayers(ComboBox comboBox, List<LayerObject> layerObjectList)
+        private bool AddField(object table, string fieldName, string type)
         {
-            comboBox.BindingContext = new BindingContext();
-            comboBox.DataSource = null;
-            comboBox.DataSource = layerObjectList;
-            comboBox.DisplayMember = "Name";
-            comboBox.SelectedIndex = -1;
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.AddField addField = new ESRI.ArcGIS.DataManagementTools.AddField();
+                addField.in_table = table;
+                addField.field_name = fieldName;
+                addField.field_type = type;
+                addField.field_is_nullable = "NULLABLE";
+                addField.field_is_required = "NON_REQUIRED";
+
+                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
+                gp.OverwriteOutput = true;
+                gp.Execute(addField, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+
+            if (cmbInputLayer.SelectedIndex < 0)
+            {
+                MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+            if (cmbInputBorder.SelectedIndex < 0)
+            {
+                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
+                return;
+            }
+
+
+            AppSingleton.Instance().CreateWorkspacePath();
+            if (AppSingleton.Instance().SettingsControl == null)
+            {
+                SettingsControl control = new SettingsControl();
+                control.Load();
+                control.CheckForm();
+            }
+
+            tpSonuc.Visible = true;
+            tpSonuc.VisualMode = ProgressBarDisplayMode.TextAndPercentage;
+            tpSonuc.CustomText = "Uygulama Katmanı kesiliyor...";
+            tpSonuc.Maximum = 33;
+            tpSonuc.Step = 1;
+            tpSonuc.PerformStep();
+            var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
+            var layerName = System.IO.Path.GetFileNameWithoutExtension(clipLayer);
+            IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
+            tpSonuc.CustomText = "Katman kopyalanıyor...";
+            tpSonuc.PerformStep();
+            var copiedfclass = CopyFeatureClass(clipClass);
+
+            IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
+
+            IQueryFilter queryFilter = new QueryFilterClass();
+            IFeatureCursor updateCursor = fclass.Search(queryFilter, false);
+            IFeature feature = null;
+
+            while ((feature = updateCursor.NextFeature()) != null)
+            {
+                MultiplyFeatureValue(feature);
+            }
+            var layer = (cmbInputLayer.SelectedItem as LayerObject).layer;
+
+            tpSonuc.CustomText = "YilOrtSic katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var YilOrtSic = IDW(fclass, "yilTmp", "YilOrtSic"); tpSonuc.CustomText = "AySicOca katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicOcak = IDW(fclass, "ocaTmp", "AySicOca"); tpSonuc.CustomText = "AySicSub katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicSubat = IDW(fclass, "subTmp", "AySicSub"); tpSonuc.CustomText = "AySicMar katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicMart = IDW(fclass, "marTmp", "AySicMar"); tpSonuc.CustomText = "AySicNis katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicNisan = IDW(fclass, "nisTmp", "AySicNis"); tpSonuc.CustomText = "AySicMay katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicMayis = IDW(fclass, "mayTmp", "AySicMay"); tpSonuc.CustomText = "AySicHaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicHaziran = IDW(fclass, "hazTmp", "AySicHaz"); tpSonuc.CustomText = "AySicTem katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicTemmuz = IDW(fclass, "temTmp", "AySicTem"); tpSonuc.CustomText = "AySicAgu katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicAgustos = IDW(fclass, "aguTmp", "AySicAgu"); tpSonuc.CustomText = "AySicEyl katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicEylul = IDW(fclass, "eylTmp", "AySicEyl"); tpSonuc.CustomText = "AySicEki katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicEkim = IDW(fclass, "ekiTmp", "AySicEki"); tpSonuc.CustomText = "AySicKas katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicKasim = IDW(fclass, "kasTmp", "AySicKas"); tpSonuc.CustomText = "AySicAra katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AySicAralik = IDW(fclass, "araTmp", "AySicAra");
+
+            string layerNames = YilOrtSic + ";" + AySicOcak + ";" + AySicSubat + ";" + AySicMart
+                + ";" + AySicNisan + ";" + AySicMayis + ";" + AySicHaziran + ";" + AySicTemmuz
+                + ";" + AySicAgustos + ";" + AySicEylul + ";" + AySicEkim + ";" + AySicKasim + ";" + AySicAralik;
+            tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+            tpSonuc.PerformStep();
+            var combine1 = Combine(layerNames, "CombineSic"); tpSonuc.CustomText = "YilTopYag katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var YilTopYag = IDW(fclass, "yilRain", "YilTopYag"); tpSonuc.CustomText = "AyYagOca katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagOcak = IDW(fclass, "ocaRain", "AyYagOca"); tpSonuc.CustomText = "AyYagSub katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagSubat = IDW(fclass, "subRain", "AyYagSub"); tpSonuc.CustomText = "AyYagMar katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagMart = IDW(fclass, "marRain", "AyYagMar"); tpSonuc.CustomText = "AyYagNis katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagNisan = IDW(fclass, "nisRain", "AyYagNis"); tpSonuc.CustomText = "AyYagMay katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagMayis = IDW(fclass, "mayRain", "AyYagMay"); tpSonuc.CustomText = "AyYagHaz katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagHaziran = IDW(fclass, "hazRain", "AyYagHaz"); tpSonuc.CustomText = "AyYagTem katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagTemmuz = IDW(fclass, "temRain", "AyYagTem"); tpSonuc.CustomText = "AyYagAgu katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagAgustos = IDW(fclass, "aguRain", "AyYagAgu"); tpSonuc.CustomText = "AyYagEyl katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagEylul = IDW(fclass, "eylRain", "AyYagEyl"); tpSonuc.CustomText = "AyYagEki katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagEkim = IDW(fclass, "ekiRain", "AyYagEki"); tpSonuc.CustomText = "AyYagKas katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagKasim = IDW(fclass, "kasRain", "AyYagKas"); tpSonuc.CustomText = "AyYagAra katmanı oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var AyYagAralik = IDW(fclass, "araRain", "AyYagAra");
+
+            string layerNames2 = YilTopYag + ";" + AyYagOcak + ";" + AyYagSubat + ";" + AyYagMart
+                + ";" + AyYagNisan + ";" + AyYagMayis + ";" + AyYagHaziran + ";" + AyYagTemmuz
+                + ";" + AyYagAgustos + ";" + AyYagEylul + ";" + AyYagEkim + ";" + AyYagKasim + ";" + AyYagAralik; tpSonuc.CustomText = "Katmanlar birleştiriliyor...";
+            tpSonuc.PerformStep();
+            var combine2 = Combine(layerNames2, "CombineYag"); tpSonuc.CustomText = "Siniflandirma_Koppen oluşturuluyor...";
+            tpSonuc.PerformStep();
+            var combineLayer = Combine(combine1 + ";" + combine2, "Siniflandirma_Koppen");
+            var vat = AppSingleton.Instance().BuildRasterAttributeTable("Siniflandirma_Koppen");
+            JoinField(vat, "CombineSic", combine1, "Value");
+            JoinField(vat, "CombineYag", combine2, "Value");
+            tpSonuc.CustomText = "Veriler ekleniyor...";
+            tpSonuc.PerformStep();
+            FindIklimForValues();
+            tpSonuc.CustomText = "İşlem tamamlandı...";
+            tpSonuc.PerformStep();
+            (this.Parent as Form).Close();
+        }
+
+        private ITable BuildRasterAttributeTable(string rasterName)
+        {
+            Type factoryType = Type.GetTypeFromProgID(
+                "esriDataSourcesGDB.AccessWorkspaceFactory");
+            IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
+               (factoryType);
+            IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
+            IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(rasterName);
+            IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
+
+            ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
+            raster.BuildAttributeTable();
+            ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
+            return vat;
+
         }
 
         private void cmbInputLayer_SelectedIndexChanged(object sender, EventArgs e)
@@ -65,6 +246,44 @@ namespace Iklim
             }
         }
 
+        private string Combine(string layerNames, string outLayerName)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
+                combine.in_rasters = layerNames;
+                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outLayerName;
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(combine, null);
+                return combine.out_raster.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        private string CopyFeatureClass(object featureClass)
+        {
+            try
+            {
+                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
+                ESRI.ArcGIS.DataManagementTools.CopyFeatures copyFeatures = new ESRI.ArcGIS.DataManagementTools.CopyFeatures();
+                copyFeatures.in_features = featureClass;
+                copyFeatures.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\" + "Copy";
+                gp.AddOutputsToMap = true;
+                gp.OverwriteOutput = true;
+                gp.Execute(copyFeatures, null);
+                return copyFeatures.out_feature_class.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         private void FillCmboboboxWithFieldList(ComboBox comboBox, List<string> fieldList)
         {
             comboBox.BindingContext = new BindingContext();
@@ -73,102 +292,9 @@ namespace Iklim
             comboBox.SelectedIndex = -1;
         }
 
-        private void btnOk_Click(object sender, EventArgs e)
-        {
-            
-            if (cmbInputLayer.SelectedIndex < 0)
-            {
-                MessageBox.Show("Uygulama katmanı belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbInputBorder.SelectedIndex < 0)
-            {
-                MessageBox.Show("Proje sınırı belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbYillikOrtSic.SelectedIndex < 0)
-            {
-                MessageBox.Show("Yıllık Ortalama Sıcaklık değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-            if (cmbYillikTopYag.SelectedIndex < 0)
-            {
-                MessageBox.Show("Yıllık Toplam Yağış değeri belirlenmeden işlem yapılamaz.");
-                return;
-            }
-
-           
-            AppSingleton.Instance().CreateWorkspacePath();
-            if (AppSingleton.Instance().SettingsControl == null)
-            {
-                SettingsControl control = new SettingsControl();
-                control.Load();
-                control.CheckForm();
-            }
-
-            
-            var clipLayer = AppSingleton.Instance().ClipLayers((cmbInputBorder.SelectedItem as LayerObject).layer, (cmbInputLayer.SelectedItem as LayerObject).layer);
-            var layerName = System.IO.Path.GetFileNameWithoutExtension(clipLayer);
-            IFeatureClass clipClass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass(layerName);
-
-            var copiedfclass = CopyFeatureClass(clipClass);
-
-            IFeatureClass fclass = (AppSingleton.Instance().PersonalWorkspace as IFeatureWorkspace).OpenFeatureClass("Copy");
-
-            IQueryFilter queryFilter = new QueryFilterClass();
-            IFeatureCursor updateCursor = fclass.Search(queryFilter, false);
-            IFeature feature = null;
-
-            while ((feature = updateCursor.NextFeature()) != null)
-            {
-                MultiplyFeatureValue(feature);
-            }
-            var layer = (cmbInputLayer.SelectedItem as LayerObject).layer;
-
-
-            //var YilOrtSic = IDW(fclass, cmbYillikOrtSic.SelectedItem.ToString(), "YilOrtSic");
-            //var AySicOcak = IDW(fclass, cmbAylikSicOcak.SelectedItem.ToString(), "AySicOca");
-            //var AySicSubat = IDW(fclass, cmbAylikSicSubat.SelectedItem.ToString(), "AySicSub");
-            //var AySicMart = IDW(fclass, cmbAylikSicMart.SelectedItem.ToString(), "AySicMar");
-            //var AySicNisan = IDW(fclass, cmbAylikSicNisan.SelectedItem.ToString(), "AySicNis");
-            //var AySicMayis = IDW(fclass, cmbAylikSicMayis.SelectedItem.ToString(), "AySicMay");
-            //var AySicHaziran = IDW(fclass, cmbAylikSicHaziran.SelectedItem.ToString(), "AySicHaz");
-            //var AySicTemmuz = IDW(fclass, cmbAylikSicTemmuz.SelectedItem.ToString(), "AySicTem");
-            //var AySicAgustos = IDW(fclass, cmbAylikSicAgustos.SelectedItem.ToString(), "AySicAgu");
-            //var AySicEylul = IDW(fclass, cmbAylikSicEylul.SelectedItem.ToString(), "AySicEyl");
-            //var AySicEkim = IDW(fclass, cmbAylikSicEkim.SelectedItem.ToString(), "AySicEki");
-            //var AySicKasim = IDW(fclass, cmbAylikSicKasim.SelectedItem.ToString(), "AySicKas");
-            //var AySicAralik = IDW(fclass, cmbAylikSicAralik.SelectedItem.ToString(), "AySicAra");
-
-            //string layerNames = YilOrtSic + ";" + AySicOcak + ";" + AySicSubat + ";" + AySicMart
-            //    + ";" + AySicNisan + ";" + AySicMayis + ";" + AySicHaziran + ";" + AySicTemmuz
-            //    + ";" + AySicAgustos + ";" + AySicEylul + ";" + AySicEkim + ";" + AySicKasim + ";" + AySicAralik;
-            //var combine1 = Combine(layerNames, "CombineSic");
-            //var YilTopYag = IDW(fclass, cmbYillikTopYag.SelectedItem.ToString(), "YilTopYag");
-            //var AyYagOcak = IDW(fclass, cmbAylikYagOcak.SelectedItem.ToString(), "AyYagOca");
-            //var AyYagSubat = IDW(fclass, cmbAylikYagSubat.SelectedItem.ToString(), "AyYagSub");
-            //var AyYagMart = IDW(fclass, cmbAylikYagMart.SelectedItem.ToString(), "AyYagMar");
-            //var AyYagNisan = IDW(fclass, cmbAylikYagNisan.SelectedItem.ToString(), "AyYagNis");
-            //var AyYagMayis = IDW(fclass, cmbAylikYagMayis.SelectedItem.ToString(), "AyYagMay");
-            //var AyYagHaziran = IDW(fclass, cmbAylikYagHaziran.SelectedItem.ToString(), "AyYagHaz");
-            //var AyYagTemmuz = IDW(fclass, cmbAylikYagTemmuz.SelectedItem.ToString(), "AyYagTem");
-            //var AyYagAgustos = IDW(fclass, cmbAylikYagAgustos.SelectedItem.ToString(), "AyYagAgu");
-            //var AyYagEylul = IDW(fclass, cmbAylikYagEylul.SelectedItem.ToString(), "AyYagEyl");
-            //var AyYagEkim = IDW(fclass, cmbAylikYagEkim.SelectedItem.ToString(), "AyYagEki");
-            //var AyYagKasim = IDW(fclass, cmbAylikYagKasim.SelectedItem.ToString(), "AyYagKas");
-            //var AyYagAralik = IDW(fclass, cmbAylikYagAralik.SelectedItem.ToString(), "AyYagAra");
-
-            //string layerNames2 = YilTopYag + ";" + AyYagOcak + ";" + AyYagSubat + ";" + AyYagMart
-            //    + ";" + AyYagNisan + ";" + AyYagMayis + ";" + AyYagHaziran + ";" + AyYagTemmuz
-            //    + ";" + AyYagAgustos + ";" + AyYagEylul + ";" + AyYagEkim + ";" + AyYagKasim + ";" + AyYagAralik;
-            //var combine2 = Combine(layerNames2, "CombineYag");
-            //Combine(combine1 + ";" + combine2, "FinalCombined");
-            //FindIklimForValues();
-        }
-
         private void FindIklimForValues()
         {
-            ITable vatRaster = BuildRasterAttributeTable("FinalCombined");
+            ITable vatRaster = BuildRasterAttributeTable("Siniflandirma_Koppen");
             ITable vatYag = BuildRasterAttributeTable("CombineYag");
             ITable vatSic = BuildRasterAttributeTable("CombineSic");
             AddField(vatRaster, "IKLIMTURU", "TEXT");
@@ -354,7 +480,7 @@ namespace Iklim
                                         {
                                             IklimTuru = "Csb";
                                         }
-                                        else 
+                                        else
                                         {
                                             IklimTuru = "Csc";
                                         }
@@ -386,7 +512,7 @@ namespace Iklim
                                     }
                                     else if (TSicak < 22 * carpan)
                                     {
-                                         if ((sicaklikListesi[11] > 10 * carpan) && (sicaklikListesi[10] > 10 * carpan) && (sicaklikListesi[9] > 10 * carpan) && (sicaklikListesi[8] > 10 * carpan))
+                                        if ((sicaklikListesi[11] > 10 * carpan) && (sicaklikListesi[10] > 10 * carpan) && (sicaklikListesi[9] > 10 * carpan) && (sicaklikListesi[8] > 10 * carpan))
                                         {
                                             IklimTuru = "Cfb";
                                         }
@@ -432,11 +558,11 @@ namespace Iklim
                                     }
                                     else if (TSicak < 22 * carpan)
                                     {
-                                         if ((sicaklikListesi[11] > 10 * carpan) && (sicaklikListesi[10] > 10 * carpan) && (sicaklikListesi[9] > 10 * carpan) && (sicaklikListesi[8] > 10 * carpan))
+                                        if ((sicaklikListesi[11] > 10 * carpan) && (sicaklikListesi[10] > 10 * carpan) && (sicaklikListesi[9] > 10 * carpan) && (sicaklikListesi[8] > 10 * carpan))
                                         {
                                             IklimTuru = "Dwb";
                                         }
-                                        else 
+                                        else
                                         {
                                             if (TSoguk >= -38 * carpan)
                                             {
@@ -457,10 +583,11 @@ namespace Iklim
                                     }
                                     else if (TSicak < 22 * carpan)
                                     {
-                                         if ((sicaklikListesi[11] > 10 * carpan) && (sicaklikListesi[10] > 10 * carpan) && (sicaklikListesi[9] > 10 * carpan) && (sicaklikListesi[8] > 10 * carpan)){
+                                        if ((sicaklikListesi[11] > 10 * carpan) && (sicaklikListesi[10] > 10 * carpan) && (sicaklikListesi[9] > 10 * carpan) && (sicaklikListesi[8] > 10 * carpan))
+                                        {
                                             IklimTuru = "Dfb";
                                         }
-                                        else 
+                                        else
                                         {
                                             if (TSoguk >= -38 * carpan)
                                             {
@@ -494,38 +621,19 @@ namespace Iklim
             }
         }
 
-        private ITable BuildRasterAttributeTable(string rasterName)
-        {
-            Type factoryType = Type.GetTypeFromProgID(
-                "esriDataSourcesGDB.AccessWorkspaceFactory");
-            IWorkspaceFactory workspaceFactory = (IWorkspaceFactory)Activator.CreateInstance
-               (factoryType);
-            IRasterWorkspaceEx rasterWorkspaceEx = workspaceFactory.OpenFromFile(AppSingleton.Instance().WorkspacePath, 0) as IRasterWorkspaceEx;
-            IRasterDataset rasterDataset = rasterWorkspaceEx.OpenRasterDataset(rasterName);
-            IRasterDatasetEdit2 raster = (IRasterDatasetEdit2)rasterDataset;
-
-            ESRI.ArcGIS.Geodatabase.IGeoDataset geoDataset = (ESRI.ArcGIS.Geodatabase.IGeoDataset)rasterDataset;
-            raster.BuildAttributeTable();
-            ITable vat = (raster as IRasterBandCollection).Item(0).AttributeTable;
-            return vat;
-
-        }
-
-        private bool AddField(object table, string fieldName, string type)
+        private bool JoinField(object table, string inField, string joinTable, string joinField)
         {
             try
             {
                 ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.DataManagementTools.AddField addField = new ESRI.ArcGIS.DataManagementTools.AddField();
-                addField.in_table = table;
-                addField.field_name = fieldName;
-                addField.field_type = type;
-                addField.field_is_nullable = "NULLABLE";
-                addField.field_is_required = "NON_REQUIRED";
-
+                ESRI.ArcGIS.DataManagementTools.JoinField join = new ESRI.ArcGIS.DataManagementTools.JoinField();
+                join.in_data = table;
+                join.in_field = inField;
+                join.join_table = joinTable;
+                join.join_field = joinField;
                 gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
                 gp.OverwriteOutput = true;
-                gp.Execute(addField, null);
+                gp.Execute(join, null);
                 return true;
             }
             catch (Exception ex)
@@ -533,151 +641,101 @@ namespace Iklim
                 return false;
             }
         }
+
         private void MultiplyFeatureValue(IFeature feature)
         {
-            ////Sicaklik Fields
-            //int yillikOrtSicField = feature.Fields.FindField(cmbYillikOrtSic.SelectedItem.ToString());
-            //var yillikOrtSicValue = Convert.ToDouble(feature.get_Value(yillikOrtSicField)) * 10000;
-            //int aylikSicOcakField = feature.Fields.FindField(cmbAylikSicOcak.SelectedItem.ToString());
-            //var aylikSicOcakValue = Convert.ToDouble(feature.get_Value(aylikSicOcakField)) * 10000;
-            //int aylikSicSubatField = feature.Fields.FindField(cmbAylikSicSubat.SelectedItem.ToString());
-            //var aylikSicSubatValue = Convert.ToDouble(feature.get_Value(aylikSicSubatField)) * 10000;
-            //int aylikSicMartField = feature.Fields.FindField(cmbAylikSicMart.SelectedItem.ToString());
-            //var aylikSicMartValue = Convert.ToDouble(feature.get_Value(aylikSicMartField)) * 10000;
-            //int aylikSicNisanField = feature.Fields.FindField(cmbAylikSicNisan.SelectedItem.ToString());
-            //var aylikSicNisanValue = Convert.ToDouble(feature.get_Value(aylikSicNisanField)) * 10000;
-            //int aylikSicMayisField = feature.Fields.FindField(cmbAylikSicMayis.SelectedItem.ToString());
-            //var aylikSicMayisValue = Convert.ToDouble(feature.get_Value(aylikSicMayisField)) * 10000;
-            //int aylikSicHaziranField = feature.Fields.FindField(cmbAylikSicHaziran.SelectedItem.ToString());
-            //var aylikSicHaziranValue = Convert.ToDouble(feature.get_Value(aylikSicHaziranField)) * 10000;
-            //int aylikSicTemmuzField = feature.Fields.FindField(cmbAylikSicTemmuz.SelectedItem.ToString());
-            //var aylikSicTemmuzValue = Convert.ToDouble(feature.get_Value(aylikSicTemmuzField)) * 10000;
-            //int aylikSicAgustosField = feature.Fields.FindField(cmbAylikSicAgustos.SelectedItem.ToString());
-            //var aylikSicAgustosValue = Convert.ToDouble(feature.get_Value(aylikSicAgustosField)) * 10000;
-            //int aylikSicEylulField = feature.Fields.FindField(cmbAylikSicEylul.SelectedItem.ToString());
-            //var aylikSicEylulValue = Convert.ToDouble(feature.get_Value(aylikSicEylulField)) * 10000;
-            //int aylikSicEkimField = feature.Fields.FindField(cmbAylikSicEkim.SelectedItem.ToString());
-            //var aylikSicEkimValue = Convert.ToDouble(feature.get_Value(aylikSicEkimField)) * 10000;
-            //int aylikSicKasimField = feature.Fields.FindField(cmbAylikSicKasim.SelectedItem.ToString());
-            //var aylikSicKasimValue = Convert.ToDouble(feature.get_Value(aylikSicKasimField)) * 10000;
-            //int aylikSicAralikField = feature.Fields.FindField(cmbAylikSicAralik.SelectedItem.ToString());
-            //var aylikSicAralikValue = Convert.ToDouble(feature.get_Value(aylikSicAralikField)) * 10000;
+            //Sicaklik Fields
+            int yillikOrtSicField = feature.Fields.FindField("yilTmp");
+            var yillikOrtSicValue = Convert.ToDouble(feature.get_Value(yillikOrtSicField)) * 10000;
+            int aylikSicOcakField = feature.Fields.FindField("ocaTmp");
+            var aylikSicOcakValue = Convert.ToDouble(feature.get_Value(aylikSicOcakField)) * 10000;
+            int aylikSicSubatField = feature.Fields.FindField("subTmp");
+            var aylikSicSubatValue = Convert.ToDouble(feature.get_Value(aylikSicSubatField)) * 10000;
+            int aylikSicMartField = feature.Fields.FindField("marTmp");
+            var aylikSicMartValue = Convert.ToDouble(feature.get_Value(aylikSicMartField)) * 10000;
+            int aylikSicNisanField = feature.Fields.FindField("nisTmp");
+            var aylikSicNisanValue = Convert.ToDouble(feature.get_Value(aylikSicNisanField)) * 10000;
+            int aylikSicMayisField = feature.Fields.FindField("mayTmp");
+            var aylikSicMayisValue = Convert.ToDouble(feature.get_Value(aylikSicMayisField)) * 10000;
+            int aylikSicHaziranField = feature.Fields.FindField("hazTmp");
+            var aylikSicHaziranValue = Convert.ToDouble(feature.get_Value(aylikSicHaziranField)) * 10000;
+            int aylikSicTemmuzField = feature.Fields.FindField("temTmp");
+            var aylikSicTemmuzValue = Convert.ToDouble(feature.get_Value(aylikSicTemmuzField)) * 10000;
+            int aylikSicAgustosField = feature.Fields.FindField("aguTmp");
+            var aylikSicAgustosValue = Convert.ToDouble(feature.get_Value(aylikSicAgustosField)) * 10000;
+            int aylikSicEylulField = feature.Fields.FindField("eylTmp");
+            var aylikSicEylulValue = Convert.ToDouble(feature.get_Value(aylikSicEylulField)) * 10000;
+            int aylikSicEkimField = feature.Fields.FindField("ekiTmp");
+            var aylikSicEkimValue = Convert.ToDouble(feature.get_Value(aylikSicEkimField)) * 10000;
+            int aylikSicKasimField = feature.Fields.FindField("kasTmp");
+            var aylikSicKasimValue = Convert.ToDouble(feature.get_Value(aylikSicKasimField)) * 10000;
+            int aylikSicAralikField = feature.Fields.FindField("araTmp");
+            var aylikSicAralikValue = Convert.ToDouble(feature.get_Value(aylikSicAralikField)) * 10000;
 
-            ////Yagis Fields
-            //int yillikTopYagField = feature.Fields.FindField(cmbYillikTopYag.SelectedItem.ToString());
-            //var yillikTopYagValue = Convert.ToDouble(feature.get_Value(yillikTopYagField)) * 10000;
-            //int aylikYagOcakField = feature.Fields.FindField(cmbAylikYagOcak.SelectedItem.ToString());
-            //var aylikYagOcakValue = Convert.ToDouble(feature.get_Value(aylikYagOcakField)) * 10000;
-            //int aylikYagSubatField = feature.Fields.FindField(cmbAylikYagSubat.SelectedItem.ToString());
-            //var aylikYagSubatValue = Convert.ToDouble(feature.get_Value(aylikYagSubatField)) * 10000;
-            //int aylikYagMartField = feature.Fields.FindField(cmbAylikYagMart.SelectedItem.ToString());
-            //var aylikYagMartValue = Convert.ToDouble(feature.get_Value(aylikYagMartField)) * 10000;
-            //int aylikYagNisanField = feature.Fields.FindField(cmbAylikYagNisan.SelectedItem.ToString());
-            //var aylikYagNisanValue = Convert.ToDouble(feature.get_Value(aylikYagNisanField)) * 10000;
-            //int aylikYagMayisField = feature.Fields.FindField(cmbAylikYagMayis.SelectedItem.ToString());
-            //var aylikYagMayisValue = Convert.ToDouble(feature.get_Value(aylikYagMayisField)) * 10000;
-            //int aylikYagHaziranField = feature.Fields.FindField(cmbAylikYagHaziran.SelectedItem.ToString());
-            //var aylikYagHaziranValue = Convert.ToDouble(feature.get_Value(aylikYagHaziranField)) * 10000;
-            //int aylikYagTemmuzField = feature.Fields.FindField(cmbAylikYagTemmuz.SelectedItem.ToString());
-            //var aylikYagTemmuzValue = Convert.ToDouble(feature.get_Value(aylikYagTemmuzField)) * 10000;
-            //int aylikYagAgustosField = feature.Fields.FindField(cmbAylikYagAgustos.SelectedItem.ToString());
-            //var aylikYagAgustosValue = Convert.ToDouble(feature.get_Value(aylikYagAgustosField)) * 10000;
-            //int aylikYagEylulField = feature.Fields.FindField(cmbAylikYagEylul.SelectedItem.ToString());
-            //var aylikYagEylulValue = Convert.ToDouble(feature.get_Value(aylikYagEylulField)) * 10000;
-            //int aylikYagEkimField = feature.Fields.FindField(cmbAylikYagEkim.SelectedItem.ToString());
-            //var aylikYagEkimValue = Convert.ToDouble(feature.get_Value(aylikYagEkimField)) * 10000;
-            //int aylikYagKasimField = feature.Fields.FindField(cmbAylikYagKasim.SelectedItem.ToString());
-            //var aylikYagKasimValue = Convert.ToDouble(feature.get_Value(aylikYagKasimField)) * 10000;
-            //int aylikYagAralikField = feature.Fields.FindField(cmbAylikYagAralik.SelectedItem.ToString());
-            //var aylikYagAralikValue = Convert.ToDouble(feature.get_Value(aylikYagAralikField)) * 10000;
+            //Yagis Fields
+            int yillikTopYagField = feature.Fields.FindField("yilRain");
+            var yillikTopYagValue = Convert.ToDouble(feature.get_Value(yillikTopYagField)) * 10000;
+            int aylikYagOcakField = feature.Fields.FindField("ocaRain");
+            var aylikYagOcakValue = Convert.ToDouble(feature.get_Value(aylikYagOcakField)) * 10000;
+            int aylikYagSubatField = feature.Fields.FindField("subRain");
+            var aylikYagSubatValue = Convert.ToDouble(feature.get_Value(aylikYagSubatField)) * 10000;
+            int aylikYagMartField = feature.Fields.FindField("marRain");
+            var aylikYagMartValue = Convert.ToDouble(feature.get_Value(aylikYagMartField)) * 10000;
+            int aylikYagNisanField = feature.Fields.FindField("nisRain");
+            var aylikYagNisanValue = Convert.ToDouble(feature.get_Value(aylikYagNisanField)) * 10000;
+            int aylikYagMayisField = feature.Fields.FindField("mayRain");
+            var aylikYagMayisValue = Convert.ToDouble(feature.get_Value(aylikYagMayisField)) * 10000;
+            int aylikYagHaziranField = feature.Fields.FindField("hazRain");
+            var aylikYagHaziranValue = Convert.ToDouble(feature.get_Value(aylikYagHaziranField)) * 10000;
+            int aylikYagTemmuzField = feature.Fields.FindField("temRain");
+            var aylikYagTemmuzValue = Convert.ToDouble(feature.get_Value(aylikYagTemmuzField)) * 10000;
+            int aylikYagAgustosField = feature.Fields.FindField("aguRain");
+            var aylikYagAgustosValue = Convert.ToDouble(feature.get_Value(aylikYagAgustosField)) * 10000;
+            int aylikYagEylulField = feature.Fields.FindField("eylRain");
+            var aylikYagEylulValue = Convert.ToDouble(feature.get_Value(aylikYagEylulField)) * 10000;
+            int aylikYagEkimField = feature.Fields.FindField("ekiRain");
+            var aylikYagEkimValue = Convert.ToDouble(feature.get_Value(aylikYagEkimField)) * 10000;
+            int aylikYagKasimField = feature.Fields.FindField("kasRain");
+            var aylikYagKasimValue = Convert.ToDouble(feature.get_Value(aylikYagKasimField)) * 10000;
+            int aylikYagAralikField = feature.Fields.FindField("araRain");
+            var aylikYagAralikValue = Convert.ToDouble(feature.get_Value(aylikYagAralikField)) * 10000;
 
-            //feature.set_Value(yillikOrtSicField, yillikOrtSicValue);
-            //feature.set_Value(aylikSicOcakField, aylikSicOcakValue);
-            //feature.set_Value(aylikSicSubatField, aylikSicSubatValue);
-            //feature.set_Value(aylikSicMartField, aylikSicMartValue);
-            //feature.set_Value(aylikSicNisanField, aylikSicNisanValue);
-            //feature.set_Value(aylikSicMayisField, aylikSicMayisValue);
-            //feature.set_Value(aylikSicHaziranField, aylikSicHaziranValue);
-            //feature.set_Value(aylikSicTemmuzField, aylikSicTemmuzValue);
-            //feature.set_Value(aylikSicAgustosField, aylikSicAgustosValue);
-            //feature.set_Value(aylikSicEylulField, aylikSicEylulValue);
-            //feature.set_Value(aylikSicEkimField, aylikSicEkimValue);
-            //feature.set_Value(aylikSicKasimField, aylikSicKasimValue);
-            //feature.set_Value(aylikSicAralikField, aylikSicAralikValue);
-            //feature.set_Value(yillikTopYagField, yillikTopYagValue);
-            //feature.set_Value(aylikYagOcakField, aylikYagOcakValue);
-            //feature.set_Value(aylikYagSubatField, aylikYagSubatValue);
-            //feature.set_Value(aylikYagMartField, aylikYagMartValue);
-            //feature.set_Value(aylikYagNisanField, aylikYagNisanValue);
-            //feature.set_Value(aylikYagMayisField, aylikYagMayisValue);
-            //feature.set_Value(aylikYagHaziranField, aylikYagHaziranValue);
-            //feature.set_Value(aylikYagTemmuzField, aylikYagTemmuzValue);
-            //feature.set_Value(aylikYagAgustosField, aylikYagAgustosValue);
-            //feature.set_Value(aylikYagEylulField, aylikYagEylulValue);
-            //feature.set_Value(aylikYagEkimField, aylikYagEkimValue);
-            //feature.set_Value(aylikYagKasimField, aylikYagKasimValue);
-            //feature.set_Value(aylikYagAralikField, aylikYagAralikValue);
-            //feature.Store();
-        }
-        public string IDW(object fclass, string FieldName,string outLayerName)
-        {
-            try
-            {
-                ESRI.ArcGIS.SpatialAnalystTools.Idw idw = new ESRI.ArcGIS.SpatialAnalystTools.Idw();
-                idw.cell_size = AppSingleton.Instance().CellSize;
-                idw.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outLayerName;
-                idw.in_point_features = fclass;
-                idw.z_field = FieldName;
-                idw.power = 3;
-                idw.search_radius = AppSingleton.Instance().IDWYaricap;
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                gp.AddOutputsToMap = AppSingleton.Instance().AralariEkle;
-                gp.OverwriteOutput = true;
-                gp.Execute(idw, null);
-                return idw.out_raster.ToString();
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
+            feature.set_Value(yillikOrtSicField, yillikOrtSicValue);
+            feature.set_Value(aylikSicOcakField, aylikSicOcakValue);
+            feature.set_Value(aylikSicSubatField, aylikSicSubatValue);
+            feature.set_Value(aylikSicMartField, aylikSicMartValue);
+            feature.set_Value(aylikSicNisanField, aylikSicNisanValue);
+            feature.set_Value(aylikSicMayisField, aylikSicMayisValue);
+            feature.set_Value(aylikSicHaziranField, aylikSicHaziranValue);
+            feature.set_Value(aylikSicTemmuzField, aylikSicTemmuzValue);
+            feature.set_Value(aylikSicAgustosField, aylikSicAgustosValue);
+            feature.set_Value(aylikSicEylulField, aylikSicEylulValue);
+            feature.set_Value(aylikSicEkimField, aylikSicEkimValue);
+            feature.set_Value(aylikSicKasimField, aylikSicKasimValue);
+            feature.set_Value(aylikSicAralikField, aylikSicAralikValue);
+            feature.set_Value(yillikTopYagField, yillikTopYagValue);
+            feature.set_Value(aylikYagOcakField, aylikYagOcakValue);
+            feature.set_Value(aylikYagSubatField, aylikYagSubatValue);
+            feature.set_Value(aylikYagMartField, aylikYagMartValue);
+            feature.set_Value(aylikYagNisanField, aylikYagNisanValue);
+            feature.set_Value(aylikYagMayisField, aylikYagMayisValue);
+            feature.set_Value(aylikYagHaziranField, aylikYagHaziranValue);
+            feature.set_Value(aylikYagTemmuzField, aylikYagTemmuzValue);
+            feature.set_Value(aylikYagAgustosField, aylikYagAgustosValue);
+            feature.set_Value(aylikYagEylulField, aylikYagEylulValue);
+            feature.set_Value(aylikYagEkimField, aylikYagEkimValue);
+            feature.set_Value(aylikYagKasimField, aylikYagKasimValue);
+            feature.set_Value(aylikYagAralikField, aylikYagAralikValue);
+            feature.Store();
         }
 
-        private string Combine(string layerNames, string outLayerName)
+        private void UpdateComboboxWithLayers(ComboBox comboBox, List<LayerObject> layerObjectList)
         {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.SpatialAnalystTools.Combine combine = new ESRI.ArcGIS.SpatialAnalystTools.Combine();
-                combine.in_rasters = layerNames;
-                combine.out_raster = AppSingleton.Instance().WorkspacePath + "\\" + outLayerName;
-                gp.AddOutputsToMap = true;
-                gp.OverwriteOutput = true;
-                gp.Execute(combine, null);
-                return combine.out_raster.ToString();
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
-
-        private string CopyFeatureClass(object featureClass)
-        {
-            try
-            {
-                ESRI.ArcGIS.Geoprocessor.Geoprocessor gp = new ESRI.ArcGIS.Geoprocessor.Geoprocessor();
-                ESRI.ArcGIS.DataManagementTools.CopyFeatures copyFeatures = new ESRI.ArcGIS.DataManagementTools.CopyFeatures();
-                copyFeatures.in_features = featureClass;
-                copyFeatures.out_feature_class = AppSingleton.Instance().WorkspacePath + "\\" + "Copy";
-                gp.AddOutputsToMap = true;
-                gp.OverwriteOutput = true;
-                gp.Execute(copyFeatures, null);
-                return copyFeatures.out_feature_class.ToString();
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
+            comboBox.BindingContext = new BindingContext();
+            comboBox.DataSource = null;
+            comboBox.DataSource = layerObjectList;
+            comboBox.DisplayMember = "Name";
+            comboBox.SelectedIndex = -1;
         }
     }
 }

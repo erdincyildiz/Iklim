@@ -145,6 +145,18 @@
     <Compile Include="CustomTools\TextProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DemartonneGottmanSablon\DeMArtonnGotmannFormSablon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DemartonneGottmanSablon\DeMArtonnGotmannFormSablon.Designer.cs">
+      <DependentUpon>DeMArtonnGotmannFormSablon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DemartonneGottmanSablon\ucDeMartonneGottmanSablon.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemartonneGottmanSablon\ucDeMartonneGottmanSablon.Designer.cs">
+      <DependentUpon>ucDeMartonneGottmanSablon.cs</DependentUpon>
+    </Compile>
     <Compile Include="DemartonneGottman\DeMArtonnGotmannForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -258,16 +270,16 @@
     <Compile Include="Kadastro\ucKadastro.Designer.cs">
       <DependentUpon>ucKadastro.cs</DependentUpon>
     </Compile>
-    <Compile Include="Koppen - Copy\KoppenFormSablon.cs">
+    <Compile Include="KoppenSablon\KoppenFormSablon.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Koppen - Copy\KoppenFormSablon.Designer.cs">
+    <Compile Include="KoppenSablon\KoppenFormSablon.Designer.cs">
       <DependentUpon>KoppenFormSablon.cs</DependentUpon>
     </Compile>
-    <Compile Include="Koppen - Copy\ucKoppenSablon.cs">
+    <Compile Include="KoppenSablon\ucKoppenSablon.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Koppen - Copy\ucKoppenSablon.Designer.cs">
+    <Compile Include="KoppenSablon\ucKoppenSablon.Designer.cs">
       <DependentUpon>ucKoppenSablon.cs</DependentUpon>
     </Compile>
     <Compile Include="Koppen\KoppenForm.cs">
@@ -392,6 +404,12 @@
     <EmbeddedResource Include="Buffer\BufferForm.resx">
       <DependentUpon>BufferForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DemartonneGottmanSablon\DeMArtonnGotmannFormSablon.resx">
+      <DependentUpon>DeMArtonnGotmannFormSablon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DemartonneGottmanSablon\ucDeMartonneGottmanSablon.resx">
+      <DependentUpon>ucDeMartonneGottmanSablon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DemartonneGottman\DeMArtonnGotmannForm.resx">
       <DependentUpon>DeMArtonnGotmannForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -437,10 +455,10 @@
     <EmbeddedResource Include="Kadastro\ucKadastro.resx">
       <DependentUpon>ucKadastro.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Koppen - Copy\KoppenFormSablon.resx">
+    <EmbeddedResource Include="KoppenSablon\KoppenFormSablon.resx">
       <DependentUpon>KoppenFormSablon.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Koppen - Copy\ucKoppenSablon.resx">
+    <EmbeddedResource Include="KoppenSablon\ucKoppenSablon.resx">
       <DependentUpon>ucKoppenSablon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Koppen\KoppenForm.resx">

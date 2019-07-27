@@ -29,12 +29,10 @@
         private void InitializeComponent()
         {
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbNn = new System.Windows.Forms.ComboBox();
-            this.cmbNp = new System.Windows.Forms.ComboBox();
             this.cmbY = new System.Windows.Forms.ComboBox();
             this.cmbGs = new System.Windows.Forms.ComboBox();
             this.cmbS = new System.Windows.Forms.ComboBox();
@@ -61,25 +59,15 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(6, 76);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(186, 13);
+            this.label2.Size = new System.Drawing.Size(161, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Aylık Ortalama Nispi Nem (Nn) yüzeyi :";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(6, 103);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(169, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Nemli Periyot Yüzdesi (Np) yüzeyi :";
+            this.label2.Text = "Ortalama Nispi Nem (Nn) yüzeyi :";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 184);
+            this.label4.Location = new System.Drawing.Point(6, 157);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(402, 13);
             this.label4.TabIndex = 6;
@@ -89,21 +77,21 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(6, 157);
+            this.label5.Location = new System.Drawing.Point(6, 130);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(168, 13);
+            this.label5.Size = new System.Drawing.Size(143, 13);
             this.label5.TabIndex = 5;
-            this.label5.Text = "Aylık Ortalama Sıcaklık (S) yüzeyi :";
+            this.label5.Text = "Ortalama Sıcaklık (S) yüzeyi :";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(6, 130);
+            this.label6.Location = new System.Drawing.Point(6, 103);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(150, 13);
+            this.label6.Size = new System.Drawing.Size(125, 13);
             this.label6.TabIndex = 4;
-            this.label6.Text = "Aylık Toplam Yağış (Y) yüzeyi :";
+            this.label6.Text = "Toplam Yağış (Y) yüzeyi :";
             // 
             // cmbNn
             // 
@@ -114,20 +102,11 @@
             this.cmbNn.Size = new System.Drawing.Size(259, 21);
             this.cmbNn.TabIndex = 7;
             // 
-            // cmbNp
-            // 
-            this.cmbNp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbNp.FormattingEnabled = true;
-            this.cmbNp.Location = new System.Drawing.Point(414, 100);
-            this.cmbNp.Name = "cmbNp";
-            this.cmbNp.Size = new System.Drawing.Size(259, 21);
-            this.cmbNp.TabIndex = 8;
-            // 
             // cmbY
             // 
             this.cmbY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbY.FormattingEnabled = true;
-            this.cmbY.Location = new System.Drawing.Point(414, 127);
+            this.cmbY.Location = new System.Drawing.Point(414, 100);
             this.cmbY.Name = "cmbY";
             this.cmbY.Size = new System.Drawing.Size(259, 21);
             this.cmbY.TabIndex = 9;
@@ -136,7 +115,7 @@
             // 
             this.cmbGs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbGs.FormattingEnabled = true;
-            this.cmbGs.Location = new System.Drawing.Point(414, 181);
+            this.cmbGs.Location = new System.Drawing.Point(414, 154);
             this.cmbGs.Name = "cmbGs";
             this.cmbGs.Size = new System.Drawing.Size(259, 21);
             this.cmbGs.TabIndex = 11;
@@ -145,7 +124,7 @@
             // 
             this.cmbS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbS.FormattingEnabled = true;
-            this.cmbS.Location = new System.Drawing.Point(414, 154);
+            this.cmbS.Location = new System.Drawing.Point(414, 127);
             this.cmbS.Name = "cmbS";
             this.cmbS.Size = new System.Drawing.Size(259, 21);
             this.cmbS.TabIndex = 10;
@@ -212,12 +191,10 @@
             this.grpbxInput.Controls.Add(this.label4);
             this.grpbxInput.Controls.Add(this.cmbGs);
             this.grpbxInput.Controls.Add(this.label5);
-            this.grpbxInput.Controls.Add(this.label3);
             this.grpbxInput.Controls.Add(this.cmbS);
             this.grpbxInput.Controls.Add(this.label6);
             this.grpbxInput.Controls.Add(this.cmbY);
             this.grpbxInput.Controls.Add(this.cmbNn);
-            this.grpbxInput.Controls.Add(this.cmbNp);
             this.grpbxInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpbxInput.Location = new System.Drawing.Point(3, 116);
             this.grpbxInput.Name = "grpbxInput";
@@ -316,12 +293,10 @@
 
         #endregion
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmbNn;
-        private System.Windows.Forms.ComboBox cmbNp;
         private System.Windows.Forms.ComboBox cmbY;
         private System.Windows.Forms.ComboBox cmbGs;
         private System.Windows.Forms.ComboBox cmbS;
